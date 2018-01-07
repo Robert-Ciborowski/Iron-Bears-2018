@@ -1,8 +1,9 @@
 /*
  * Class: AutoSwitch
- * Author: Waseef Nayeem and Robert Ciborowski
- * Date: 2017
- * Description: A class that interprets the input from the autonomous mode selection switch and gives an output accordingly.
+ * Author: Robert Ciborowski and Waseef Nayeem
+ * Date: Early 2017
+ * Description: A class that interprets the input from the autonomous mode selection switches and
+ *              gives an output accordingly.
  */
 
 package auto;
@@ -10,7 +11,7 @@ package auto;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class AutoSwitch {
-
+	// There are two switches, with are binary. Together, they can select up to 4 different options.
 	private DigitalInput switch0, switch1;
 	private byte state;
 	

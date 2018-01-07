@@ -31,14 +31,14 @@ public abstract class AutoGoStraightCommand extends Command {
 		this.speedSetpoint = (direction == Direction.FORWARD) ? absoluteSpeed : -absoluteSpeed;
 	}
 
-	// Called just before this Command runs the first time
+	// This is called just before this Command runs the first time.
 	protected void initialize() {
 		GoStraightPID.setEnabled(false);
 		GoStraightPID.setSetpoint(angleSetpoint);
 		GoStraightPID.setEnabled(true);
 	}
 
-	// Called repeatedly when this Command is scheduled to run
+	// This is called repeatedly when this Command is scheduled to run.
 	protected void execute() {
 		double speed = speedSetpoint;
 		double leftSpeed;

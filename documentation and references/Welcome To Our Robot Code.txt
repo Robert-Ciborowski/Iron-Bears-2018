@@ -1,0 +1,23 @@
+=======================================================================================================================
+
+       ``..................``           ``....................`                    `.......`        
+     `+syhhhhhhhhhhhhhhhhhhhyo-        `shhhhhhhhhhhhhhhhhhhhh/                  `/hhhhhhhhs        
+     ohhhhsssssssssssssssssssso:-`     /hhhyssssssssssssssssss+//.              .shhhhssssso//:     
+     yhhy++++++++++++++++++++++++/     /hhy++++++++++++++++++++++-             /hhhhyo+++++++++     
+     yhho++++++//::::::::+soo+++++.    /hhy++++//////////////////.           `ohhhhs++++os+++++     
+     shho+++++`          /hhs+++++.    /hhy++++-                            :yhhhyo++++shy+++++     
+     -yho+++++::::::::::/yhhy+++++.    /hhy+++++////////////:-`           `ohhhhs+++++ohhy+++++     
+      `:++++++yhhhhhhhhhhhhso+++++`    /hhy++++shhhhhhhhhhhhhhh/         -yhhhyo++++:`/hhy+++++     
+     .ohhyso++++oooooooooo++++o/-`     /hhs++++++++++++++++++++++:`    `+hhhhs+++++.  /hhy+++++     
+    .hhhhys/+++++++++++++++++oo/-`        -++++++++++++++++++++++++   `yhhhyo++++s+///shhy+++++     
+    :hhhs++++/-...........sys+++++.       `................yyyo++++   .hhhs+++++shhhhhhhhs+++++``   
+    :hhy+++++.            hhho+++++                        hhho++++   .hhy++++++++++++++++++++++:   
+    :hhy++++++++++++++++oyhhho+++++    -+++++++++++++++++++hhho++++      .++++++++++++++++++++++:   
+    `yhy+++++oyyyyyyyyyyyyyys++++++    /hhhyyyyyyyyyyyyyyyyyyyo++++       ............+yys+++++.`   
+     `/+++++++++++++++++++++++++++:    :sss++++++++++++++++++++++++                   :sss+++++     
+        ./++++++++++++++++++++++/:`     ``-++++++++++++++++++++++/-                    ``:+++++  
+
+=======================================================================================================================
+
+Hello, and welcome to The Iron Bears (Team 854) FIRST Robotics Robot Codebase for the 2018 FIRST Robotics Competition!
+The files contained in the "Guides and Documentation"
