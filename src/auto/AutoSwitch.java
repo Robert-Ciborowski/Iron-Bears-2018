@@ -11,7 +11,7 @@ package auto;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class AutoSwitch {
-	// There are two switches, with are binary. Together, they can select up to 4 different options.
+	// There are two switches, which are binary. Together, they can select up to 4 different options.
 	private DigitalInput switch0, switch1;
 	private byte state;
 	

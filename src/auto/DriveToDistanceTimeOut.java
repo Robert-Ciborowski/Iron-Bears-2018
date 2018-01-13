@@ -35,7 +35,7 @@ public class DriveToDistanceTimeOut extends AutoGoStraightCommand {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		Robot.chassisSubsystem.resetEncoders();
+		Robot.chassisSubsystem.reset();
 		super.initialize();
 
 		//chad
@@ -67,9 +67,10 @@ public class DriveToDistanceTimeOut extends AutoGoStraightCommand {
 	// Called once after isFinished returns true
 	@Override
 	protected boolean isFinished() {
-		if(this.isTimedOut()) {
-			return this.isTimedOut();
-		}
-		return (Math.abs(Robot.chassisSubsystem.getEncoderDistance()) >= Math.abs(distanceSetpoint) - AutoVariables.driveStopDistance);
+//		if(this.isTimedOut()) {
+//			return this.isTimedOut();
+//		}
+//		return (Math.abs(Robot.chassisSubsystem.getEncoderDistance()) >= Math.abs(distanceSetpoint) - AutoVariables.driveStopDistance);
+		return false;
 	}
 }

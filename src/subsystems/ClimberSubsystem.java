@@ -1,17 +1,17 @@
 package subsystems;
 
 import org.usfirst.frc.team854.robot.M_Subsystem;
-import org.usfirst.frc.team854.robot.RobotMap;
+import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
 
 import org.usfirst.frc.team854.robot.commands.ClimberOff;
 import edu.wpi.first.wpilibj.Spark;
 
 public class ClimberSubsystem extends M_Subsystem{
 	public static final double MAX_CURRENT = 15.0;
-	private Spark climberMotor = new Spark(RobotMap.climberMotorPort);
+	private Spark climberMotor = new Spark(RobotInterfaceConstants.climberMotorPort);
 	
 	public ClimberSubsystem() {
-		climberMotor.setInverted(RobotMap.climberMotorInverted);
+		climberMotor.setInverted(RobotInterfaceConstants.climberMotorInverted);
 	}
 	
 	public void init() {

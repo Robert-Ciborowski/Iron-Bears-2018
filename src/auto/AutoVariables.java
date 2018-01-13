@@ -1,3 +1,7 @@
+/*
+ * 
+ */
+
 package auto;
 
 public class AutoVariables {

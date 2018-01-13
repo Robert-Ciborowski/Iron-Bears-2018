@@ -2,7 +2,7 @@ package teleopdrive;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team854.robot.Robot;
-import org.usfirst.frc.team854.robot.RobotMap;
+import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
 
 public class JoystickCommand extends Command{
 	
@@ -69,10 +69,10 @@ public class JoystickCommand extends Command{
     		
     		//INDEXER
     		if(Robot.oi.getIndexerUp()) {
-    			Robot.indexerSubsystem.setIndexerSpeed(RobotMap.indexerSpeed);
+    			Robot.indexerSubsystem.setIndexerSpeed(RobotInterfaceConstants.indexerSpeed);
     		}
     		else if(Robot.oi.getIndexerDown()) {
-    			Robot.indexerSubsystem.setIndexerSpeed(-RobotMap.indexerSpeed);
+    			Robot.indexerSubsystem.setIndexerSpeed(-RobotInterfaceConstants.indexerSpeed);
     		}
     		else {
     			Robot.indexerSubsystem.indexerOff();
@@ -80,10 +80,10 @@ public class JoystickCommand extends Command{
     		
     		//INTAKE
     		if(Robot.oi.getIntake()) {
-    			Robot.intakeSubsystem.setIntakeSpeed(RobotMap.intakeSpeed);
+    			Robot.intakeSubsystem.setIntakeSpeed(RobotInterfaceConstants.intakeSpeed);
     		}
     		else if(Robot.oi.getIntakeReverse()) {
-    			Robot.intakeSubsystem.setIntakeSpeed(-RobotMap.intakeSpeed);
+    			Robot.intakeSubsystem.setIntakeSpeed(-RobotInterfaceConstants.intakeSpeed);
     		}
     		else {
     			Robot.intakeSubsystem.intakeOff();
@@ -91,7 +91,7 @@ public class JoystickCommand extends Command{
     		
     		//CLIMBER
     		if(Robot.oi.getClimberUp()) {
-    			Robot.climberSubsystem.setClimberSpeed(RobotMap.climberSpeed);
+    			Robot.climberSubsystem.setClimberSpeed(RobotInterfaceConstants.climberSpeed);
     		}
     		else { Robot.climberSubsystem.climberOff();}
     		

@@ -1,7 +1,7 @@
 package subsystems;
 
 import org.usfirst.frc.team854.robot.M_Subsystem;
-import org.usfirst.frc.team854.robot.RobotMap;
+import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.commands.ShooterOff;
 import com.ctre.CANTalon;
 
@@ -14,21 +14,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class EncodedShooterSubsystem extends M_Subsystem {
 	
-	private CANTalon shooterMotor1 = new CANTalon(RobotMap.shooterCANMotorPort);
-	private Victor shooterMotor2 = new Victor(RobotMap.shooterVictorMotorPort);
-	private Encoder shooterEncoder = new Encoder(RobotMap.shooterMotorEncoder1, RobotMap.shooterMotorEncoder2);
+	private CANTalon shooterMotor1 = new CANTalon(RobotInterfaceConstants.shooterCANMotorPort);
+	private Victor shooterMotor2 = new Victor(RobotInterfaceConstants.shooterVictorMotorPort);
+	private Encoder shooterEncoder = new Encoder(RobotInterfaceConstants.shooterMotorEncoder1, RobotInterfaceConstants.shooterMotorEncoder2);
 	
 	M_PIDInput shooterPIDInput1 = new M_PIDInput() {
 		@Override
 		public double pidGet() {
-			return -shooterEncoder.getRate() / RobotMap.shooterEncoderMaxRate;
+			return -shooterEncoder.getRate() / RobotInterfaceConstants.shooterEncoderMaxRate;
 		}
 	};
 	
 	M_PIDInput shooterPIDInput2 = new M_PIDInput() {
 		@Override
 		public double pidGet() {
-			return -shooterEncoder.getRate() / RobotMap.shooterEncoderMaxRate;
+			return -shooterEncoder.getRate() / RobotInterfaceConstants.shooterEncoderMaxRate;
 		}
 	};
 	
@@ -39,8 +39,8 @@ public class EncodedShooterSubsystem extends M_Subsystem {
 
 	// Motor inversions MUST be declared in the constructor!!!
     public EncodedShooterSubsystem() {
-    	shooterMotor1.setInverted(RobotMap.shooterMotorInverted);
-    	shooterMotor2.setInverted(RobotMap.shooterMotor2Inverted);
+    	shooterMotor1.setInverted(RobotInterfaceConstants.shooterMotorInverted);
+    	shooterMotor2.setInverted(RobotInterfaceConstants.shooterMotor2Inverted);
     }
     
   //MIGHT NEED TO CALL THIS!

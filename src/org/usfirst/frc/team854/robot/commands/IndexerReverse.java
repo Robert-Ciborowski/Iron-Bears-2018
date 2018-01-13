@@ -1,7 +1,7 @@
 package org.usfirst.frc.team854.robot.commands;
 
 import org.usfirst.frc.team854.robot.Robot;
-import org.usfirst.frc.team854.robot.RobotMap;
+import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -20,7 +20,7 @@ public class IndexerReverse extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.indexerSubsystem.setIndexerSpeed(-RobotMap.indexerSpeed);
+    	Robot.indexerSubsystem.setIndexerSpeed(-RobotInterfaceConstants.indexerSpeed);
     }
 
     // Make this return true when this Command no longer needs to run execute()

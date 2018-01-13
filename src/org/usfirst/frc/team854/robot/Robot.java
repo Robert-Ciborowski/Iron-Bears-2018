@@ -11,13 +11,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import OI.OI;
-import auto.AutoShot;
+import OI.OperatorInterface;
 import auto.AutoSwitch;
-import auto.GoStraightPID;
-import auto.MiddleGearPlace;
-import auto.SideGearPlace;
-import auto.SideGearPlace.Side;
 import subsystems.ChassisSubsystem;
 import subsystems.ClimberSubsystem;
 import subsystems.EncodedShooterSubsystem;
@@ -38,7 +33,7 @@ public class Robot extends IterativeRobot {
 	public static final IndexerSubsystem indexerSubsystem = new IndexerSubsystem();
 	public static final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 	public static final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
-	public static OI oi;
+	public static OperatorInterface oi;
 	public static PowerDistributionPanel pdp;
 	private AutoSwitch autoSwitch;
 
@@ -49,22 +44,20 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		CameraServer.getInstance().startAutomaticCapture("Front camera",0);
 		pdp = new PowerDistributionPanel();
-		oi = new OI();
+		oi = new OperatorInterface();
 
-		autoSwitch = new AutoSwitch(RobotMap.switch0, RobotMap.switch1);
+		//autoSwitch = new AutoSwitch(RobotMap.switch0, RobotMap.switch1);
 
 		// Add all the subsystems to the subsystem list.
 		subsystemList.add(chassisSubsystem);
-		subsystemList.add(shooterSubsystem);
-		subsystemList.add(indexerSubsystem);
-		subsystemList.add(intakeSubsystem);
-		subsystemList.add(climberSubsystem);
+		// subsystemList.add(shooterSubsystem);
+		// subsystemList.add(indexerSubsystem);
+		// subsystemList.add(intakeSubsystem);
+		// subsystemList.add(climberSubsystem);
 
 		for (M_Subsystem s : subsystemList) {
 			s.init();
 		}
-
-		Robot.chassisSubsystem.setServo(180);
 
 		updateDashboard();
 	}
@@ -98,10 +91,9 @@ public class Robot extends IterativeRobot {
 				System.out.println("How did you even get here?");
 		}
 		
-    	Robot.chassisSubsystem.setServo(0);
-		Robot.chassisSubsystem.resetGyroHeading();
+		Robot.chassisSubsystem.reset();
     	//autonomousCommand = new SideGearPlace(Side.LEFT);
-		autonomousCommand = new MiddleGearPlace();
+		// autonomousCommand = new MiddleGearPlace();
         
     	Scheduler.getInstance().add(autonomousCommand);
     	
@@ -121,7 +113,6 @@ public class Robot extends IterativeRobot {
 		// this line or comment it out.
 		if (autonomousCommand != null)
 			autonomousCommand.cancel();
-		Robot.chassisSubsystem.setServo(0);
 		updateDashboard();
 	}
 
@@ -144,9 +135,6 @@ public class Robot extends IterativeRobot {
 			r.periodic();
 		}
 		oi.periodic();
-
-		// COMMAND PID UPDATES!!!
-		GoStraightPID.periodic();
 	}
 
 	private void updateDashboard() {
@@ -156,9 +144,8 @@ public class Robot extends IterativeRobot {
 		for (M_Subsystem r : subsystemList) {
 			r.updateDashboard();
 		}
-		oi.updateDashboard();
+		// oi.updateDashboard();
 
-		GoStraightPID.updateDashboard();
 		SmartDashboard.putNumber("Joystick speed value", Robot.oi.getSpeed());
 		SmartDashboard.putNumber("Joystick turn value", Robot.oi.getTurn());
 	}

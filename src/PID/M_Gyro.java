@@ -1,5 +1,7 @@
 package PID;
 
+import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
+
 import edu.wpi.first.wpilibj.AnalogGyro;
 
 public class M_Gyro extends AnalogGyro {
@@ -10,6 +12,9 @@ public class M_Gyro extends AnalogGyro {
 	@Override
 	public double getAngle() {
 		double angle = super.getAngle() % 360;
+		if (!RobotInterfaceConstants.gyroIsFlipped) {
+			angle = 360 - angle;
+		}
 		return (angle < 0) ? angle + 360 : angle;
 	}
 	

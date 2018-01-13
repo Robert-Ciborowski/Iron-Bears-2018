@@ -35,7 +35,7 @@ public class DriveToDistanceTimeOutNoDistance extends AutoGoStraightCommand {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		Robot.chassisSubsystem.resetEncoders();
+		Robot.chassisSubsystem.reset();
 		super.initialize();
 
 		//chad

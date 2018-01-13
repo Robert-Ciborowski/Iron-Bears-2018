@@ -1,15 +1,15 @@
 package subsystems;
 
 import org.usfirst.frc.team854.robot.M_Subsystem;
-import org.usfirst.frc.team854.robot.RobotMap;
+import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
 import edu.wpi.first.wpilibj.Spark;
 import org.usfirst.frc.team854.robot.commands.IntakeOff;
 
 public class IntakeSubsystem extends M_Subsystem{
-	private Spark intakeMotor = new Spark(RobotMap.intakeMotorPort);
+	private Spark intakeMotor = new Spark(RobotInterfaceConstants.intakeMotorPort);
 	
 	public IntakeSubsystem() {
-		intakeMotor.setInverted(RobotMap.intakeMotorInverted);
+		intakeMotor.setInverted(RobotInterfaceConstants.intakeMotorInverted);
 	}
 	
 	public void init() {
