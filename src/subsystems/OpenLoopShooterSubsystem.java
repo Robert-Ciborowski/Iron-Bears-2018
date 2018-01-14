@@ -1,11 +1,11 @@
 package subsystems;
 
-import org.usfirst.frc.team854.robot.M_Subsystem;
+import org.usfirst.frc.team854.robot.PeriodicSubsystem;
 import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.commands.ShooterOff;
 import com.ctre.CANTalon;
 
-public class OpenLoopShooterSubsystem extends M_Subsystem{
+public class OpenLoopShooterSubsystem extends PeriodicSubsystem{
 	
 	private CANTalon shooterMotor = new CANTalon(RobotInterfaceConstants.shooterCANMotorPort);
 

@@ -1,11 +1,11 @@
 package subsystems;
 
-import org.usfirst.frc.team854.robot.M_Subsystem;
+import org.usfirst.frc.team854.robot.PeriodicSubsystem;
 import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
 import com.ctre.CANTalon;
 import org.usfirst.frc.team854.robot.commands.IndexerOff;
 
-public class IndexerSubsystem extends M_Subsystem{
+public class IndexerSubsystem extends PeriodicSubsystem{
 	private CANTalon indexerMotor = new CANTalon(RobotInterfaceConstants.indexerCANMotorPort);
 	
 	public IndexerSubsystem() {

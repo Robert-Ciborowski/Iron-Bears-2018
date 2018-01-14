@@ -1,11 +1,11 @@
 package subsystems;
 
-import org.usfirst.frc.team854.robot.M_Subsystem;
+import org.usfirst.frc.team854.robot.PeriodicSubsystem;
 import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
 import edu.wpi.first.wpilibj.Spark;
 import org.usfirst.frc.team854.robot.commands.IntakeOff;
 
-public class IntakeSubsystem extends M_Subsystem{
+public class IntakeSubsystem extends PeriodicSubsystem{
 	private Spark intakeMotor = new Spark(RobotInterfaceConstants.intakeMotorPort);
 	
 	public IntakeSubsystem() {

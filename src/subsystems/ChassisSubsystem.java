@@ -1,6 +1,6 @@
 package subsystems;
 
-import org.usfirst.frc.team854.robot.M_Subsystem;
+import org.usfirst.frc.team854.robot.PeriodicSubsystem;
 import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.RobotTuningConstants;
 
@@ -12,7 +12,7 @@ import teleopdrive.JoystickCommand;
 /**
  *
  */
-public class ChassisSubsystem extends M_Subsystem {
+public class ChassisSubsystem extends PeriodicSubsystem {
 	private DriveMotorPIDInput motorPIDInput = new DriveMotorPIDInput();
 	private DriveMotorPIDOutput motorPIDOutput = new DriveMotorPIDOutput();
 	private PIDController motorPIDController = new PIDController(

@@ -33,33 +33,12 @@ public abstract class AutoGoStraightCommand extends Command {
 
 	// This is called just before this Command runs the first time.
 	protected void initialize() {
-
+		
 	}
 
 	// This is called repeatedly when this Command is scheduled to run.
 	protected void execute() {
-//		double speed = speedSetpoint;
-//		double leftSpeed;
-//		double rightSpeed;
-//		
-//		SmartDashboard.putNumber("Angle setpoint",  angleSetpoint);
-//		SmartDashboard.putNumber("AnglePIDOutput", GoStraightPID.getOutput());
-//		
-//		double turn = GoStraightPID.getOutput();
-//		
-//		if (speed < 0) {
-//			turn = -turn;
-//		}
-//		
-//		if (Math.abs(speed) < 0.03) {
-//			leftSpeed = turn / 4.0;
-//			rightSpeed = -turn / 4.0;
-//		} else {
-//			leftSpeed = (turn < 0) ? speed * (1 + turn) : speed;
-//			rightSpeed = (turn < 0) ? speed : speed * (1 - turn);
-//		}
-//		
-//		Robot.chassisSubsystem.setMotorSpeed(leftSpeed,rightSpeed);
+		
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

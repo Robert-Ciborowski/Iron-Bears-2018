@@ -1,3 +1,10 @@
+/*
+ * Class: RotateFixedCommand
+ * Author: Christopher Lansdale, Waseef Nayeem and Robert Ciborowski
+ * Date: A long time ago (2016)
+ * Description: A command for rotating.
+ */
+
 package auto;
 
 import org.usfirst.frc.team854.robot.Robot;
@@ -5,7 +12,8 @@ import org.usfirst.frc.team854.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class RotateFixedCommand extends Command {
-
+	// This class needs to be re-implemented or deleted!
+	
 	public enum Direction {
 		LEFT, RIGHT;
 	}
@@ -23,15 +31,14 @@ public class RotateFixedCommand extends Command {
 
 	@Override
 	protected void execute() {
-
-		switch (direction) {
-		case LEFT:
-			Robot.chassisSubsystem.setMotorSpeed(1, -1);
-			break;
-		case RIGHT:
-			Robot.chassisSubsystem.setMotorSpeed(-1, 1);
-			break;
-		}
+		/*switch (direction) {
+			case LEFT:
+				Robot.chassisSubsystem.setMotorSpeed(1, -1);
+				break;
+			case RIGHT:
+				Robot.chassisSubsystem.setMotorSpeed(-1, 1);
+				break;
+		}*/
 	}
 
 	@Override

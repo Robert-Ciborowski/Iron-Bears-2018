@@ -1,3 +1,10 @@
+/*
+ * Class: RotateToAngle
+ * Author: Christopher Lansdale, Waseef Nayeem and Robert Ciborowski
+ * Date: A long time ago (2016)
+ * Description: A command for rotating.
+ */
+
 package auto;
 
 import org.usfirst.frc.team854.robot.Robot;
@@ -5,9 +12,6 @@ import org.usfirst.frc.team854.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- *
- */
 public class RotateToAngle extends Command {
 
 	private double targetAngle;

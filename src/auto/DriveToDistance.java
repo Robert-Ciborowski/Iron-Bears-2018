@@ -1,3 +1,10 @@
+/*
+ * Class: DriveToDistance
+ * Author: Christopher Lansdale, Waseef Nayeem and Robert Ciborowski
+ * Date: A long time ago (2016)
+ * Description: A command for driving a certain distance.
+ */
+
 package auto;
 
 import org.usfirst.frc.team854.robot.Robot;
@@ -6,6 +13,7 @@ import org.usfirst.frc.team854.robot.Robot;
  * Drives to a specified distance using encoder counts.
  */
 public class DriveToDistance extends AutoGoStraightCommand {
+	// This class needs to be re-implemented!
 
 	/**
 	 * The distance to drive to.
@@ -28,7 +36,6 @@ public class DriveToDistance extends AutoGoStraightCommand {
 		super(angle);
 		this.speedSetpoint = speed;
 		this.distanceSetpoint = distance;
-		System.out.println("DriveToDistance called constructor");
 	}
 
 	// Called just before this Command runs the first time
@@ -37,13 +44,12 @@ public class DriveToDistance extends AutoGoStraightCommand {
 		Robot.chassisSubsystem.reset();
 		super.initialize();
 
-		//chad
+		// Chad.
 		if (distanceSetpoint < 0) {
 			setSpeed(speedSetpoint, Direction.BACKWARD);
 		} else {
 			setSpeed(speedSetpoint, Direction.FORWARD);
 		}
-		System.out.println("Initialized");
 	}
 	
 	@Override

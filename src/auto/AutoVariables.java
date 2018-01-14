@@ -1,5 +1,8 @@
 /*
- * 
+ * Class: AutoVariables
+ * Author: Christopher Lansdale, Waseef Nayeem and Robert Ciborowski
+ * Date: A long time ago (2016)
+ * Description: Contains variables related to autonomous commands.
  */
 
 package auto;

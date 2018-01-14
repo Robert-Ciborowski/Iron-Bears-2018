@@ -1,6 +1,6 @@
 package subsystems;
 
-import org.usfirst.frc.team854.robot.M_Subsystem;
+import org.usfirst.frc.team854.robot.PeriodicSubsystem;
 import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.commands.ShooterOff;
 import com.ctre.CANTalon;
@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class EncodedShooterSubsystem extends M_Subsystem {
+public class EncodedShooterSubsystem extends PeriodicSubsystem {
 	
 	private CANTalon shooterMotor1 = new CANTalon(RobotInterfaceConstants.shooterCANMotorPort);
 	private Victor shooterMotor2 = new Victor(RobotInterfaceConstants.shooterVictorMotorPort);

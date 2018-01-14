@@ -1,3 +1,10 @@
+/*
+ * Class: Robot Interface Constants
+ * Author: Waseef Nayeem, Robert Ciborowski and Julian Dominguez-Schatz
+ * Date: 06/01/2018
+ * Description: Contains constants related to the robot's IO interface.
+ */
+
 package org.usfirst.frc.team854.robot;
 
 public interface RobotInterfaceConstants {
