@@ -1,3 +1,10 @@
+/*
+ * Class: DriveToDistanceTimeOut
+ * Author: Christopher Lansdale, Waseef Nayeem and Robert Ciborowski
+ * Date: A long time ago (2016)
+ * Description: A command for driving a certain distance.
+ */
+
 package auto;
 
 import org.usfirst.frc.team854.robot.Robot;
@@ -6,7 +13,8 @@ import org.usfirst.frc.team854.robot.Robot;
  * Drives to a specified distance using encoder counts.
  */
 public class DriveToDistanceTimeOut extends AutoGoStraightCommand {
-
+	// This class needs to be re-implemented or deleted!
+	
 	/**
 	 * The distance to drive to.
 	 */
@@ -38,7 +46,7 @@ public class DriveToDistanceTimeOut extends AutoGoStraightCommand {
 		Robot.chassisSubsystem.reset();
 		super.initialize();
 
-		//chad
+		// Chad.
 		if (distanceSetpoint < 0) {
 			setSpeed(speedSetpoint, Direction.BACKWARD);
 		} else {
@@ -67,10 +75,10 @@ public class DriveToDistanceTimeOut extends AutoGoStraightCommand {
 	// Called once after isFinished returns true
 	@Override
 	protected boolean isFinished() {
-//		if(this.isTimedOut()) {
-//			return this.isTimedOut();
-//		}
-//		return (Math.abs(Robot.chassisSubsystem.getEncoderDistance()) >= Math.abs(distanceSetpoint) - AutoVariables.driveStopDistance);
+		/* if(this.isTimedOut()) {
+			return this.isTimedOut();
+		}
+		return (Math.abs(Robot.chassisSubsystem.getEncoderDistance()) >= Math.abs(distanceSetpoint) - AutoVariables.driveStopDistance);*/
 		return false;
 	}
 }

@@ -1,8 +1,9 @@
 /*
- * Class: DriveToDistance
- * Author: Christopher Lansdale, Waseef Nayeem and Robert Ciborowski
+ * Class: PeriodicSubsystem
+ * Author: Christopher Lansdale and Robert Ciborowski
  * Date: A long time ago (2016)
- * Description: A command for driving a certain distance.
+ * Description: An abstract class for a subsystem which updates itself
+ *              and the dashboard periodically.
  */
 
 package org.usfirst.frc.team854.robot;

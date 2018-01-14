@@ -13,7 +13,7 @@ import org.usfirst.frc.team854.robot.Robot;
  * Drives to a specified distance using encoder counts.
  */
 public class DriveToDistance extends AutoGoStraightCommand {
-	// This class needs to be re-implemented!
+	// This class needs to be re-implemented or deleted!
 
 	/**
 	 * The distance to drive to.

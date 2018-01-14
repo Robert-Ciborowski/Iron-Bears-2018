@@ -21,7 +21,7 @@ public class OperatorInterface {
 			 		shooterOff = new JoystickButton(joystick,3),
 			 		driveReverse = new JoystickButton(joystick,9);
 	
-	// Attach joystick buttons here
+	// Attach joystick buttons here.
 	public OperatorInterface() {
 		shooterOn.whenPressed(new ShooterOn());
 		shooterOff.whenPressed(new ShooterOff());
@@ -63,63 +63,64 @@ public class OperatorInterface {
 		return intakeReverse.get();
 	}
 	
-	//Raw joystick info for dashboard
-		public double getRawSpeed() {
-			double rawSpeed = - joystick.getRawAxis(RobotInterfaceConstants.SpeedAxis);
-			return rawSpeed;
-		}
+	public double getRawSpeed() {
+		double rawSpeed = - joystick.getRawAxis(RobotInterfaceConstants.SpeedAxis);
+		return rawSpeed;
+	}
+	
+	public double getRawTurn() {
+		double rawTurn = joystick.getRawAxis(RobotInterfaceConstants.TurnAxis);
+		return rawTurn;
+	}
+	
+	public double getSpeed() {
+		double rawSpeed = - joystick.getRawAxis(RobotInterfaceConstants.SpeedAxis);
 		
-		public double getRawTurn() {
-			double rawTurn = joystick.getRawAxis(RobotInterfaceConstants.TurnAxis);
-			return rawTurn;
-		}
+		// To increase center sensitivity while retaining full range,
+		// we multiply the speed by itself. If an even polynomial,
+		// use Math.abs() on all but one of the terms to keep the
+		// direction.
+		double cubeSpeed = rawSpeed*rawSpeed*rawSpeed;
 		
-		public double getSpeed() {
-			double rawSpeed = - joystick.getRawAxis(RobotInterfaceConstants.SpeedAxis);
-			
-			//To increase center sensitivity while retaining full range,
-			//we multiply the speed by itself. If an even polynomial,
-			//use Math.abs() on all but one of the terms to keep the
-			//direction
-			double cubeSpeed = rawSpeed*rawSpeed*rawSpeed;
-			
-			//The joystick won't always centre properly (eg you let go of the controls
-			//and it gives you a small output value instead of 0) so we check if the value
-			//it's returned (except made positive to check for negative values as well) is 
-			//less than some determined number, usually less than 0.03 
-			if (Math.abs(cubeSpeed) < RobotInterfaceConstants.joystickCenterSensitivity) { return 0; }
-			return cubeSpeed;
+		// The joystick won't always centre properly (eg you let go of the controls
+		// and it gives you a small output value instead of 0) so we check if the value
+		// it's returned (except made positive to check for negative values as well) is 
+		// less than some determined number, usually less than 0.03 .
+		if (Math.abs(cubeSpeed) < RobotInterfaceConstants.joystickCenterSensitivity) {
+			return 0;
 		}
+		return cubeSpeed;
+	}
+	
+	public double getTurn() {
+		double rawTurn = joystick.getRawAxis(RobotInterfaceConstants.TurnAxis);
 		
-		public double getTurn() {
-			double rawTurn = joystick.getRawAxis(RobotInterfaceConstants.TurnAxis);
-			
-			//To increase center sensitivity while retaining full range,
-			//we multiply the speed by itself. If an even polynomial,
-			//use Math.abs() on all but one of the terms to keep the
-			//direction
-			double cubeTurn = rawTurn*rawTurn*rawTurn;
-			
-			//The joystick won't always centre properly (eg you let go of the controls
-			//and it gives you a small output value instead of 0) so we check if the value
-			//it's returned (except made positive to check for negative values as well) is 
-			//less than some determined number, usually less than 0.03 
-			if (Math.abs(cubeTurn) < RobotInterfaceConstants.joystickCenterSensitivity) { 
-				return 0.0;
-			}
-			return cubeTurn;
-		}
+		// To increase center sensitivity while retaining full range,
+		// we multiply the speed by itself. If an even polynomial,
+		// use Math.abs() on all but one of the terms to keep the
+		// direction.
+		double cubeTurn = rawTurn*rawTurn*rawTurn;
 		
-		public double getThrottle() {
-			double throttle = -joystick.getRawAxis(RobotInterfaceConstants.throttleAxis);
-			throttle = 0.2*(throttle + 1) + 0.6;
-			return throttle;
+		// The joystick won't always centre properly (eg you let go of the controls
+		// and it gives you a small output value instead of 0) so we check if the value
+		// it's returned (except made positive to check for negative values as well) is 
+		// less than some determined number, usually less than 0.03 .
+		if (Math.abs(cubeTurn) < RobotInterfaceConstants.joystickCenterSensitivity) { 
+			return 0.0;
 		}
-		
-		public void periodic() {
-		}
-		
-		public void updateDashboard() {
-			SmartDashboard.putNumber("Shooter throttle", getThrottle());
-		}
+		return cubeTurn;
+	}
+	
+	public double getThrottle() {
+		double throttle = -joystick.getRawAxis(RobotInterfaceConstants.throttleAxis);
+		throttle = 0.2*(throttle + 1) + 0.6;
+		return throttle;
+	}
+	
+	public void periodic() {
+	}
+	
+	public void updateDashboard() {
+		SmartDashboard.putNumber("Shooter throttle", getThrottle());
+	}
 }
