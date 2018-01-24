@@ -5,7 +5,7 @@
  * Description: Contains constants related to the robot's physical structure.
  */
 
-package org.usfirst.frc.team854.robot;
+package org.usfirst.frc.team854.robot.constants;
 
 public interface RobotStructureConstants {
 	// The following variables use inches.

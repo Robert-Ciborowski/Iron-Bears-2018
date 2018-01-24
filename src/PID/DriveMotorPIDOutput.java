@@ -8,41 +8,42 @@
 
 package PID;
 
-import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
-import org.usfirst.frc.team854.robot.RobotStructureConstants;
+import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
+import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
+import org.usfirst.frc.team854.robot.constants.RobotStructureConstants;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveMotorPIDOutput implements PIDOutput {
-	private Spark leftMotor = new Spark(RobotInterfaceConstants.rightMotorPort);
-	private Spark rightMotor = new Spark(RobotInterfaceConstants.leftMotorPort);
-	private Spark leftMiniCIM = new Spark(RobotInterfaceConstants.leftMiniCIMPort);
-	private Spark rightMiniCIM = new Spark(RobotInterfaceConstants.rightMiniCIMPort);
+	private Spark leftMotor = new Spark(RobotInterfaceConstants.PORT_MOTOR_LEFT);
+	private Spark rightMotor = new Spark(RobotInterfaceConstants.PORT_MOTOR_RIGHT);
+	private Spark leftMiniCIM = new Spark(RobotInterfaceConstants.PORT_MINICIM_LEFT);
+	private Spark rightMiniCIM = new Spark(RobotInterfaceConstants.PORT_MINICIM_RIGHT);
 	
 	// These are the base speeds to use.
 	private double targetSpeed = 0;
 	private double outputAngle;
 	
 	public DriveMotorPIDOutput() {
-		leftMotor.setInverted(RobotInterfaceConstants.leftMotorInverted);
-    	rightMotor.setInverted(RobotInterfaceConstants.rightMotorInverted);
-    	leftMiniCIM.setInverted(RobotInterfaceConstants.leftMiniCIMInverted);
-    	rightMiniCIM.setInverted(RobotInterfaceConstants.rightMiniCIMInverted);
+		leftMotor.setInverted(UserInterfaceConstants.leftMotorInverted);
+    	rightMotor.setInverted(UserInterfaceConstants.rightMotorInverted);
+    	leftMiniCIM.setInverted(UserInterfaceConstants.leftMiniCIMInverted);
+    	rightMiniCIM.setInverted(UserInterfaceConstants.rightMiniCIMInverted);
 	}
 	
 	@Override
 	public void pidWrite(double outputAngle) {
-		// There's a potential problem here. Example: what if "rightSpeed + output / 2" goes over the motor's
-		// maximum value? The old code, which did its motor control entirely in M_PIDController, had the
-		// same issue. To do: look at M_PIDController's solution to this.
+		// convert from 1/s to in/s
+		targetSpeed *= UserInterfaceConstants.ENCODER_MAX_RATE_LEFT / UserInterfaceConstants.ENCODER_COUNTS_PER_INCH;
 		
-		double leftSpeed = targetSpeed / RobotStructureConstants.WHEEL_RADIUS;
+		// convert to speed of the wheel in rotations/s
+		double leftSpeed = targetSpeed / (RobotStructureConstants.WHEEL_RADIUS);
 		double rightSpeed = leftSpeed + (outputAngle * RobotStructureConstants.DISTANCE_BETWEEN_WHEELS / RobotStructureConstants.WHEEL_RADIUS);
 
-		leftSpeed *= RobotInterfaceConstants.encoderCountsPerInch / RobotInterfaceConstants.leftEncoderMaxRate;
-		rightSpeed *= RobotInterfaceConstants.encoderCountsPerInch / RobotInterfaceConstants.rightEncoderMaxRate;
+		leftSpeed /= (UserInterfaceConstants.ENCODER_MAX_RATE_LEFT / UserInterfaceConstants.ENCODER_COUNTS_PER_INCH);
+		rightSpeed /= (UserInterfaceConstants.ENCODER_MAX_RATE_RIGHT / UserInterfaceConstants.ENCODER_COUNTS_PER_INCH);
 		
 		leftMotor.pidWrite(leftSpeed);
 		leftMiniCIM.pidWrite(-leftSpeed);
@@ -58,7 +59,7 @@ public class DriveMotorPIDOutput implements PIDOutput {
 		SmartDashboard.putNumber("PID Angular Correction", outputAngle);
 	}
 	
-	public void setSpeed(double speed) {
-		this.targetSpeed = speed;
+	public void setTargetSpeed(double targetSpeed) {
+		this.targetSpeed = targetSpeed;
 	}
 }

@@ -24,28 +24,17 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import OI.OperatorInterface;
-import auto.AutoSwitch;
+import oi.OperatorInterface;
 import subsystems.ChassisSubsystem;
-import subsystems.ClimberSubsystem;
-import subsystems.EncodedShooterSubsystem;
-import subsystems.IndexerSubsystem;
-import subsystems.IntakeSubsystem;
-import subsystems.OpenLoopShooterSubsystem;
 
 public class Robot extends IterativeRobot {
 	// These are the robot's subsystems.
 	public static final ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
-	public static final EncodedShooterSubsystem shooterSubsystem = new EncodedShooterSubsystem();
-	public static final IndexerSubsystem indexerSubsystem = new IndexerSubsystem();
-	public static final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-	public static final ClimberSubsystem climberSubsystem = new ClimberSubsystem();
 	public static List<PeriodicSubsystem> subsystemList = new ArrayList<PeriodicSubsystem>();
 	
 	// These represent other parts of the robot.
 	public static OperatorInterface oi;
 	public static PowerDistributionPanel pdp;
-	private AutoSwitch autoSwitch;
 
 	Command autonomousCommand;
 
@@ -54,13 +43,7 @@ public class Robot extends IterativeRobot {
 		pdp = new PowerDistributionPanel();
 		oi = new OperatorInterface();
 
-		// Uncomment the following as we set up our subsystems!
-		// autoSwitch = new AutoSwitch(RobotMap.switch0, RobotMap.switch1);
 		subsystemList.add(chassisSubsystem);
-		// subsystemList.add(shooterSubsystem);
-		// subsystemList.add(indexerSubsystem);
-		// subsystemList.add(intakeSubsystem);
-		// subsystemList.add(climberSubsystem);
 
 		for (PeriodicSubsystem s : subsystemList) {
 			s.init();
@@ -79,29 +62,9 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousInit() {
-		autoSwitch.update();
-		
-		switch (autoSwitch.getState()) {
-			case 0:
-				System.out.println("Switch is in state 0.");
-				break;
-			case 1:
-				System.out.println("Switch is in state 1.");
-				break;
-			case 2:
-				System.out.println("Switch is in state 2.");
-				break;
-			case 3:
-				System.out.println("Switch is in state 3.");
-				break;
-			default:
-				System.out.println("How did you even get here?");
-		}
-		
 		Robot.chassisSubsystem.reset();
-    	// autonomousCommand = new SideGearPlace(Side.LEFT);
-		// autonomousCommand = new MiddleGearPlace();
-        
+		
+		// autonomousCommand = new ...();
     	Scheduler.getInstance().add(autonomousCommand);
     	
         updateDashboard();
@@ -130,7 +93,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	/**
-	 * This function is called periodically during test mode
+	 * This function is called periodically during test mode.
 	 */
 	public void testPeriodic() {
 		LiveWindow.run();

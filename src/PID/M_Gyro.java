@@ -1,6 +1,13 @@
+/**
+ * Name: M_Gyro
+ * Authors: Robert Ciborowski
+ * Date: 20/01/2018
+ * Description: 
+ */
+
 package PID;
 
-import org.usfirst.frc.team854.robot.RobotInterfaceConstants;
+import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 
@@ -12,7 +19,7 @@ public class M_Gyro extends AnalogGyro {
 	@Override
 	public double getAngle() {
 		double angle = super.getAngle() % 360;
-		if (!RobotInterfaceConstants.gyroIsFlipped) {
+		if (!UserInterfaceConstants.FLIP_GYRO) {
 			angle = 360 - angle;
 		}
 		return (angle < 0) ? angle + 360 : angle;
