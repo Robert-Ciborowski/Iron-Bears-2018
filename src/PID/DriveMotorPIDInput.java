@@ -46,12 +46,12 @@ public class DriveMotorPIDInput implements PIDSource {
 		} else if (turningMode == TurningMode.RELATIVE) {
 			long currentTime = System.currentTimeMillis();
 			currentAngleForRelativePID += targetAngle * (currentTime - timeOfLastPIDGet) / 1000;
-			System.out.println(targetAngle * (currentTime - timeOfLastPIDGet) / 1000);
 			timeOfLastPIDGet = currentTime;
 			
 			double gyroAngle = Math.toRadians(gyro.getAngle());
 			double transformedTargetAngle = currentAngleForRelativePID - gyroAngle;
 			transformedTargetAngle = descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
+			System.out.println("Current angle for relative (input): " + transformedTargetAngle + " " + targetAngle);
 			return transformedTargetAngle;
 		} else {
 			throw new IllegalStateException("Stop screwing with the robot.");

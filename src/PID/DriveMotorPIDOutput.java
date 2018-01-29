@@ -23,7 +23,7 @@ public class DriveMotorPIDOutput implements PIDOutput {
 	private Spark rightMiniCIM = new Spark(RobotInterfaceConstants.PORT_MINICIM_RIGHT);
 	
 	// These are the base speeds to use.
-	private double targetSpeed = 0;
+	private double targetSpeed;
 	private double outputAngle;
 	
 	public DriveMotorPIDOutput() {
@@ -38,9 +38,12 @@ public class DriveMotorPIDOutput implements PIDOutput {
 		// convert from 1/s to in/s
 		targetSpeed *= UserInterfaceConstants.ENCODER_MAX_RATE_LEFT / UserInterfaceConstants.ENCODER_COUNTS_PER_INCH;
 		
+		double targetAngularSpeed = targetSpeed / RobotStructureConstants.WHEEL_RADIUS;
+		double angleOffset = (outputAngle * RobotStructureConstants.DISTANCE_BETWEEN_WHEELS / RobotStructureConstants.WHEEL_RADIUS) / 2;
+		
 		// convert to speed of the wheel in rotations/s
-		double leftSpeed = targetSpeed / (RobotStructureConstants.WHEEL_RADIUS);
-		double rightSpeed = leftSpeed + (outputAngle * RobotStructureConstants.DISTANCE_BETWEEN_WHEELS / RobotStructureConstants.WHEEL_RADIUS);
+		double leftSpeed = targetAngularSpeed - angleOffset;
+		double rightSpeed = targetAngularSpeed + angleOffset;
 
 		leftSpeed /= (UserInterfaceConstants.ENCODER_MAX_RATE_LEFT / UserInterfaceConstants.ENCODER_COUNTS_PER_INCH);
 		rightSpeed /= (UserInterfaceConstants.ENCODER_MAX_RATE_RIGHT / UserInterfaceConstants.ENCODER_COUNTS_PER_INCH);

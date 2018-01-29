@@ -1,34 +1,32 @@
 package oi;
 
-public class LogarithmicFilter extends ValueFilter {
+public class LogarithmicFilter implements Filter {
 	
-	private double logOfMaxValue;
+	private double maxValueConstant;
 
-	public LogarithmicFilter(double thresholdValue) {
-		this(thresholdValue, -1);
+	public LogarithmicFilter() {
+		this(0);
 	}
 
-	public LogarithmicFilter(double thresholdValue, double maxValue) {
-		super(thresholdValue);
-
-		// Logs of bases less than or equal to one don't exist!
-		if (maxValue <= 0) {
-			logOfMaxValue = 1;
+	public LogarithmicFilter(double maxValue) {
+		// We must divide by the max value, if it is zero, we ignore it.
+		if (maxValue == 0) {
+			maxValueConstant = Math.log(2);
 		} else {
-			// Precompute the value of the log of the base for later calculations.
-			logOfMaxValue = Math.log(maxValue + 1);
+			// Precompute a constant that will scale the output up to the max value.
+			maxValueConstant = Math.log(2) / maxValue;
 		}
 	}
 
 	@Override
-	protected double transform(double value) {
+	public double filter(double value) {
 		// Ensure the value is in the domain of log_e(v).
 		double transformedValue = Math.abs(value) + 1;
 		double signOfValue = Math.signum(value);
 		
 		// Take the log of the value in the base specified in the constructor.
 		// This uses the change of base formula: log_a(v) = log_e(v) / log_e(a)
-		return (Math.log(transformedValue) / logOfMaxValue) * signOfValue;
+		return (Math.log(transformedValue) / maxValueConstant) * signOfValue;
 	}
 
 }

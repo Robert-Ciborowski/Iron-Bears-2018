@@ -1,24 +1,21 @@
 package oi;
 
-public abstract class ValueFilter {
+public class CutoffFilter implements Filter {
 	
 	private double thresholdValue;
 	
-	public ValueFilter(double thresholdValue) {
+	public CutoffFilter(double thresholdValue) {
 		this.thresholdValue = thresholdValue;
 	}
 	
-	protected abstract double transform(double value);
-	
+	@Override
 	public double filter(double value) {
-		double transformedValue = transform(value);
-		
 		// If the input value is very close to 0, clamp it to 0.
 		// This helps prevent unnecessary input noise.
-		if (Math.abs(transformedValue) < thresholdValue) {
+		if (Math.abs(value) < thresholdValue) {
 			return 0;
 		}
 		
-		return transformedValue;
+		return value;
 	}
 }

@@ -25,8 +25,8 @@ public class JoystickCommand extends Command {
 	}
 	
 	protected void execute() {
-		double speed = Robot.oi.getSpeed();  //Positive forwards
-    	double turn = Robot.oi.getTurn(); //Positive right, sums inputs
+		double speed = Robot.oi.getSpeed();  // Positive forwards
+    	double turn = Robot.oi.getTurn(); // Positive left, sums inputs
     	
     	if(Robot.oi.getDriveReverse()) {
     		if(!reverseButtonHeld) {

@@ -26,7 +26,10 @@ public interface UserInterfaceConstants {
 	public static final boolean leftMiniCIMInverted = true;
 	public static final boolean rightMiniCIMInverted = false;
 
-	public static final double JOYSTICK_INPUT_CUTOFF = 0.05;
+	public static final double JOYSTICK_TURNING_CUTOFF = 0.05;
+	public static final double JOYSTICK_SPEED_CUTOFF = 0.05;
+	public static final int JOYSTICK_TURNING_OFFSET = 0;
+	public static final int JOYSTICK_SPEED_OFFSET = 0;
 	
-	public static final TurningMode INITIAL_TURNING_MODE = TurningMode.ABSOLUTE;
+	public static final TurningMode INITIAL_TURNING_MODE = TurningMode.RELATIVE;
 }
