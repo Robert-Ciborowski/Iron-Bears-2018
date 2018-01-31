@@ -45,13 +45,16 @@ public class DriveMotorPIDInput implements PIDSource {
 			return descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
 		} else if (turningMode == TurningMode.RELATIVE) {
 			long currentTime = System.currentTimeMillis();
-			currentAngleForRelativePID += targetAngle * (currentTime - timeOfLastPIDGet) / 1000;
+			currentAngleForRelativePID -= targetAngle * (currentTime - timeOfLastPIDGet) / 1000;
 			timeOfLastPIDGet = currentTime;
 			
 			double gyroAngle = Math.toRadians(gyro.getAngle());
 			double transformedTargetAngle = currentAngleForRelativePID - gyroAngle;
-			transformedTargetAngle = descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
-			System.out.println("Current angle for relative (input): " + transformedTargetAngle + " " + targetAngle);
+			System.out.println("Joystick-Stored Angle: " + currentAngleForRelativePID);
+			System.out.println("Angle provided by joy: " + transformedTargetAngle + ", Gyro Angle: " + gyroAngle);
+			// System.out.println("Target Angle for PID: " + currentAngleForRelativePID + ", Target Angle: " + targetAngle);
+			// transformedTargetAngle = descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
+			// System.out.println("Current angle for relative (input): " + transformedTargetAngle + " " + targetAngle);
 			return transformedTargetAngle;
 		} else {
 			throw new IllegalStateException("Stop screwing with the robot.");
@@ -77,7 +80,10 @@ public class DriveMotorPIDInput implements PIDSource {
 		}
 		
 		double valueRange = maxValue - minValue;
-		return value + valueRange * Math.ceil(Math.abs((minValue - value) / valueRange));
+		if (value < minValue) {
+			return value + valueRange * Math.ceil(Math.abs((minValue - value) / valueRange));
+		}
+		return value - valueRange * Math.ceil(Math.abs((maxValue - value) / valueRange));
 	}
 	
 	public void setTurningMode(TurningMode turningMode) {

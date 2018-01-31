@@ -11,6 +11,7 @@ package PID;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.RobotStructureConstants;
+import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Spark;
@@ -35,15 +36,21 @@ public class DriveMotorPIDOutput implements PIDOutput {
 	
 	@Override
 	public void pidWrite(double outputAngle) {
+		System.out.println("Output angle: " + outputAngle);
 		// convert from 1/s to in/s
 		targetSpeed *= UserInterfaceConstants.ENCODER_MAX_RATE_LEFT / UserInterfaceConstants.ENCODER_COUNTS_PER_INCH;
 		
 		double targetAngularSpeed = targetSpeed / RobotStructureConstants.WHEEL_RADIUS;
 		double angleOffset = (outputAngle * RobotStructureConstants.DISTANCE_BETWEEN_WHEELS / RobotStructureConstants.WHEEL_RADIUS) / 2;
 		
+		// TEMPORARY
+		angleOffset *= RobotTuningConstants.TURN_POST_SCALE;
+		
+		// System.out.println("Angle offset: " + angleOffset);
+		
 		// convert to speed of the wheel in rotations/s
-		double leftSpeed = targetAngularSpeed - angleOffset;
-		double rightSpeed = targetAngularSpeed + angleOffset;
+		double leftSpeed = targetAngularSpeed + angleOffset;
+		double rightSpeed = targetAngularSpeed - angleOffset;
 
 		leftSpeed /= (UserInterfaceConstants.ENCODER_MAX_RATE_LEFT / UserInterfaceConstants.ENCODER_COUNTS_PER_INCH);
 		rightSpeed /= (UserInterfaceConstants.ENCODER_MAX_RATE_RIGHT / UserInterfaceConstants.ENCODER_COUNTS_PER_INCH);

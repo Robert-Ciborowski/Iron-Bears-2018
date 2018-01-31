@@ -58,6 +58,8 @@ public class ChassisSubsystem extends PeriodicSubsystem {
 		if (!motorPIDController.isEnabled()) {
 			motorPIDController.enable();
 		}
+		
+		// System.out.println("Updated joystick turn!: " + angle);
     }
     
     public void setTurningMode(TurningMode turningMode) {

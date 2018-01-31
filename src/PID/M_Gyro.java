@@ -18,11 +18,7 @@ public class M_Gyro extends AnalogGyro {
 
 	@Override
 	public double getAngle() {
-		double angle = super.getAngle() % 360;
-		if (!UserInterfaceConstants.FLIP_GYRO) {
-			angle = 360 - angle;
-		}
-		return (angle < 0) ? angle + 360 : angle;
+		return super.getAngle();
 	}
 	
 	public double getAngleDifference(double targetAngle) {

@@ -22,7 +22,7 @@ public class OperatorInterface {
 
 	private Filter turningFilter = new CompoundFilter.Builder()
 			.addFilter(new LinearFilter(UserInterfaceConstants.JOYSTICK_TURNING_OFFSET))
-			.addFilter(new LogarithmicFilter(Math.PI / 2))
+			.addFilter(new LogarithmicFilter(Math.PI))
 			.addFilter(new CutoffFilter(UserInterfaceConstants.JOYSTICK_TURNING_CUTOFF))
 			.build();
 	private Filter speedFilter = new CompoundFilter.Builder()
