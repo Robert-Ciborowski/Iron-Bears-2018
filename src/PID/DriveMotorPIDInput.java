@@ -11,6 +11,7 @@ package PID;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -107,5 +108,9 @@ public class DriveMotorPIDInput implements PIDSource {
 
 	public void setTargetAngle(double targetAngle) {
 		this.targetAngle = targetAngle;
+	}
+	
+	public AnalogGyro getGyro() {
+		return gyro;
 	}
 }
