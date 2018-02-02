@@ -11,13 +11,14 @@ package PID;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import subsystems.TurningMode;
 
 public class DriveMotorPIDInput implements PIDSource {
-	private M_Gyro gyro = new M_Gyro(RobotInterfaceConstants.PORT_GYRO);
+	private AnalogGyro gyro = new AnalogGyro(RobotInterfaceConstants.PORT_GYRO);
 	
 	private double targetAngle = 0;
 	private double currentAngleForRelativePID = 0;
