@@ -1,4 +1,4 @@
-package Autnomous;
+package autonomous;
 
 import org.usfirst.frc.team854.robot.Robot;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
