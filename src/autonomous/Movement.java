@@ -18,8 +18,8 @@ public class Movement extends Command implements RobotInterfaceConstants{
 	private double angle;
 	private double distanceRemaining;
 	Encoder leftEnc, rightEnc;
-	AnalogGyro gyro=DriveMotorPIDInput.getGyro();
-	
+	// I made getGyro static -- Cole
+	AnalogGyro gyro = DriveMotorPIDInput.getGyro();
 
 	public Movement(double distance, double speed, double angle) {
 		
