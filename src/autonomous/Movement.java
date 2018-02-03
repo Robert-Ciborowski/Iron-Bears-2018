@@ -4,7 +4,6 @@ import org.usfirst.frc.team854.robot.Robot;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 
 import PID.DriveMotorPIDInput;
-import PID.M_Gyro;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Command;
@@ -45,7 +44,7 @@ public class Movement extends Command implements RobotInterfaceConstants{
 	public double updateSpeed() {
 		// calculates the remaining speed and returns the new speed needed
 		
-		double newSpeed;
+		double newSpeed = 0;
 		distanceRemaining = distance - ((leftEnc.getDistance() + rightEnc.getDistance()) / 2);
 		// rana writes his function here
 		return newSpeed;
