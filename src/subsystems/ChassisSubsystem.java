@@ -12,6 +12,7 @@ import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 
 import PID.DriveMotorPIDInput;
 import PID.DriveMotorPIDOutput;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import teleopdrive.JoystickCommand;
@@ -20,7 +21,7 @@ import teleopdrive.JoystickCommand;
  * 
  */
 public class ChassisSubsystem extends PeriodicSubsystem {
-	private DriveMotorPIDInput motorPIDInput = new DriveMotorPIDInput();
+	private static DriveMotorPIDInput motorPIDInput = new DriveMotorPIDInput();
 	private DriveMotorPIDOutput motorPIDOutput = new DriveMotorPIDOutput();
 	private PIDController motorPIDController = new PIDController(
 			RobotTuningConstants.DRIVE_PROPORTIONAL,
@@ -77,6 +78,10 @@ public class ChassisSubsystem extends PeriodicSubsystem {
 		motorPIDInput.updateDashboard();
 		motorPIDOutput.updateDashboard();
 		SmartDashboard.putData("Motor Controller", motorPIDController);
+	}
+	
+	public static AnalogGyro getGyro() {
+		return motorPIDInput.getGyro();
 	}
 }
 
