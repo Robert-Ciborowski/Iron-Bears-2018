@@ -1,3 +1,10 @@
+/*
+ * Class: CutoffFilter
+ * Author: Julian Dominguez-Schatz, Robert Ciborowski
+ * Date: 25/01/2018
+ * Description: A filter that will cause a value to be zero if its less than a threshold value.
+ */
+
 package oi;
 
 public class CutoffFilter implements Filter {

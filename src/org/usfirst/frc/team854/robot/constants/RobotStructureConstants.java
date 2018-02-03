@@ -11,5 +11,4 @@ public interface RobotStructureConstants {
 	// The following variables use inches.
 	public static final double DISTANCE_BETWEEN_WHEELS = 19.25;
 	public static final int WHEEL_RADIUS = 2;
-	
 }

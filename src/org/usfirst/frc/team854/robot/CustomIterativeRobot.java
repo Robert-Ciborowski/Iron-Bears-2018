@@ -1,3 +1,13 @@
+/*
+ * Class: CustomIterativeRobot
+ * Author: Robert Ciborowski, Creators of WPILib
+ * Date: 01/02/2018
+ * Description: A modification of WPILib's Iterative Robot, which splits up the robot
+ *              based on iterations of each mode.
+ *              Q: Why would you create a custom iterative robot?
+ *              A: For more control, even if its unnecessary to have at first.
+ */
+
 package org.usfirst.frc.team854.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
@@ -14,283 +24,185 @@ import edu.wpi.first.wpilibj.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.wpilibj.hal.HAL;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
-/**
- * CustomIterativeRobot implements a specific type of Robot Program framework, extending the RobotBase
- * class.
- *
- * <p>The CustomIterativeRobot class is intended to be subclassed by a user creating a robot program.
- *
- * <p>This class is intended to implement the "old style" default code, by providing the following
- * functions which are called by the main loop, startCompetition(), at the appropriate times:
- *
- * <p>robotInit() -- provide for initialization at robot power-on
- *
- * <p>init() functions -- each of the following functions is called once when the appropriate mode
- * is entered: - DisabledInit() -- called only when first disabled - AutonomousInit() -- called each
- * and every time autonomous is entered from another mode - TeleopInit() -- called each and every
- * time teleop is entered from another mode - TestInit() -- called each and every time test mode is
- * entered from anothermode
- *
- * <p>Periodic() functions -- each of these functions is called iteratively at the appropriate
- * periodic rate (aka the "slow loop"). The period of the iterative robot is synced to the driver
- * station control packets, giving a periodic frequency of about 50Hz (50 times per second). -
- * disabledPeriodic() - autonomousPeriodic() - teleopPeriodic() - testPeriodoc()
- */
 public class CustomIterativeRobot extends RobotBase {
-  private boolean m_disabledInitialized;
-  private boolean m_autonomousInitialized;
-  private boolean m_teleopInitialized;
-  private boolean m_testInitialized;
+	private boolean disabledIsInitialised;
+	private boolean autonomousIsInitialised;
+	private boolean teleopIsInitialised;
+	private boolean testIsInitialised;
 
-  /**
-   * Constructor for RobotIterativeBase.
-   *
-   * <p>The constructor initializes the instance variables for the robot to indicate the status of
-   * initialization for disabled, autonomous, and teleop code.
-   */
-  public CustomIterativeRobot() {
-    // set status for initialization of disabled, autonomous, and teleop code.
-    m_disabledInitialized = false;
-    m_autonomousInitialized = false;
-    m_teleopInitialized = false;
-    m_testInitialized = false;
-  }
+	/** The default constructor, which sets initialisation statuses.*/
+	public CustomIterativeRobot() {
+		disabledIsInitialised = false;
+		autonomousIsInitialised = false;
+		teleopIsInitialised = false;
+		testIsInitialised = false;
+	}
 
-  /**
-   * Provide an alternate "main loop" via startCompetition().
-   */
-  public void startCompetition() {
-    HAL.report(tResourceType.kResourceType_Framework,
-                                   tInstances.kFramework_Iterative);
+	/** This is like the main method of the robot. It takes care of all necessary
+	 * looping in order for the iterative functionality of this class to happen.
+	 */
+	public void startCompetition() {
+		HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_Iterative);
 
-    robotInit();
+		// Runs the (hopefully overridden) robot initialisation method.
+		robotInit();
 
-    // Tell the DS that the robot is ready to be enabled
-    HAL.observeUserProgramStarting();
+		// This tells the DS that the robot is ready to be enabled.
+		HAL.observeUserProgramStarting();
 
-    // loop forever, calling the appropriate mode-dependent function
-    LiveWindow.setEnabled(false);
-    while (true) {
-      // Wait for new data to arrive
-      m_ds.waitForData();
-      // Call the appropriate function depending upon the current robot mode
-      if (isDisabled()) {
-        // call DisabledInit() if we are now just entering disabled mode from
-        // either a different mode or from power-on
-        if (!m_disabledInitialized) {
-          LiveWindow.setEnabled(false);
-          disabledInit();
-          m_disabledInitialized = true;
-          // reset the initialization flags for the other modes
-          m_autonomousInitialized = false;
-          m_teleopInitialized = false;
-          m_testInitialized = false;
-        }
-        HAL.observeUserProgramDisabled();
-        disabledPeriodic();
-      } else if (isTest()) {
-        // call TestInit() if we are now just entering test mode from either
-        // a different mode or from power-on
-        if (!m_testInitialized) {
-          LiveWindow.setEnabled(true);
-          testInit();
-          m_testInitialized = true;
-          m_autonomousInitialized = false;
-          m_teleopInitialized = false;
-          m_disabledInitialized = false;
-        }
-        HAL.observeUserProgramTest();
-        testPeriodic();
-      } else if (isAutonomous()) {
-        // call Autonomous_Init() if this is the first time
-        // we've entered autonomous_mode
-        if (!m_autonomousInitialized) {
-          LiveWindow.setEnabled(false);
-          // KBS NOTE: old code reset all PWMs and relays to "safe values"
-          // whenever entering autonomous mode, before calling
-          // "Autonomous_Init()"
-          autonomousInit();
-          m_autonomousInitialized = true;
-          m_testInitialized = false;
-          m_teleopInitialized = false;
-          m_disabledInitialized = false;
-        }
-        HAL.observeUserProgramAutonomous();
-        autonomousPeriodic();
-      } else {
-        // call Teleop_Init() if this is the first time
-        // we've entered teleop_mode
-        if (!m_teleopInitialized) {
-          LiveWindow.setEnabled(false);
-          teleopInit();
-          m_teleopInitialized = true;
-          m_testInitialized = false;
-          m_autonomousInitialized = false;
-          m_disabledInitialized = false;
-        }
-        HAL.observeUserProgramTeleop();
-        teleopPeriodic();
-      }
-      robotPeriodic();
-    }
-  }
+		// This disables the live window, whatever that means.
+		LiveWindow.setEnabled(false);
 
-  /* ----------- Overridable initialization code ----------------- */
+		// This is the running loop of the robot.
+		while (true) {
+			// This will wait for new data to arrive, so that the loop only runs
+			// when something new occurs.
+			m_ds.waitForData();
+			
+			// This will run the mode that is currently enabled.
+			if (isDisabled()) {
+				// This will initialise the disabled mode, if necessary.
+				if (!disabledIsInitialised) {
+					LiveWindow.setEnabled(false);
+					disabledInit();
+					disabledIsInitialised = true;
+					autonomousIsInitialised = false;
+					teleopIsInitialised = false;
+					testIsInitialised = false;
+				}
+				HAL.observeUserProgramDisabled();
+				disabledPeriodic();
+			} else if (isTest()) {
+				// This will initialise the test mode, if necessary.
+				if (!testIsInitialised) {
+					LiveWindow.setEnabled(true);
+					testInit();
+					testIsInitialised = true;
+					autonomousIsInitialised = false;
+					teleopIsInitialised = false;
+					disabledIsInitialised = false;
+				}
+				HAL.observeUserProgramTest();
+				testPeriodic();
+			} else if (isAutonomous()) {
+				// This will initialise the autonomous mode, if necessary.
+				if (!autonomousIsInitialised) {
+					LiveWindow.setEnabled(false);
+					autonomousInit();
+					autonomousIsInitialised = true;
+					testIsInitialised = false;
+					teleopIsInitialised = false;
+					disabledIsInitialised = false;
+				}
+				HAL.observeUserProgramAutonomous();
+				autonomousPeriodic();
+			} else {
+				// This will initialise the tele-operated mode, if necessary.
+				if (!teleopIsInitialised) {
+					LiveWindow.setEnabled(false);
+					teleopInit();
+					teleopIsInitialised = true;
+					testIsInitialised = false;
+					autonomousIsInitialised = false;
+					disabledIsInitialised = false;
+				}
+				HAL.observeUserProgramTeleop();
+				teleopPeriodic();
+			}
+			robotPeriodic();
+		}
+	}
 
-  /**
-   * Robot-wide initialization code should go here.
-   *
-   * <p>Users should override this method for default Robot-wide initialization which will be called
-   * when the robot is first powered on. It will be called exactly one time.
-   *
-   * <p>Warning: the Driver Station "Robot Code" light and FMS "Robot Ready" indicators will be off
-   * until RobotInit() exits. Code in RobotInit() that waits for enable will cause the robot to
-   * never indicate that the code is ready, causing the robot to be bypassed in a match.
-   */
-  public void robotInit() {
-    System.out.println("Default CustomIterativeRobot.robotInit() method... Overload me!");
-  }
+	/** The robot's initialisation method, which should be overridden.*/
+	public void robotInit() {
+		System.out.println("You forgot to override robotInit()!");
+	}
 
-  /**
-   * Initialization code for disabled mode should go here.
-   *
-   * <p>Users should override this method for initialization code which will be called each time the
-   * robot enters disabled mode.
-   */
-  public void disabledInit() {
-    System.out.println("Default CustomIterativeRobot.disabledInit() method... Overload me!");
-  }
+	/** The robot's disabled initialisation method, which should be overridden.*/
+	public void disabledInit() {
+		System.out.println("You forgot to override disabledInit()!");
+	}
 
-  /**
-   * Initialization code for autonomous mode should go here.
-   *
-   * <p>Users should override this method for initialization code which will be called each time the
-   * robot enters autonomous mode.
-   */
-  public void autonomousInit() {
-    System.out.println("Default CustomIterativeRobot.autonomousInit() method... Overload me!");
-  }
+	/** The robot's autonomous initialisation method, which should be overridden.*/
+	public void autonomousInit() {
+		System.out.println("You forgot to override autonomousInit()!");
+	}
 
-  /**
-   * Initialization code for teleop mode should go here.
-   *
-   * <p>Users should override this method for initialization code which will be called each time the
-   * robot enters teleop mode.
-   */
-  public void teleopInit() {
-    System.out.println("Default CustomIterativeRobot.teleopInit() method... Overload me!");
-  }
+	/** The robot's tele-operated initialisation method, which should be overridden.*/
+	public void teleopInit() {
+		System.out.println("You forgot to override teleopInit()!");
+	}
 
-  /**
-   * Initialization code for test mode should go here.
-   *
-   * <p>Users should override this method for initialization code which will be called each time the
-   * robot enters test mode.
-   */
-  @SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
-  public void testInit() {
-    System.out.println("Default CustomIterativeRobot.testInit() method... Overload me!");
-  }
+	/** The robot's test initialisation method, which should be overridden.*/
+	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
+	public void testInit() {
+		System.out.println("You forgot to override testInit()!");
+	}
 
-  /* ----------- Overridable periodic code ----------------- */
 
-  private boolean m_rpFirstRun = true;
+	private boolean robotPeriodicWasRunOnce = false;
 
-  /**
-   * Periodic code for all robot modes should go here.
-   *
-   * <p>This function is called each time a new packet is received from the driver station.
-   *
-   * <p>Packets are received approximately every 20ms.  Fixed loop timing is not guaranteed due to
-   * network timing variability and the function may not be called at all if the Driver Station is
-   * disconnected.  For most use cases the variable timing will not be an issue.  If your code does
-   * require guaranteed fixed periodic timing, consider using Notifier or PIDController instead.
-   */
-  public void robotPeriodic() {
-    if (m_rpFirstRun) {
-      System.out.println("Default CustomIterativeRobot.robotPeriodic() method... Overload me!");
-      m_rpFirstRun = false;
-    }
-  }
+	/** This is the robot's periodic method, which should be overridden. It runs no matter what the
+	 * mode is. Note that it will run when a new packet is received from the driver station, which
+	 * (according to WPILib's IterativeRobot) is approximately every 20 ms.
+	 */
+	public void robotPeriodic() {
+		if (!robotPeriodicWasRunOnce) {
+			System.out.println("You forgot to override robotPeriodic()!");
+			robotPeriodicWasRunOnce = true;
+		}
+	}
 
-  private boolean m_dpFirstRun = true;
+	private boolean disabledPeriodicWasRunOnce = false;
 
-  /**
-   * Periodic code for disabled mode should go here.
-   *
-   * <p>Users should override this method for code which will be called each time a new packet is
-   * received from the driver station and the robot is in disabled mode.
-   *
-   * <p>Packets are received approximately every 20ms.  Fixed loop timing is not guaranteed due to
-   * network timing variability and the function may not be called at all if the Driver Station is
-   * disconnected.  For most use cases the variable timing will not be an issue.  If your code does
-   * require guaranteed fixed periodic timing, consider using Notifier or PIDController instead.
-   */
-  public void disabledPeriodic() {
-    if (m_dpFirstRun) {
-      System.out.println("Default CustomIterativeRobot.disabledPeriodic() method... Overload me!");
-      m_dpFirstRun = false;
-    }
-  }
+	/** This is the robot's disabled periodic method, which should be overridden. It runs during the
+	 * disabled mode. Note that it will run when a new packet is received from the driver station, which
+	 * (according to WPILib's IterativeRobot) is approximately every 20 ms.
+	 */
+	public void disabledPeriodic() {
+		if (!disabledPeriodicWasRunOnce) {
+			System.out.println("You forgot to override disabledPeriodic()!");
+			disabledPeriodicWasRunOnce = true;
+		}
+	}
 
-  private boolean m_apFirstRun = true;
+	private boolean autonomousPeriodicWasRunOnce = false;
 
-  /**
-   * Periodic code for autonomous mode should go here.
-   *
-   * <p>Users should override this method for code which will be called each time a new packet is
-   * received from the driver station and the robot is in autonomous mode.
-   *
-   * <p>Packets are received approximately every 20ms.  Fixed loop timing is not guaranteed due to
-   * network timing variability and the function may not be called at all if the Driver Station is
-   * disconnected.  For most use cases the variable timing will not be an issue.  If your code does
-   * require guaranteed fixed periodic timing, consider using Notifier or PIDController instead.
-   */
-  public void autonomousPeriodic() {
-    if (m_apFirstRun) {
-      System.out.println("Default CustomIterativeRobot.autonomousPeriodic() method... Overload me!");
-      m_apFirstRun = false;
-    }
-  }
+	/** This is the robot's autonomous periodic method, which should be overridden. It runs during the
+	 * autonomous mode. Note that it will run when a new packet is received from the driver station, which
+	 * (according to WPILib's IterativeRobot) is approximately every 20 ms.
+	 */
+	public void autonomousPeriodic() {
+		if (!autonomousPeriodicWasRunOnce) {
+			System.out.println("You forgot to override autonomousPeriodic()!");
+			autonomousPeriodicWasRunOnce = true;
+		}
+	}
 
-  private boolean m_tpFirstRun = true;
+	private boolean teleopPeriodicWasRunOnce = false;
 
-  /**
-   * Periodic code for teleop mode should go here.
-   *
-   * <p>Users should override this method for code which will be called each time a new packet is
-   * received from the driver station and the robot is in teleop mode.
-   *
-   * <p>Packets are received approximately every 20ms.  Fixed loop timing is not guaranteed due to
-   * network timing variability and the function may not be called at all if the Driver Station is
-   * disconnected.  For most use cases the variable timing will not be an issue.  If your code does
-   * require guaranteed fixed periodic timing, consider using Notifier or PIDController instead.
-   */
-  public void teleopPeriodic() {
-    if (m_tpFirstRun) {
-      System.out.println("Default CustomIterativeRobot.teleopPeriodic() method... Overload me!");
-      m_tpFirstRun = false;
-    }
-  }
+	/** This is the robot's tele-operated periodic method, which should be overridden. It runs during the
+	 * tele-operated mode. Note that it will run when a new packet is received from the driver station, which
+	 * (according to WPILib's IterativeRobot) is approximately every 20 ms.
+	 */
+	public void teleopPeriodic() {
+		if (!teleopPeriodicWasRunOnce) {
+			System.out.println("You forgot to override teleopPeriodic()!");
+			teleopPeriodicWasRunOnce = true;
+		}
+	}
 
-  private boolean m_tmpFirstRun = true;
+	private boolean testPeriodicWasRunOnce = false;
 
-  /**
-   * Periodic code for test mode should go here.
-   *
-   * <p>Users should override this method for code which will be called each time a new packet is
-   * received from the driver station and the robot is in test mode.
-   *
-   * <p>Packets are received approximately every 20ms.  Fixed loop timing is not guaranteed due to
-   * network timing variability and the function may not be called at all if the Driver Station is
-   * disconnected.  For most use cases the variable timing will not be an issue.  If your code does
-   * require guaranteed fixed periodic timing, consider using Notifier or PIDController instead.
-   */
-  @SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
-  public void testPeriodic() {
-    if (m_tmpFirstRun) {
-      System.out.println("Default CustomIterativeRobot.testPeriodic() method... Overload me!");
-      m_tmpFirstRun = false;
-    }
-  }
+	/** This is the robot's test periodic method, which should be overridden. It runs during the
+	 * test mode. Note that it will run when a new packet is received from the driver station, which
+	 * (according to WPILib's IterativeRobot) is approximately every 20 ms.
+	 */
+	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
+	public void testPeriodic() {
+		if (!testPeriodicWasRunOnce) {
+			System.out.println("You forgot to override testPeriodic()!");
+			testPeriodicWasRunOnce = true;
+		}
+	}
 }

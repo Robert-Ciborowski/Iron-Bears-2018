@@ -3,9 +3,8 @@
  * Author: Robert Ciborowski
  * Date: 10/01/2018
  * Description: A class which is used by a Motor PID Controller to drive motors. The class is given an offset
- *              value by the PID Controller which helps to make sure that the robot travels in the right direction.
+ *              value by the PID Controller which helps to make sure that the robot is oriented in the right direction.
  */
-
 package PID;
 
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
@@ -36,7 +35,7 @@ public class DriveMotorPIDOutput implements PIDOutput {
 	
 	@Override
 	public void pidWrite(double outputAngle) {
-		System.out.println("Output angle: " + outputAngle);
+		//System.out.println("Output angle: " + outputAngle);
 		// convert from 1/s to in/s
 		targetSpeed *= UserInterfaceConstants.ENCODER_MAX_RATE_LEFT / UserInterfaceConstants.ENCODER_COUNTS_PER_INCH;
 		

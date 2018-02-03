@@ -1,8 +1,8 @@
 /*
  * Class: DriveMotorPIDInput
- * Author: Robert Ciborowski
+ * Author: Robert Ciborowski, Julian Dominguez-Schatz
  * Date: 10/01/2018
- * Description: A class which uses driving encoders to give a PID controller the difference in motor speeds.
+ * Description: A class which uses a gyro to give a PID controller the robot rotation.
  *              Note that we may eventually use gyroscope rotation with our PID Controller instead.
  */
 
@@ -14,11 +14,13 @@ import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import subsystems.TurningMode;
+import utils.PIDSourceLogger;
 
 public class DriveMotorPIDInput implements PIDSource {
-	private AnalogGyro gyro = new AnalogGyro(RobotInterfaceConstants.PORT_GYRO);
+	public static final AnalogGyro gyro = new AnalogGyro(RobotInterfaceConstants.PORT_GYRO);
 	
 	private double targetAngle = 0;
 	private double currentAngleForRelativePID = 0;
@@ -51,8 +53,8 @@ public class DriveMotorPIDInput implements PIDSource {
 			
 			double gyroAngle = Math.toRadians(gyro.getAngle());
 			double transformedTargetAngle = currentAngleForRelativePID - gyroAngle;
-			System.out.println("Joystick-Stored Angle: " + currentAngleForRelativePID);
-			System.out.println("Angle provided by joy: " + transformedTargetAngle + ", Gyro Angle: " + gyroAngle);
+			//System.out.println("Joystick-Stored Angle: " + currentAngleForRelativePID);
+			//System.out.println("Angle provided by joy: " + transformedTargetAngle + ", Gyro Angle: " + gyroAngle);
 			// System.out.println("Target Angle for PID: " + currentAngleForRelativePID + ", Target Angle: " + targetAngle);
 			// transformedTargetAngle = descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
 			// System.out.println("Current angle for relative (input): " + transformedTargetAngle + " " + targetAngle);
@@ -93,10 +95,12 @@ public class DriveMotorPIDInput implements PIDSource {
 	
 	public void updateDashboard() {
 		SmartDashboard.putNumber("Gyro angle", gyro.getAngle());
+		SmartDashboard.putNumber("Gyro offset", gyro.getOffset());
 		SmartDashboard.putData("Gyro", gyro);
+		SmartDashboard.putNumber("angle", currentAngleForRelativePID);
 	}
 
-	public void init() {
+	public void init() {		
     	gyro.initGyro();
     	gyro.setSensitivity(UserInterfaceConstants.GYRO_SENSITIVITY);
     	gyro.calibrate();

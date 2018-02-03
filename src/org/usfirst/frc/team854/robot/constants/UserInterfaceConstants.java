@@ -13,11 +13,11 @@ public interface UserInterfaceConstants {
 	public static final boolean FLIP_GYRO = false;
 
 	// This value is based on the individual gyro and is determined from a data sheet (in volts/degree/second).
-	public static final double GYRO_SENSITIVITY = 0.00705;
+	public static final double GYRO_SENSITIVITY = 0.0069801;
 
 	public static final double ENCODER_COUNTS_PER_INCH = 141.7761453778885;
 
-	// in counts/second
+	// These are encoder max rates, in counts/second
 	public static final double ENCODER_MAX_RATE_LEFT = 20000;
 	public static final double ENCODER_MAX_RATE_RIGHT = 20000;
 
@@ -28,8 +28,14 @@ public interface UserInterfaceConstants {
 
 	public static final double JOYSTICK_TURNING_CUTOFF = 0.05;
 	public static final double JOYSTICK_SPEED_CUTOFF = 0.05;
-	public static final int JOYSTICK_TURNING_OFFSET = 0;
-	public static final int JOYSTICK_SPEED_OFFSET = 0;
+	public static final double JOYSTICK_TURNING_OFFSET = 0;
+	public static final double JOYSTICK_SPEED_OFFSET = 0;
 	
 	public static final TurningMode INITIAL_TURNING_MODE = TurningMode.RELATIVE;
+
+	// These are the operator interface axes and buttons.
+	public static final int PORT_JOYSTICK = 0;
+	public static final int AXIS_ID_SPEED = 1;
+	public static final int AXIS_ID_TURN = 0;
+	public static final int AXIS_ID_MAX_SPEED = 3;
 }
