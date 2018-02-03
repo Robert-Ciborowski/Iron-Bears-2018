@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import oi.OperatorInterface;
 import subsystems.ChassisSubsystem;
 
-public class Robot extends IterativeRobot {
+public class Robot extends CustomIterativeRobot {
 	// These are the robot's subsystems.
 	public static final ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
 	public static List<PeriodicSubsystem> subsystemList = new ArrayList<PeriodicSubsystem>();
