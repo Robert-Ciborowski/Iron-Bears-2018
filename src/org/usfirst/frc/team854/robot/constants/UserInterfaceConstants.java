@@ -1,6 +1,6 @@
 /*
  * Class: UserInterfaceConstants
- * Author: Waseef Nayeem, Robert Ciborowski and Julian Dominguez-Schatz
+ * Authors: Waseef Nayeem, Robert Ciborowski
  * Date: 06/01/2018
  * Description: Contains constants related to the robot's IO interface.
  */

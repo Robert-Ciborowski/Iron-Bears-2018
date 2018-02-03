@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import subsystems.TurningMode;
 
 public class DriveMotorPIDInput implements PIDSource {
-	private M_Gyro gyro = new M_Gyro(RobotInterfaceConstants.PORT_GYRO);
+	private AnalogGyro gyro = new AnalogGyro(RobotInterfaceConstants.PORT_GYRO);
 	
 	private double targetAngle = 0;
 	private double currentAngleForRelativePID = 0;
