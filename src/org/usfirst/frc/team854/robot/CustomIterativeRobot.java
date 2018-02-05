@@ -5,19 +5,12 @@
  * Description: A modification of WPILib's Iterative Robot, which splits up the robot
  *              based on iterations of each mode.
  *              Q: Why would you create a custom iterative robot?
- *              A: For more control, even if its unnecessary to have at first.
+ *              A: For more control, even if it's unnecessary to have at first.
  */
 
 package org.usfirst.frc.team854.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
-
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2008-2017. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
 
 import edu.wpi.first.wpilibj.hal.FRCNetComm.tInstances;
 import edu.wpi.first.wpilibj.hal.FRCNetComm.tResourceType;

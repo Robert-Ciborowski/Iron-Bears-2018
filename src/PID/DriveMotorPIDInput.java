@@ -113,4 +113,8 @@ public class DriveMotorPIDInput implements PIDSource {
 	public void setTargetAngle(double targetAngle) {
 		this.targetAngle = targetAngle;
 	}
+
+	public static AnalogGyro getGyro() {
+		return gyro;
+	}
 }
