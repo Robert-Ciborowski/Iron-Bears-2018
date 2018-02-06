@@ -16,11 +16,12 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import hardware.Sensors;
 import subsystems.TurningMode;
 import utils.PIDSourceLogger;
 
 public class DriveMotorPIDInput implements PIDSource {
-	public static final AnalogGyro gyro = new AnalogGyro(RobotInterfaceConstants.PORT_GYRO);
+	public static final AnalogGyro gyro = Sensors.gyro;
 	
 	private double targetAngle = 0;
 	private double currentAngleForRelativePID = 0;
