@@ -8,7 +8,6 @@
 
 package org.usfirst.frc.team854.robot;
 
-
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public abstract class PeriodicSubsystem extends Subsystem {
@@ -17,8 +16,6 @@ public abstract class PeriodicSubsystem extends Subsystem {
 	
 	public void init() {}
 	
-	/**
-	 * Update the dashboard every cycle.
-	 */
+	/** Updates the FRC dashboard every cycle.*/
 	public abstract void updateDashboard();
 }

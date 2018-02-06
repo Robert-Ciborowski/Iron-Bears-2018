@@ -17,15 +17,15 @@ package org.usfirst.frc.team854.robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import PID.DriveMotorPIDInput;
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import oi.OperatorInterface;
 import subsystems.ChassisSubsystem;
+import utils.PIDSourceLogger;
 
 public class Robot extends CustomIterativeRobot {
 	// These are the robot's subsystems.
@@ -37,9 +37,12 @@ public class Robot extends CustomIterativeRobot {
 	public static PowerDistributionPanel pdp;
 
 	Command autonomousCommand;
+	
+	PIDSourceLogger logger;
 
+	/** The robot's initialisation method.*/
 	public void robotInit() {
-		CameraServer.getInstance().startAutomaticCapture("Front camera",0);
+		CameraServer.getInstance().startAutomaticCapture("Front camera", 0);
 		pdp = new PowerDistributionPanel();
 		oi = new OperatorInterface();
 
@@ -48,19 +51,29 @@ public class Robot extends CustomIterativeRobot {
 		for (PeriodicSubsystem s : subsystemList) {
 			s.init();
 		}
+		logger = new PIDSourceLogger(DriveMotorPIDInput.gyro);
 
 		updateDashboard();
 	}
+	
+	@Override
+	public void robotPeriodic() {
+		// Useless function
+	}
 
+	/** This runs when the robot's disabled mode is enabled.*/
 	public void disabledInit() {
+		logger.output();
 		updateDashboard();
 	}
 
+	/** This runs during the robot's disabled mode, periodically.*/
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 		updateDashboard();
 	}
 
+	/** This runs when the robot's autonomous mode is enabled.*/
 	public void autonomousInit() {
 		Robot.chassisSubsystem.reset();
 		
@@ -70,12 +83,14 @@ public class Robot extends CustomIterativeRobot {
         updateDashboard();
     }
 
+	/** This runs during the robot's autonomous mode, periodically.*/
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 		subsystemPeriodic();
 		updateDashboard();
 	}
 
+	/** This runs when the robot's disabled mode is enabled.*/
 	public void teleopInit() {
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
@@ -86,37 +101,41 @@ public class Robot extends CustomIterativeRobot {
 		updateDashboard();
 	}
 
+	/** This runs during the robot's tele-operated mode, periodically.*/
 	public void teleopPeriodic() {
+		logger.log();
 		Scheduler.getInstance().run();
 		subsystemPeriodic();
 		updateDashboard();
 	}
+	
+	/** This runs when the robot's test mode is enabled.*/
+	public void testInit() {
+		updateDashboard();
+	}
 
-	/**
-	 * This function is called periodically during test mode.
-	 */
+	/** This runs during the robot's disabled mode, periodically.*/
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
 
+	/** This runs every subsystem's periodic method and should be called inside of
+	 * an autonomous mode's periodic method.
+	 */
 	private void subsystemPeriodic() {
-		// update all subsystem runtime data.
+		// This updates all subsystem runtime data.
 		for (PeriodicSubsystem r : subsystemList) {
 			r.periodic();
 		}
 		oi.periodic();
 	}
 
+	/** This updates the FRC dashboard.*/
 	private void updateDashboard() {
-		// Need to work on updateDashboard!!!
-
-		// update all subsystems and the OI dashboard items.
+		// This updates all subsystem OI dashboard items.
 		for (PeriodicSubsystem r : subsystemList) {
 			r.updateDashboard();
 		}
-		// oi.updateDashboard();
-
-		SmartDashboard.putNumber("Joystick speed value", Robot.oi.getSpeed());
-		SmartDashboard.putNumber("Joystick turn value", Robot.oi.getTurn());
+		oi.updateDashboard();
 	}
 }

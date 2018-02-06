@@ -1,3 +1,10 @@
+/*
+ * Class: LogarithmicFilter
+ * Author: Julian Dominguez-Schatz, Robert Ciborowski
+ * Date: 25/01/2018
+ * Description: A filter which modifies a value based on a logarithmic function.
+ */
+
 package oi;
 
 public class LogarithmicFilter implements Filter {

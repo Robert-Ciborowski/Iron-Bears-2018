@@ -1,3 +1,12 @@
+/*
+ * Class: LinearFilter
+ * Author: Julian Dominguez-Schatz, Robert Ciborowski
+ * Date: 25/01/2018
+ * Description: A class which modifies a value by an offset, and then adjusts it based
+ *              on one of two scaling constants. The scaling constant that is used is
+ *              based on if the original value was less or greater than the offset.
+ */
+
 package oi;
 
 public class LinearFilter implements Filter {

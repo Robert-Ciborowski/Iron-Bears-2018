@@ -17,9 +17,6 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import teleopdrive.JoystickCommand;
 
-/**
- * 
- */
 public class ChassisSubsystem extends PeriodicSubsystem {
 	private static DriveMotorPIDInput motorPIDInput = new DriveMotorPIDInput();
 	private DriveMotorPIDOutput motorPIDOutput = new DriveMotorPIDOutput();
