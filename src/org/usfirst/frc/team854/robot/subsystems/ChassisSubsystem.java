@@ -75,9 +75,5 @@ public class ChassisSubsystem extends PeriodicSubsystem {
 		motorPIDOutput.updateDashboard();
 		SmartDashboard.putData("Motor Controller", motorPIDController);
 	}
-	
-	public static AnalogGyro getGyro() {
-		return motorPIDInput.getGyro();
-	}
 }
 

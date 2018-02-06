@@ -17,18 +17,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DriveMotorPIDInput implements PIDSource {
-<<<<<<< HEAD
-
-	private static AnalogGyro gyro = new AnalogGyro(RobotInterfaceConstants.PORT_GYRO);
-
-	
-	// static so that Movement.java can use it... is this wrong? -- Cole
-
-=======
-	public static final AnalogGyro gyro = Sensors.gyro;
->>>>>>> c5a5c485ac43300aba91c858eff2f81ddd7acb1a
-	
+public class DriveMotorPIDInput implements PIDSource {	
 	private double targetAngle = 0;
 	private double currentAngleForRelativePID = 0;
 	private long timeOfLastPIDGet = 0;
@@ -50,7 +39,7 @@ public class DriveMotorPIDInput implements PIDSource {
 		if (turningMode == TurningMode.ABSOLUTE) {
 			// This takes the difference between the actual heading and the target angle. If travelling at the right
 			// angle, this should be 0.
-			double gyroAngle = Math.toRadians(gyro.getAngle());
+			double gyroAngle = Math.toRadians(Sensors.gyro.getAngle());
 			double transformedTargetAngle = targetAngle - gyroAngle;
 			return descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
 		} else if (turningMode == TurningMode.RELATIVE) {
@@ -58,7 +47,7 @@ public class DriveMotorPIDInput implements PIDSource {
 			currentAngleForRelativePID -= targetAngle * (currentTime - timeOfLastPIDGet) / 1000;
 			timeOfLastPIDGet = currentTime;
 			
-			double gyroAngle = Math.toRadians(gyro.getAngle());
+			double gyroAngle = Math.toRadians(Sensors.gyro.getAngle());
 			double transformedTargetAngle = currentAngleForRelativePID - gyroAngle;
 			//System.out.println("Joystick-Stored Angle: " + currentAngleForRelativePID);
 			//System.out.println("Angle provided by joy: " + transformedTargetAngle + ", Gyro Angle: " + gyroAngle);
@@ -101,34 +90,23 @@ public class DriveMotorPIDInput implements PIDSource {
 	}
 	
 	public void updateDashboard() {
-		SmartDashboard.putNumber("Gyro angle", gyro.getAngle());
-		SmartDashboard.putNumber("Gyro offset", gyro.getOffset());
-		SmartDashboard.putData("Gyro", gyro);
+		SmartDashboard.putNumber("Gyro angle", Sensors.gyro.getAngle());
+		SmartDashboard.putNumber("Gyro offset", Sensors.gyro.getOffset());
+		SmartDashboard.putData("Gyro", Sensors.gyro);
 		SmartDashboard.putNumber("angle", currentAngleForRelativePID);
 	}
 
 	public void init() {		
-    	gyro.initGyro();
-    	gyro.setSensitivity(UserInterfaceConstants.GYRO_SENSITIVITY);
-    	gyro.calibrate();
+		Sensors.gyro.initGyro();
+		Sensors.gyro.setSensitivity(UserInterfaceConstants.GYRO_SENSITIVITY);
+		Sensors.gyro.calibrate();
 	}
 
 	public void reset() {
-		gyro.reset();
+		Sensors.gyro.reset();
 	}
 
 	public void setTargetAngle(double targetAngle) {
 		this.targetAngle = targetAngle;
-	}
-<<<<<<< HEAD
-	
-
-	// made static for Movement.java -- Cole
-=======
-
->>>>>>> c5a5c485ac43300aba91c858eff2f81ddd7acb1a
-	public static AnalogGyro getGyro() {
-
-		return gyro;
 	}
 }

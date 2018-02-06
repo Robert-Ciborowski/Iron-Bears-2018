@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.usfirst.frc.team854.robot.PID.DriveMotorPIDInput;
+import org.usfirst.frc.team854.robot.hardware.Sensors;
 import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
 import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
 import org.usfirst.frc.team854.robot.utils.PIDSourceLogger;
@@ -52,7 +53,7 @@ public class Robot extends CustomIterativeRobot {
 		for (PeriodicSubsystem s : subsystemList) {
 			s.init();
 		}
-		logger = new PIDSourceLogger(DriveMotorPIDInput.gyro);
+		logger = new PIDSourceLogger(Sensors.gyro);
 
 		updateDashboard();
 	}
