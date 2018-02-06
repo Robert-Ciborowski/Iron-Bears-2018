@@ -5,17 +5,16 @@
  * Description: Personal implementation of FRC's periodic subsystem, mainly adding some PID features
  */
 
-package subsystems;
+package org.usfirst.frc.team854.robot.subsystems;
 
 import org.usfirst.frc.team854.robot.PeriodicSubsystem;
+import org.usfirst.frc.team854.robot.PID.DriveMotorPIDInput;
+import org.usfirst.frc.team854.robot.PID.DriveMotorPIDOutput;
 import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
+import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 
-import PID.DriveMotorPIDInput;
-import PID.DriveMotorPIDOutput;
-import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import teleopdrive.JoystickCommand;
 
 public class ChassisSubsystem extends PeriodicSubsystem {
 	private static DriveMotorPIDInput motorPIDInput = new DriveMotorPIDInput();

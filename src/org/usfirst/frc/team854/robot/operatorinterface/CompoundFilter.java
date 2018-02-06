@@ -6,7 +6,7 @@
  *              to filter an input using as many filters as your heart desires.
  */
 
-package oi;
+package org.usfirst.frc.team854.robot.operatorinterface;
 
 import java.util.ArrayList;
 

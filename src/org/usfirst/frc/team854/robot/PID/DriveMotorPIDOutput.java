@@ -5,17 +5,16 @@
  * Description: A class which is used by a Motor PID Controller to drive motors. The class is given an offset
  *              value by the PID Controller which helps to make sure that the robot is oriented in the right direction.
  */
-package PID;
+package org.usfirst.frc.team854.robot.PID;
 
-import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
-import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.RobotStructureConstants;
 import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
+import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
+import org.usfirst.frc.team854.robot.hardware.Motors;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import hardware.Motors;
 
 public class DriveMotorPIDOutput implements PIDOutput {
 	private Spark leftMotor = Motors.leftMotor;
@@ -28,10 +27,10 @@ public class DriveMotorPIDOutput implements PIDOutput {
 	private double outputAngle;
 
 	public DriveMotorPIDOutput() {
-		leftMotor.setInverted(UserInterfaceConstants.leftMotorInverted);
-		rightMotor.setInverted(UserInterfaceConstants.rightMotorInverted);
-		leftMiniCIM.setInverted(UserInterfaceConstants.leftMiniCIMInverted);
-		rightMiniCIM.setInverted(UserInterfaceConstants.rightMiniCIMInverted);
+		leftMotor.setInverted(UserInterfaceConstants.MOTOR_LEFT_INVERT);
+		rightMotor.setInverted(UserInterfaceConstants.MOTOR_RIGHT_INVERT);
+		leftMiniCIM.setInverted(UserInterfaceConstants.MINICIM_LEFT_INVERT);
+		rightMiniCIM.setInverted(UserInterfaceConstants.MINICIM_RIGHT_INVERT);
 	}
 
 	@Override

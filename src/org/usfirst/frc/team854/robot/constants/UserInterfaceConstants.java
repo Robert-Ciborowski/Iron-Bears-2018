@@ -7,13 +7,13 @@
 
 package org.usfirst.frc.team854.robot.constants;
 
-import subsystems.TurningMode;
+import org.usfirst.frc.team854.robot.subsystems.TurningMode;
 
 public interface UserInterfaceConstants {
 	public static final boolean FLIP_GYRO = false;
 
 	// This value is based on the individual gyro and is determined from a data sheet (in volts/degree/second).
-	public static final double GYRO_SENSITIVITY = 0.0069801;
+	public static final double GYRO_SENSITIVITY = 0.00700;
 
 	public static final double ENCODER_COUNTS_PER_INCH = 141.7761453778885;
 
@@ -21,10 +21,10 @@ public interface UserInterfaceConstants {
 	public static final double ENCODER_MAX_RATE_LEFT = 20000;
 	public static final double ENCODER_MAX_RATE_RIGHT = 20000;
 
-	public static final boolean leftMotorInverted = true;
-	public static final boolean rightMotorInverted = false;
-	public static final boolean leftMiniCIMInverted = true;
-	public static final boolean rightMiniCIMInverted = false;
+	public static final boolean MOTOR_LEFT_INVERT = true;
+	public static final boolean MOTOR_RIGHT_INVERT = false;
+	public static final boolean MINICIM_LEFT_INVERT = true;
+	public static final boolean MINICIM_RIGHT_INVERT = false;
 
 	public static final double JOYSTICK_TURNING_CUTOFF = 0.05;
 	public static final double JOYSTICK_SPEED_CUTOFF = 0.05;

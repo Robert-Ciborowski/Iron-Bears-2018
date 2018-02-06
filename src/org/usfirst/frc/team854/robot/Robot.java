@@ -17,15 +17,16 @@ package org.usfirst.frc.team854.robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import PID.DriveMotorPIDInput;
+import org.usfirst.frc.team854.robot.PID.DriveMotorPIDInput;
+import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
+import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
+import org.usfirst.frc.team854.robot.utils.PIDSourceLogger;
+
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import oi.OperatorInterface;
-import subsystems.ChassisSubsystem;
-import utils.PIDSourceLogger;
 
 public class Robot extends CustomIterativeRobot {
 	// These are the robot's subsystems.

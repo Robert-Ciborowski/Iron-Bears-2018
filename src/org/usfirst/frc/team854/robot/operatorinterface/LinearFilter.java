@@ -7,7 +7,7 @@
  *              based on if the original value was less or greater than the offset.
  */
 
-package oi;
+package org.usfirst.frc.team854.robot.operatorinterface;
 
 public class LinearFilter implements Filter {
 	

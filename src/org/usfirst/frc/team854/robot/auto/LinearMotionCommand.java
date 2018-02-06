@@ -5,7 +5,7 @@
  * Description: A class for moving the robot in a linear motion.
  */
 
-package auto;
+package org.usfirst.frc.team854.robot.auto;
 
 public class LinearMotionCommand extends Motion {
 

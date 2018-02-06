@@ -1,4 +1,4 @@
-package hardware;
+package org.usfirst.frc.team854.robot.hardware;
 
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 

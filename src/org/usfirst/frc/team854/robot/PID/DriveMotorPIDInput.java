@@ -6,19 +6,16 @@
  *              Note that we may eventually use gyroscope rotation with our PID Controller instead.
  */
 
-package PID;
+package org.usfirst.frc.team854.robot.PID;
 
-import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
+import org.usfirst.frc.team854.robot.hardware.Sensors;
+import org.usfirst.frc.team854.robot.subsystems.TurningMode;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import hardware.Sensors;
-import subsystems.TurningMode;
-import utils.PIDSourceLogger;
 
 public class DriveMotorPIDInput implements PIDSource {
 	public static final AnalogGyro gyro = Sensors.gyro;

@@ -5,7 +5,7 @@
  * Description: An interface for any sort of filter, which accepts a value and modifies it.
  */
 
-package oi;
+package org.usfirst.frc.team854.robot.operatorinterface;
 
 public interface Filter {
 	/** Runs the filter on a value.*/

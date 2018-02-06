@@ -127,7 +127,6 @@ public class CustomIterativeRobot extends RobotBase {
 	}
 
 	/** The robot's test initialisation method, which should be overridden.*/
-	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
 	public void testInit() {
 		System.out.println("You forgot to override testInit()!");
 	}
@@ -191,7 +190,6 @@ public class CustomIterativeRobot extends RobotBase {
 	 * test mode. Note that it will run when a new packet is received from the driver station, which
 	 * (according to WPILib's IterativeRobot) is approximately every 20 ms.
 	 */
-	@SuppressWarnings("PMD.JUnit4TestShouldUseTestAnnotation")
 	public void testPeriodic() {
 		if (!testPeriodicWasRunOnce) {
 			System.out.println("You forgot to override testPeriodic()!");

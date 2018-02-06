@@ -5,7 +5,7 @@
  * Description: Interfaces the joystick hardware input in a software environment
  */
 
-package teleopdrive;
+package org.usfirst.frc.team854.robot.teleopdrive;
 
 import org.usfirst.frc.team854.robot.Robot;
 

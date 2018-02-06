@@ -6,15 +6,14 @@
  *              filters for the inputs.
  */
 
-package oi;
+package org.usfirst.frc.team854.robot.operatorinterface;
+
+import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import org.usfirst.frc.team854.robot.Robot;
-import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
 
 public class OperatorInterface {
 	private Joystick joystick = new Joystick(UserInterfaceConstants.PORT_JOYSTICK);

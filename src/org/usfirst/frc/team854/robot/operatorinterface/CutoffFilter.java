@@ -5,7 +5,7 @@
  * Description: A filter that will cause a value to be zero if its less than a threshold value.
  */
 
-package oi;
+package org.usfirst.frc.team854.robot.operatorinterface;
 
 public class CutoffFilter implements Filter {
 	

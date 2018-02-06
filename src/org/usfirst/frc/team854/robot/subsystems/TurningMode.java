@@ -5,7 +5,7 @@
  * Description: Defines turning modes that affect how the joystick turns the robot.
  */
 
-package subsystems;
+package org.usfirst.frc.team854.robot.subsystems;
 
 public enum TurningMode {
 	ABSOLUTE, RELATIVE

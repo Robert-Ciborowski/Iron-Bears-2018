@@ -5,7 +5,7 @@
  * Description: A filter which modifies a value based on a logarithmic function.
  */
 
-package oi;
+package org.usfirst.frc.team854.robot.operatorinterface;
 
 public class LogarithmicFilter implements Filter {
 	
