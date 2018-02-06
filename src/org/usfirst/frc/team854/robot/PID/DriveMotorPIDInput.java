@@ -18,7 +18,16 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveMotorPIDInput implements PIDSource {
+<<<<<<< HEAD
+
+	private static AnalogGyro gyro = new AnalogGyro(RobotInterfaceConstants.PORT_GYRO);
+
+	
+	// static so that Movement.java can use it... is this wrong? -- Cole
+
+=======
 	public static final AnalogGyro gyro = Sensors.gyro;
+>>>>>>> c5a5c485ac43300aba91c858eff2f81ddd7acb1a
 	
 	private double targetAngle = 0;
 	private double currentAngleForRelativePID = 0;
@@ -111,8 +120,15 @@ public class DriveMotorPIDInput implements PIDSource {
 	public void setTargetAngle(double targetAngle) {
 		this.targetAngle = targetAngle;
 	}
+<<<<<<< HEAD
+	
 
+	// made static for Movement.java -- Cole
+=======
+
+>>>>>>> c5a5c485ac43300aba91c858eff2f81ddd7acb1a
 	public static AnalogGyro getGyro() {
+
 		return gyro;
 	}
 }
