@@ -75,5 +75,9 @@ public class ChassisSubsystem extends PeriodicSubsystem {
 		motorPIDOutput.updateDashboard();
 		SmartDashboard.putData("Motor Controller", motorPIDController);
 	}
+
+	public boolean isAngleOnTarget() {
+		return motorPIDController.onTarget();
+	}
 }
 

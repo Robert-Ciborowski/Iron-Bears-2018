@@ -1,6 +1,6 @@
 package PID;
 
-import org.usfirst.frc.team854.robot.constants.SensorsAndMotors;
+import org.usfirst.frc.team854.robot.hardware.Sensors;
 
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
@@ -30,12 +30,12 @@ public class DistancePID extends PIDSubsystem{
 	@Override
 	protected double returnPIDInput() {
 		if (!intialCountTaken) {
-			prevCount=(SensorsAndMotors.leftEncoder.get()+SensorsAndMotors.rightEncoder.get())/2;
+			prevCount=(Sensors.leftEncoder.get()+Sensors.rightEncoder.get())/2;
 			intialCountTaken=true;
 		return 0;}
 		
 		
-		double currentCount= (SensorsAndMotors.leftEncoder.get()+SensorsAndMotors.rightEncoder.get())/2;
+		double currentCount= (Sensors.leftEncoder.get()+Sensors.rightEncoder.get())/2;
 		DistanceCovered= (currentCount-prevCount)*DistancePerPulse;
 		prevCount=currentCount;
 		

@@ -13,5 +13,10 @@ public interface RobotTuningConstants {
 	public static final double DRIVE_DERIVATIVE = 35; // 0.12048192, 0, 0.24
 	public static final double DRIVE_FEED_FORWARD = 1.0;
 	
+	public static final double DISTANCE_PROPORTIONAL = 7.0;
+	public static final double DISTANCE_INTEGRAL = 0.3;
+	public static final double DISTANCE_DERIVATIVE = 35;
+	public static final double DISTANCE_FEED_FORWARD = 1.0;
+	
 	public static final double TURN_POST_SCALE = 4.0;
 }

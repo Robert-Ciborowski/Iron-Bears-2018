@@ -1,32 +1,42 @@
-/** 
- * Class: Motion
- * Author: Rana, Lucas, Cole, Robert Ciborowski, Danny Xu
- * Date: 03/02/2018
- * Description: A class for moving the robot in a linear motion.
+/*
+ * Name: AngularMotion
+ * Author: Rana Raaiq Rauf, Robert Ciborowski, Shaiza Hashmi
+ * Date: 08/02/2018
+ * Description: A command for moving along a line.
  */
 
 package org.usfirst.frc.team854.robot.auto;
 
-public class LinearMotionCommand extends Motion {
+import org.usfirst.frc.team854.robot.PID.DistancePID;
+import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
-	private double distanceRemaining;
+public class LinearMotionCommand extends Command{
+
+	PIDSubsystem PID;
+	private double distanceLeft;
 	
-	public LinearMotionCommand(double distance) {
-		super(distance, 0);
+	public LinearMotionCommand(double distancePerPulse, double distance) {
+		// This initialises and starts the motion.
+		PID = new DistancePID(RobotTuningConstants.DISTANCE_PROPORTIONAL, RobotTuningConstants.DISTANCE_INTEGRAL,
+				RobotTuningConstants.DISTANCE_DERIVATIVE, RobotTuningConstants.DISTANCE_FEED_FORWARD, distance, distancePerPulse);
+		PID.enable();
 	}
-
 	
-	private void setSpeed() {
+	public void execute() {
 		
 	}
 	
-	@Override
-	protected void execute() {
-		
-	}	
+	public void end() {
+		PID.free();
+	} 
 	
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return PID.onTarget();
 	}
+	
+	
 }

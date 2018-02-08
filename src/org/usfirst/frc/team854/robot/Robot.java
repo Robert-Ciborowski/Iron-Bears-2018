@@ -17,7 +17,7 @@ package org.usfirst.frc.team854.robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.usfirst.frc.team854.robot.PID.DriveMotorPIDInput;
+import org.usfirst.frc.team854.robot.auto.TestCommandGroup;
 import org.usfirst.frc.team854.robot.hardware.Sensors;
 import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
 import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
@@ -78,6 +78,8 @@ public class Robot extends CustomIterativeRobot {
 	/** This runs when the robot's autonomous mode is enabled.*/
 	public void autonomousInit() {
 		Robot.chassisSubsystem.reset();
+		
+		autonomousCommand = new TestCommandGroup(200);
 		
 		// autonomousCommand = new ...();
     	Scheduler.getInstance().add(autonomousCommand);

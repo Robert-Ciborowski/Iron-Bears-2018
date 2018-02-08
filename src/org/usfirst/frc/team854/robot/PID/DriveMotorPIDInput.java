@@ -12,7 +12,6 @@ import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.Sensors;
 import org.usfirst.frc.team854.robot.subsystems.TurningMode;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
