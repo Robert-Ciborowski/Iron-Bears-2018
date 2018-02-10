@@ -47,7 +47,7 @@ public class JoystickCommand extends Command {
     	
 		Robot.chassisSubsystem.setTargetMotion(turn, speed);
 	}
-    		
+
 	protected boolean isFinished() {
 		return false;
 	}

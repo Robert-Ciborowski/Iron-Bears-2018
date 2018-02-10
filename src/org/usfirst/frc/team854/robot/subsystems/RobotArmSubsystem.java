@@ -16,7 +16,7 @@ import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class ChassisSubsystem extends CustomSubsystem {
+public class RobotArmSubsystem extends CustomSubsystem {
 	private static DriveMotorPIDInput motorPIDInput = new DriveMotorPIDInput();
 	private DriveMotorPIDOutput motorPIDOutput = new DriveMotorPIDOutput();
 	private PIDController motorPIDController = new PIDController(
@@ -27,27 +27,21 @@ public class ChassisSubsystem extends CustomSubsystem {
 			motorPIDInput,
 			motorPIDOutput);
 	
-    public ChassisSubsystem() {
+    public RobotArmSubsystem() {
     	motorPIDController.setInputRange(-Math.PI, Math.PI);
     	motorPIDController.setOutputRange(-Math.PI, Math.PI);
     	motorPIDController.setSetpoint(0);
-
+    	
     	motorPIDInput.init();
-    	setTargetMotion(0, 0);
     }
-
+    
+    // MIGHT NEED TO CALL THIS!
     public void reset() {
     	motorPIDController.reset();
     }
 
-    public void setTargetMotion(double angle, double speed) {
-		// If it doesn't drive, this is the likely culprit.
-		motorPIDInput.setTargetAngle(angle);
-		motorPIDOutput.setTargetSpeed(speed);
-
-		if (!motorPIDController.isEnabled()) {
-			motorPIDController.enable();
-		}
+    public void raiseArmTo(RobotArmState state) {
+    	
     }
     
     public void setTurningMode(TurningMode turningMode) {

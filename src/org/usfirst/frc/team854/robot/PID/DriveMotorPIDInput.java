@@ -8,8 +8,10 @@
 
 package org.usfirst.frc.team854.robot.PID;
 
+import org.usfirst.frc.team854.robot.Robot;
+import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
-import org.usfirst.frc.team854.robot.hardware.Sensors;
+import org.usfirst.frc.team854.robot.hardware.SensorProvider.SensorType;
 import org.usfirst.frc.team854.robot.subsystems.TurningMode;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -23,6 +25,11 @@ public class DriveMotorPIDInput implements PIDSource {
 	private long timeOfLastPIDGet = 0;
 
 	private TurningMode turningMode = UserInterfaceConstants.INITIAL_TURNING_MODE;
+	private AnalogGyro gyro;
+	
+	public DriveMotorPIDInput() {
+		this.gyro = (AnalogGyro) Robot.sensors.getSensor(SensorType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
+	}
 
 	@Override
 	// Do nothing with this method as it is not used.
@@ -39,7 +46,7 @@ public class DriveMotorPIDInput implements PIDSource {
 		if (turningMode == TurningMode.ABSOLUTE) {
 			// This takes the difference between the actual heading and the target angle. If travelling at the right
 			// angle, this should be 0.
-			double gyroAngle = Math.toRadians(Sensors.gyro.getAngle());
+			double gyroAngle = Math.toRadians(gyro.getAngle());
 			double transformedTargetAngle = targetAngle - gyroAngle;
 			return descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
 		} else if (turningMode == TurningMode.RELATIVE) {
@@ -47,7 +54,7 @@ public class DriveMotorPIDInput implements PIDSource {
 			currentAngleForRelativePID -= targetAngle * (currentTime - timeOfLastPIDGet) / 1000;
 			timeOfLastPIDGet = currentTime;
 			
-			double gyroAngle = Math.toRadians(Sensors.gyro.getAngle());
+			double gyroAngle = Math.toRadians(gyro.getAngle());
 			double transformedTargetAngle = currentAngleForRelativePID - gyroAngle;
 			//System.out.println("Joystick-Stored Angle: " + currentAngleForRelativePID);
 			//System.out.println("Angle provided by joy: " + transformedTargetAngle + ", Gyro Angle: " + gyroAngle);
@@ -90,20 +97,20 @@ public class DriveMotorPIDInput implements PIDSource {
 	}
 	
 	public void updateDashboard() {
-		SmartDashboard.putNumber("Gyro angle", Sensors.gyro.getAngle());
-		SmartDashboard.putNumber("Gyro offset", Sensors.gyro.getOffset());
-		SmartDashboard.putData("Gyro", Sensors.gyro);
+		SmartDashboard.putNumber("Gyro angle", gyro.getAngle());
+		SmartDashboard.putNumber("Gyro offset", gyro.getOffset());
+		SmartDashboard.putData("Gyro", gyro);
 		SmartDashboard.putNumber("angle", currentAngleForRelativePID);
 	}
 
 	public void init() {		
-		Sensors.gyro.initGyro();
-		Sensors.gyro.setSensitivity(UserInterfaceConstants.GYRO_SENSITIVITY);
-		Sensors.gyro.calibrate();
+		gyro.initGyro();
+		gyro.setSensitivity(UserInterfaceConstants.GYRO_SENSITIVITY);
+		gyro.calibrate();
 	}
 
 	public void reset() {
-		Sensors.gyro.reset();
+		gyro.reset();
 	}
 
 	public void setTargetAngle(double targetAngle) {

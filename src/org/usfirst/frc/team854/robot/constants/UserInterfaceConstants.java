@@ -26,7 +26,7 @@ public interface UserInterfaceConstants {
 	public static final boolean MINICIM_LEFT_INVERT = true;
 	public static final boolean MINICIM_RIGHT_INVERT = false;
 
-	public static final double JOYSTICK_TURNING_CUTOFF = 0.05;
+	public static final double JOYSTICK_TURNING_CUTOFF = 0.1;
 	public static final double JOYSTICK_SPEED_CUTOFF = 0.05;
 	public static final double JOYSTICK_TURNING_OFFSET = 0;
 	public static final double JOYSTICK_SPEED_OFFSET = 0;
