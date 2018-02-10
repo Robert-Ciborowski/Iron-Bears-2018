@@ -8,44 +8,34 @@
 package org.usfirst.frc.team854.robot.subsystems;
 
 import org.usfirst.frc.team854.robot.CustomSubsystem;
-import org.usfirst.frc.team854.robot.PID.DriveMotorPIDInput;
-import org.usfirst.frc.team854.robot.PID.DriveMotorPIDOutput;
-import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class RobotArmSubsystem extends CustomSubsystem {
-	private static DriveMotorPIDInput motorPIDInput = new DriveMotorPIDInput();
-	private DriveMotorPIDOutput motorPIDOutput = new DriveMotorPIDOutput();
-	private PIDController motorPIDController = new PIDController(
-			RobotTuningConstants.DRIVE_PROPORTIONAL,
-			RobotTuningConstants.DRIVE_INTEGRAL,
-			RobotTuningConstants.DRIVE_DERIVATIVE,
-			RobotTuningConstants.DRIVE_FEED_FORWARD,
-			motorPIDInput,
-			motorPIDOutput);
+//	private static DriveMotorPIDInput motorPIDInput = new DriveMotorPIDInput();
+//	private DriveMotorPIDOutput motorPIDOutput = new DriveMotorPIDOutput();
+//	private PIDController motorPIDController = new PIDController(
+//			RobotTuningConstants.DRIVE_PROPORTIONAL,
+//			RobotTuningConstants.DRIVE_INTEGRAL,
+//			RobotTuningConstants.DRIVE_DERIVATIVE,
+//			RobotTuningConstants.DRIVE_FEED_FORWARD,
+//			motorPIDInput,
+//			motorPIDOutput);
 	
     public RobotArmSubsystem() {
-    	motorPIDController.setInputRange(-Math.PI, Math.PI);
-    	motorPIDController.setOutputRange(-Math.PI, Math.PI);
-    	motorPIDController.setSetpoint(0);
-    	
-    	motorPIDInput.init();
+//    	motorPIDController.setInputRange(-Math.PI, Math.PI);
+//    	motorPIDController.setOutputRange(-Math.PI, Math.PI);
+//    	motorPIDController.setSetpoint(0);
+//    	
+//    	motorPIDInput.init();
     }
     
     // MIGHT NEED TO CALL THIS!
     public void reset() {
-    	motorPIDController.reset();
+//    	motorPIDController.reset();
     }
 
     public void raiseArmTo(RobotArmState state) {
     	
-    }
-    
-    public void setTurningMode(TurningMode turningMode) {
-    	motorPIDInput.setTurningMode(turningMode);
     }
 
 	public void initDefaultCommand() {
@@ -54,9 +44,9 @@ public class RobotArmSubsystem extends CustomSubsystem {
 	
 	@Override
 	public void updateDashboard() {
-		motorPIDInput.updateDashboard();
-		motorPIDOutput.updateDashboard();
-		SmartDashboard.putData("Motor Controller", motorPIDController);
+//		motorPIDInput.updateDashboard();
+//		motorPIDOutput.updateDashboard();
+//		SmartDashboard.putData("Motor Controller", motorPIDController);
 	}
 }
 

@@ -20,8 +20,9 @@ public class SensorProvider {
 		type.sensorList.put(port, sensor);
 	}
 	
-	public PIDSource getSensor(SensorType type, int port) {
-		return type.sensorList.get(port);
+	@SuppressWarnings("unchecked")
+	public <T extends PIDSource> T getSensor(SensorType type, int port) {
+		return (T) type.sensorList.get(port);
 	}
 
 	public double getSensorValue(SensorType type, int port) {
