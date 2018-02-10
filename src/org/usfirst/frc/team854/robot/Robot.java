@@ -65,6 +65,7 @@ public class Robot extends CustomIterativeRobot {
 
 	/** This runs when the robot's disabled mode is enabled.*/
 	public void disabledInit() {
+		chassisSubsystem.setCurrentMode(RobotMode.DISABLED);
 		logger.output();
 		updateDashboard();
 	}
@@ -77,9 +78,10 @@ public class Robot extends CustomIterativeRobot {
 
 	/** This runs when the robot's autonomous mode is enabled.*/
 	public void autonomousInit() {
-		Robot.chassisSubsystem.reset();
+		chassisSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
+		chassisSubsystem.reset();
 		
-		autonomousCommand = new TestCommandGroup(200);
+		autonomousCommand = new TestCommandGroup(40, chassisSubsystem);
 		
 		// autonomousCommand = new ...();
     	Scheduler.getInstance().add(autonomousCommand);
@@ -90,12 +92,14 @@ public class Robot extends CustomIterativeRobot {
 	/** This runs during the robot's autonomous mode, periodically.*/
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		subsystemPeriodic();
+		//subsystemPeriodic();
 		updateDashboard();
 	}
 
 	/** This runs when the robot's disabled mode is enabled.*/
 	public void teleopInit() {
+		chassisSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
+		
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
@@ -115,6 +119,7 @@ public class Robot extends CustomIterativeRobot {
 	
 	/** This runs when the robot's test mode is enabled.*/
 	public void testInit() {
+		chassisSubsystem.setCurrentMode(RobotMode.TEST);
 		updateDashboard();
 	}
 
