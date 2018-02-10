@@ -33,12 +33,12 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class Robot extends CustomIterativeRobot {
-	
+
 	public static final ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
 
 	// These are the robot's sensors.
 	public static final SensorProvider sensors;
-	
+
 	// These represent other parts of the robot.
 	public static OperatorInterface oi;
 	public static PowerDistributionPanel pdp;
@@ -57,6 +57,8 @@ public class Robot extends CustomIterativeRobot {
 				new Encoder(RobotInterfaceConstants.PORT_ENCODER_LEFT, RobotInterfaceConstants.PORT_ENCODER_LEFT_2));
 		sensors.putSensor(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_RIGHT,
 				new Encoder(RobotInterfaceConstants.PORT_ENCODER_RIGHT, RobotInterfaceConstants.PORT_ENCODER_RIGHT_2));
+		sensors.putSensor(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM,
+				new Encoder(RobotInterfaceConstants.PORT_ENCODER_ARM, RobotInterfaceConstants.PORT_ENCODER_ARM_2));
 		/// END SENSOR INIT ///
 	}
 

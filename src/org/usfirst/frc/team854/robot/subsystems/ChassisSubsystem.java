@@ -44,8 +44,8 @@ public class ChassisSubsystem extends CustomSubsystem {
     public ChassisSubsystem() {
     	Motors.leftMotor.setInverted(UserInterfaceConstants.MOTOR_LEFT_INVERT);
     	Motors.rightMotor.setInverted(UserInterfaceConstants.MOTOR_RIGHT_INVERT);
-    	Motors.leftMiniCIM.setInverted(UserInterfaceConstants.MINICIM_LEFT_INVERT);
-    	Motors.rightMiniCIM.setInverted(UserInterfaceConstants.MINICIM_RIGHT_INVERT);
+    	Motors.leftIntakeMotor.setInverted(UserInterfaceConstants.MINICIM_LEFT_INVERT);
+    	Motors.rightIntakeMotor.setInverted(UserInterfaceConstants.MINICIM_RIGHT_INVERT);
 		
     	teleoperatedPIDController.setInputRange(-Math.PI, Math.PI);
     	teleoperatedPIDController.setOutputRange(-Math.PI, Math.PI);
@@ -112,8 +112,8 @@ public class ChassisSubsystem extends CustomSubsystem {
     public void setMotors(double leftMotors, double rightMotors) {
     	Motors.leftMotor.pidWrite(leftMotors);
 		Motors.rightMotor.pidWrite(rightMotors);
-		Motors.leftMiniCIM.pidWrite(-leftMotors);
-		Motors.rightMiniCIM.pidWrite(-rightMotors);
+		Motors.leftIntakeMotor.pidWrite(-leftMotors);
+		Motors.rightIntakeMotor.pidWrite(-rightMotors);
     }
     
     public void setTurningMode(TurningMode turningMode) {

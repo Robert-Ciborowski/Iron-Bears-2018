@@ -8,34 +8,35 @@
 package org.usfirst.frc.team854.robot.subsystems;
 
 import org.usfirst.frc.team854.robot.CustomSubsystem;
+import org.usfirst.frc.team854.robot.Robot;
+import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
+import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
+import org.usfirst.frc.team854.robot.hardware.Motors;
+import org.usfirst.frc.team854.robot.hardware.SensorProvider.SensorType;
 import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDController;
+
 public class RobotArmSubsystem extends CustomSubsystem {
-//	private static DriveMotorPIDInput motorPIDInput = new DriveMotorPIDInput();
-//	private DriveMotorPIDOutput motorPIDOutput = new DriveMotorPIDOutput();
-//	private PIDController motorPIDController = new PIDController(
-//			RobotTuningConstants.DRIVE_PROPORTIONAL,
-//			RobotTuningConstants.DRIVE_INTEGRAL,
-//			RobotTuningConstants.DRIVE_DERIVATIVE,
-//			RobotTuningConstants.DRIVE_FEED_FORWARD,
-//			motorPIDInput,
-//			motorPIDOutput);
-	
+	private PIDController armController = new PIDController(
+			RobotTuningConstants.ARM_PROPORTIONAL,
+			RobotTuningConstants.ARM_INTEGRAL,
+			RobotTuningConstants.ARM_DERIVATIVE,
+			Robot.sensors.getSensor(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM),
+			Motors.armMotor);
+
     public RobotArmSubsystem() {
-//    	motorPIDController.setInputRange(-Math.PI, Math.PI);
-//    	motorPIDController.setOutputRange(-Math.PI, Math.PI);
-//    	motorPIDController.setSetpoint(0);
-//    	
-//    	motorPIDInput.init();
-    }
-    
-    // MIGHT NEED TO CALL THIS!
-    public void reset() {
-//    	motorPIDController.reset();
+    	armController.setSetpoint(0);
+    	Robot.sensors.<Encoder>getSensor(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM).reset();
     }
 
-    public void raiseArmTo(RobotArmState state) {
-    	
+    public void reset() {
+    	armController.reset();
+    }
+
+    public void setArmLevel(RobotArmLevel level) {
+    	armController.setSetpoint(level.getSetpoint());
     }
 
 	public void initDefaultCommand() {
@@ -44,9 +45,6 @@ public class RobotArmSubsystem extends CustomSubsystem {
 	
 	@Override
 	public void updateDashboard() {
-//		motorPIDInput.updateDashboard();
-//		motorPIDOutput.updateDashboard();
-//		SmartDashboard.putData("Motor Controller", motorPIDController);
 	}
 }
 

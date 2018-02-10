@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Spark;
 public class Motors {
 	public static Spark leftMotor = new Spark(RobotInterfaceConstants.PORT_MOTOR_LEFT);
 	public static Spark rightMotor = new Spark(RobotInterfaceConstants.PORT_MOTOR_RIGHT);
-	public static Spark leftMiniCIM = new Spark(RobotInterfaceConstants.PORT_MINICIM_LEFT);
-	public static Spark rightMiniCIM = new Spark(RobotInterfaceConstants.PORT_MINICIM_RIGHT);
+	public static Spark leftIntakeMotor = new Spark(RobotInterfaceConstants.PORT_INTAKE_LEFT);
+	public static Spark rightIntakeMotor = new Spark(RobotInterfaceConstants.PORT_INTAKE_RIGHT);
+	public static Spark armMotor = new Spark(RobotInterfaceConstants.PORT_MOTOR_ARM);
 }

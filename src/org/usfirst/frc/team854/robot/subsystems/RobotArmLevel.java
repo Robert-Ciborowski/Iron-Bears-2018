@@ -7,6 +7,16 @@
 
 package org.usfirst.frc.team854.robot.subsystems;
 
-public enum RobotArmState {
-	ABSOLUTE, RELATIVE
+public enum RobotArmLevel {
+	GROUND(0), SWITCH(15), SCALE(25), CLIMB(30);
+	
+	private double setpoint;
+
+	private RobotArmLevel(double setpoint) {
+		this.setpoint = setpoint;
+	}
+
+	public double getSetpoint() {
+		return setpoint;
+	}
 }
