@@ -17,6 +17,9 @@ package org.usfirst.frc.team854.robot;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.SensorProvider;
 import org.usfirst.frc.team854.robot.hardware.SensorProvider.SensorType;
+
+import org.usfirst.frc.team854.robot.auto.TestCommandGroup;
+
 import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
 import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
 import org.usfirst.frc.team854.robot.utils.PIDSourceLogger;
@@ -78,6 +81,7 @@ public class Robot extends CustomIterativeRobot {
 
 	/** This runs when the robot's disabled mode is enabled.*/
 	public void disabledInit() {
+		chassisSubsystem.setCurrentMode(RobotMode.DISABLED);
 		logger.output();
 		updateDashboard();
 	}
@@ -90,9 +94,10 @@ public class Robot extends CustomIterativeRobot {
 
 	/** This runs when the robot's autonomous mode is enabled.*/
 	public void autonomousInit() {
+		chassisSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		chassisSubsystem.reset();
 		
-		// autonomousCommand = new ...();
+		autonomousCommand = new TestCommandGroup(40, chassisSubsystem);
     	Scheduler.getInstance().add(autonomousCommand);
     	
         updateDashboard();
@@ -101,12 +106,14 @@ public class Robot extends CustomIterativeRobot {
 	/** This runs during the robot's autonomous mode, periodically.*/
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		subsystemPeriodic();
+		//subsystemPeriodic();
 		updateDashboard();
 	}
 
 	/** This runs when the robot's disabled mode is enabled.*/
 	public void teleopInit() {
+		chassisSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
+		
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
@@ -126,6 +133,7 @@ public class Robot extends CustomIterativeRobot {
 	
 	/** This runs when the robot's test mode is enabled.*/
 	public void testInit() {
+		chassisSubsystem.setCurrentMode(RobotMode.TEST);
 		updateDashboard();
 	}
 
