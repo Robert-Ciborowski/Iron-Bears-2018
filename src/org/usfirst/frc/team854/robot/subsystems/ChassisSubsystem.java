@@ -7,7 +7,7 @@
 
 package org.usfirst.frc.team854.robot.subsystems;
 
-import org.usfirst.frc.team854.robot.PeriodicSubsystem;
+
 import org.usfirst.frc.team854.robot.RobotMode;
 import org.usfirst.frc.team854.robot.PID.TeleoperatedPIDInput;
 import org.usfirst.frc.team854.robot.PID.TeleoperatedPIDOutput;
@@ -21,9 +21,9 @@ import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class ChassisSubsystem extends PeriodicSubsystem {
-	private TeleoperatedPIDInput motorPIDInput = new TeleoperatedPIDInput();
-	private TeleoperatedPIDOutput motorPIDOutput = new TeleoperatedPIDOutput(this);
+public class ChassisSubsystem extends CustomSubsystem {
+	private static TeleoperatedPIDInput motorPIDInput = new TeleoperatedPIDInput();
+	private TeleoperatedPIDOutput motorPIDOutput = new TeleoperatedPIDOutput();
 	private PIDController teleoperatedPIDController = new PIDController(
 			RobotTuningConstants.DRIVE_PROPORTIONAL,
 			RobotTuningConstants.DRIVE_INTEGRAL,
@@ -44,8 +44,8 @@ public class ChassisSubsystem extends PeriodicSubsystem {
     public ChassisSubsystem() {
     	Motors.leftMotor.setInverted(UserInterfaceConstants.MOTOR_LEFT_INVERT);
     	Motors.rightMotor.setInverted(UserInterfaceConstants.MOTOR_RIGHT_INVERT);
-    	Motors.leftMiniCIM.setInverted(UserInterfaceConstants.MINICIM_LEFT_INVERT);
-    	Motors.rightMiniCIM.setInverted(UserInterfaceConstants.MINICIM_RIGHT_INVERT);
+    	Motors.leftIntakeMotor.setInverted(UserInterfaceConstants.MINICIM_LEFT_INVERT);
+    	Motors.rightIntakeMotor.setInverted(UserInterfaceConstants.MINICIM_RIGHT_INVERT);
 		
     	teleoperatedPIDController.setInputRange(-Math.PI, Math.PI);
     	teleoperatedPIDController.setOutputRange(-Math.PI, Math.PI);
@@ -55,24 +55,17 @@ public class ChassisSubsystem extends PeriodicSubsystem {
     	autonomousPIDController.setSetpoint(0);
     	currentMode = RobotMode.DISABLED;
     }
-    
-    // MIGHT NEED TO CALL THIS!
+
     public void init() {
     	motorPIDInput.init();
     	setTeleoperatedTargetMotion(0, 0);
-    	
     }
-    
-    // MIGHT NEED TO CALL THIS!
-    public void reset() {		
+
+    public void reset() {
     	teleoperatedPIDController.reset();
     	// autonomousPIDController.setSetpoint(0);
     }
-    
-    @Override
-	public void periodic() {
-	}
-    
+
     public void setCurrentMode(RobotMode mode) {
     	currentMode = mode;
     	switch (mode) {
@@ -90,6 +83,10 @@ public class ChassisSubsystem extends PeriodicSubsystem {
     public void setTeleoperatedTargetMotion(double angle, double speed) {
 		// If it doesn't drive, this is the likely culprit.
     	if (currentMode == RobotMode.TELEOPERATED) {
+    		if (!teleoperatedPIDController.isEnabled()) {
+    			teleoperatedPIDController.enable();
+    		}
+
 			motorPIDInput.setTargetAngle(angle);
 			motorPIDOutput.setTargetSpeed(speed);
     	}
@@ -117,8 +114,8 @@ public class ChassisSubsystem extends PeriodicSubsystem {
     public void setMotors(double leftMotors, double rightMotors) {
     	Motors.leftMotor.pidWrite(leftMotors);
 		Motors.rightMotor.pidWrite(rightMotors);
-		Motors.leftMiniCIM.pidWrite(-leftMotors);
-		Motors.rightMiniCIM.pidWrite(-rightMotors);
+		Motors.leftIntakeMotor.pidWrite(-leftMotors);
+		Motors.rightIntakeMotor.pidWrite(-rightMotors);
     }
     
     public void setTurningMode(TurningMode turningMode) {

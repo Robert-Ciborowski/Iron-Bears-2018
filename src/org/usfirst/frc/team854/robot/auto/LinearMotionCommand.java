@@ -7,13 +7,9 @@
 
 package org.usfirst.frc.team854.robot.auto;
 
-import org.usfirst.frc.team854.robot.PID.DistancePID;
-import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
 
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
 public class LinearMotionCommand extends Command {
 	private ChassisSubsystem chassisSubsystem;

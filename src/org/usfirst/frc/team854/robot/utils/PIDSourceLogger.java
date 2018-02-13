@@ -3,20 +3,22 @@ package org.usfirst.frc.team854.robot.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wpi.first.wpilibj.PIDSource;
+import org.usfirst.frc.team854.robot.Robot;
+import org.usfirst.frc.team854.robot.hardware.SensorProvider.SensorType;
 
 public class PIDSourceLogger {
 
 	private List<Double> values;
-	private PIDSource source;
+	private SensorType type;
+	private int port;
 	
-	public PIDSourceLogger(PIDSource source) {
+	public PIDSourceLogger(SensorType type, int port) {
 		values = new ArrayList<>();
-		this.source = source;
+		this.port = port;
 	}
 	
 	public void log() {
-		values.add(source.pidGet());
+		values.add(Robot.sensors.getSensorValue(type, port));
 	}
 	
 	public void output() {

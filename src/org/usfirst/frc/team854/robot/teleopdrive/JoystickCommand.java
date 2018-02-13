@@ -47,7 +47,7 @@ public class JoystickCommand extends Command {
     	
 		Robot.chassisSubsystem.setTeleoperatedTargetMotion(turn, speed);
 	}
-    		
+
 	protected boolean isFinished() {
 		return false;
 	}

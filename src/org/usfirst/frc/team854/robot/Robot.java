@@ -14,46 +14,64 @@
 
 package org.usfirst.frc.team854.robot;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
+import org.usfirst.frc.team854.robot.hardware.SensorProvider;
+import org.usfirst.frc.team854.robot.hardware.SensorProvider.SensorType;
 
 import org.usfirst.frc.team854.robot.auto.TestCommandGroup;
-import org.usfirst.frc.team854.robot.hardware.Sensors;
+
 import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
 import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
 import org.usfirst.frc.team854.robot.utils.PIDSourceLogger;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class Robot extends CustomIterativeRobot {
-	// These are the robot's subsystems.
+
 	public static final ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
-	public static List<PeriodicSubsystem> subsystemList = new ArrayList<PeriodicSubsystem>();
-	
+
+	// These are the robot's sensors.
+	public static final SensorProvider sensors;
+
 	// These represent other parts of the robot.
 	public static OperatorInterface oi;
 	public static PowerDistributionPanel pdp;
 
-	Command autonomousCommand;
+	private Command autonomousCommand;
 	
-	PIDSourceLogger logger;
+	private PIDSourceLogger logger;
+	
+	static {
+		sensors = new SensorProvider();
+		
+		///  BEGIN SENSOR INIT   ///
+		sensors.putSensor(SensorType.ANALOG, RobotInterfaceConstants.PORT_GYRO,
+				new AnalogGyro(RobotInterfaceConstants.PORT_GYRO));
+		sensors.putSensor(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_LEFT,
+				new Encoder(RobotInterfaceConstants.PORT_ENCODER_LEFT, RobotInterfaceConstants.PORT_ENCODER_LEFT_2));
+		sensors.putSensor(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_RIGHT,
+				new Encoder(RobotInterfaceConstants.PORT_ENCODER_RIGHT, RobotInterfaceConstants.PORT_ENCODER_RIGHT_2));
+		sensors.putSensor(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM,
+				new Encoder(RobotInterfaceConstants.PORT_ENCODER_ARM, RobotInterfaceConstants.PORT_ENCODER_ARM_2));
+		/// END SENSOR INIT ///
+	}
 
-	/** The robot's initialisation method.*/
+	/**
+	 * The robot's initialisation method.
+	 */
 	public void robotInit() {
 		CameraServer.getInstance().startAutomaticCapture("Front camera", 0);
 		pdp = new PowerDistributionPanel();
 		oi = new OperatorInterface();
-
-		subsystemList.add(chassisSubsystem);
-
-		for (PeriodicSubsystem s : subsystemList) {
-			s.init();
-		}
-		logger = new PIDSourceLogger(Sensors.gyro);
+		
+		logger = new PIDSourceLogger(SensorType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
+//		sensors.getSensorValue(SensorType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
 
 		updateDashboard();
 	}
@@ -81,9 +99,11 @@ public class Robot extends CustomIterativeRobot {
 		chassisSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		chassisSubsystem.reset();
 		
+
 		autonomousCommand = new TestCommandGroup(-40, chassisSubsystem);
 		
 		// autonomousCommand = new ...();
+
     	Scheduler.getInstance().add(autonomousCommand);
     	
         updateDashboard();
@@ -132,19 +152,13 @@ public class Robot extends CustomIterativeRobot {
 	 * an autonomous mode's periodic method.
 	 */
 	private void subsystemPeriodic() {
-		// This updates all subsystem runtime data.
-		for (PeriodicSubsystem r : subsystemList) {
-			r.periodic();
-		}
 		oi.periodic();
 	}
 
 	/** This updates the FRC dashboard.*/
 	private void updateDashboard() {
 		// This updates all subsystem OI dashboard items.
-		for (PeriodicSubsystem r : subsystemList) {
-			r.updateDashboard();
-		}
+		chassisSubsystem.updateDashboard();
 		oi.updateDashboard();
 	}
 }

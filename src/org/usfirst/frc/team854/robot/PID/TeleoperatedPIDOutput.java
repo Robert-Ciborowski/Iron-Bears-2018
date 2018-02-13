@@ -7,6 +7,7 @@
  */
 package org.usfirst.frc.team854.robot.PID;
 
+import org.usfirst.frc.team854.robot.Robot;
 import org.usfirst.frc.team854.robot.constants.RobotStructureConstants;
 import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
@@ -18,14 +19,11 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TeleoperatedPIDOutput implements PIDOutput {
-	private ChassisSubsystem chassisSubsystem;
-
 	// These are the base speeds to use.
 	private double targetSpeed;
 	private double outputAngle;
 
-	public TeleoperatedPIDOutput(ChassisSubsystem chassisSubsystem) {
-		this.chassisSubsystem = chassisSubsystem;
+	public TeleoperatedPIDOutput() {
 	}
 
 	@Override
@@ -50,7 +48,7 @@ public class TeleoperatedPIDOutput implements PIDOutput {
 		leftSpeed /= (RobotStructureConstants.ENCODER_MAX_RATE_LEFT / RobotStructureConstants.ENCODER_COUNTS_PER_INCH);
 		rightSpeed /= (UserInterfaceConstants.ENCODER_MAX_RATE_RIGHT / RobotStructureConstants.ENCODER_COUNTS_PER_INCH);
 		
-		chassisSubsystem.setMotors(leftSpeed, rightSpeed);
+		Robot.chassisSubsystem.setMotors(leftSpeed, rightSpeed);
 
 		this.outputAngle = outputAngle;
 	}

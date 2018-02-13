@@ -1,7 +1,9 @@
 package org.usfirst.frc.team854.robot.PID;
 
+import org.usfirst.frc.team854.robot.Robot;
+import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.Motors;
-import org.usfirst.frc.team854.robot.hardware.Sensors;
+import org.usfirst.frc.team854.robot.hardware.SensorProvider.SensorType;
 import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
 
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
@@ -13,6 +15,11 @@ public class DistancePID extends PIDSubsystem {
 				   targetInPulses;
 	private boolean initialCountTaken = false;
 	private ChassisSubsystem chassisSubsystem;
+	private Object prevCountRight;
+	private boolean intialCountTaken;
+	private Object DistanceCoveredLeft;
+	private int distancePerPulse;
+	private Object prevCountleft;
 
 	public DistancePID(double p, double i, double d,
 			double feedForward, double distanceInInches, double pulsesPerInch, ChassisSubsystem chassisSubsystem) {
@@ -38,15 +45,27 @@ public class DistancePID extends PIDSubsystem {
 		if (targetInPulses == 0) {
 			return 0;
 		}
-		if (!initialCountTaken) {
-			initialCount = Sensors.leftEncoder.get();
-			initialCountTaken = true;
+		if (!intialCountTaken) {
+			prevCountleft = Robot.sensors.getSensorValue(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_LEFT);
+			prevCountRight = Robot.sensors.getSensorValue(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_RIGHT);
+			
+			intialCountTaken=true;
+		return 0;
+		}
+
+		double currentCountLeft = Robot.sensors.getSensorValue(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_LEFT);
+		double currentCountRight = Robot.sensors.getSensorValue(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_RIGHT);
+
+		Object distanceCoveredRight = (currentCountRight - prevCountRight) * distancePerPulse;
+		System.out.println(currentCountLeft + " is the current count left.");
+
+		if (setpoint != 0) {
+			double scaledDistance = DistanceCoveredLeft / Math.abs(setpoint);
+			System.out.println("Scaled Distance: " + scaledDistance + ", Setpoint: " + Math.abs(setpoint));
+			return scaledDistance;
+		} else {
 			return 0;
 		}
-		double returnValue = (Sensors.leftEncoder.get() - initialCount) / targetInPulses;
-		System.out.println("Here is the PIDInput's return: " + returnValue);
-		System.out.println("Tagret in Pulses: " + targetInPulses + ", Left Encoder: " + Sensors.leftEncoder.get() + ", Initial Count: " + initialCount);
-		return returnValue;
 		
 		
 	}
@@ -59,6 +78,5 @@ public class DistancePID extends PIDSubsystem {
 	@Override
 	protected void initDefaultCommand() {
 		// TODO Auto-generated method stub
-		
 	}
 }
