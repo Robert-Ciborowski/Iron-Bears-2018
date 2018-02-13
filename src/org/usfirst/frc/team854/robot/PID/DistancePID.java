@@ -8,51 +8,47 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
 public class DistancePID extends PIDSubsystem {
 	
-	private double prevCountleft,prevCountRight,
-				   distancePerPulse,
-				   setpoint,
-				   DistanceCoveredLeft, distanceCoveredRight;
-	private boolean intialCountTaken = false;
+	private double initialCount,
+				   pulsesPerInch,
+				   targetInPulses;
+	private boolean initialCountTaken = false;
 	private ChassisSubsystem chassisSubsystem;
 
 	public DistancePID(double p, double i, double d,
-			double feedForward, double distance, double distancePerPulse, ChassisSubsystem chassisSubsystem) {
-		super(p, i, d, feedForward);
-		this.distancePerPulse = distancePerPulse;
-		this.setpoint = distance;
+			double feedForward, double distanceInInches, double pulsesPerInch, ChassisSubsystem chassisSubsystem) {
+		super("", p, i, d, feedForward);
+		this.pulsesPerInch = pulsesPerInch;
+		this.targetInPulses = distanceInInches * pulsesPerInch;
 		this.chassisSubsystem = chassisSubsystem;
-		setSetpoint(setpoint);
+		setSetpoint(1);
+		System.out.println("Distance in Inches: " + distanceInInches + ", Pulses Per Inch: " + pulsesPerInch);
 		
 		setAbsoluteTolerance(0.05); 
 		getPIDController().setContinuous(false);
 		
 	}
+	
+	public void setDistance(double distanceInInches) {
+		this.targetInPulses = distanceInInches * pulsesPerInch;
+		initialCountTaken = false;
+	}
 
 	@Override
 	protected double returnPIDInput() {
-		if (!intialCountTaken) {
-			prevCountleft=Sensors.leftEncoder.get();
-			prevCountRight=Sensors.rightEncoder.get();
-			
-			intialCountTaken=true;
-		return 0;
-		}
-
-		double currentCountLeft = Sensors.leftEncoder.get();
-		double currentCountRight = Sensors.rightEncoder.get();
-		DistanceCoveredLeft += (currentCountLeft - prevCountleft) * distancePerPulse;
-		prevCountleft = currentCountLeft;
-		
-		distanceCoveredRight += (currentCountRight - prevCountRight) * distancePerPulse;
-		System.out.println(currentCountLeft + " is the current count left.");
-		
-		if (setpoint != 0) {
-			double scaledDistance = DistanceCoveredLeft / Math.abs(setpoint);
-			System.out.println("Scaled Distance: " + scaledDistance + ", Setpoint: " + Math.abs(setpoint));
-			return scaledDistance;
-		} else {
+		if (targetInPulses == 0) {
 			return 0;
 		}
+		if (!initialCountTaken) {
+			initialCount = Sensors.leftEncoder.get();
+			initialCountTaken = true;
+			return 0;
+		}
+		double returnValue = (Sensors.leftEncoder.get() - initialCount) / targetInPulses;
+		System.out.println("Here is the PIDInput's return: " + returnValue);
+		System.out.println("Tagret in Pulses: " + targetInPulses + ", Left Encoder: " + Sensors.leftEncoder.get() + ", Initial Count: " + initialCount);
+		return returnValue;
+		
+		
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class ChassisSubsystem extends PeriodicSubsystem {
 			RobotTuningConstants.DISTANCE_DERIVATIVE,
 			RobotTuningConstants.DISTANCE_FEED_FORWARD,
 			0,
-			1.0 / RobotStructureConstants.ENCODER_COUNTS_PER_INCH,
+			RobotStructureConstants.ENCODER_COUNTS_PER_INCH,
 			this);
 	private RobotMode currentMode;
 	
@@ -50,7 +50,7 @@ public class ChassisSubsystem extends PeriodicSubsystem {
     	teleoperatedPIDController.setInputRange(-Math.PI, Math.PI);
     	teleoperatedPIDController.setOutputRange(-Math.PI, Math.PI);
     	teleoperatedPIDController.setSetpoint(0);
-    	autonomousPIDController.setInputRange(RobotStructureConstants.ENCODER_MAX_RATE_LEFT, RobotStructureConstants.ENCODER_MAX_RATE_RIGHT);
+    	autonomousPIDController.setInputRange(0, 10);
     	autonomousPIDController.setOutputRange(-1, 1);
     	autonomousPIDController.setSetpoint(0);
     	currentMode = RobotMode.DISABLED;
@@ -83,6 +83,7 @@ public class ChassisSubsystem extends PeriodicSubsystem {
     		case AUTONOMOUS:
     			teleoperatedPIDController.disable();
     			autonomousPIDController.enable();
+    			break;
     	}
     }
     
@@ -98,7 +99,8 @@ public class ChassisSubsystem extends PeriodicSubsystem {
     public void setAutonomousTarget(double angle, double distance) {
 		// If it doesn't drive, this is the likely culprit.
     	if (currentMode == RobotMode.AUTONOMOUS) {
-			autonomousPIDController.setSetpoint(distance);
+			autonomousPIDController.setDistance(distance);
+			autonomousPIDController.setSetpoint(1);
 			System.out.println("A setpoint has been set: " + distance);
     	}
 		// System.out.println("Updated joystick turn!: " + angle);

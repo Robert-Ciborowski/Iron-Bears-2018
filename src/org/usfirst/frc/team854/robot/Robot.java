@@ -81,7 +81,7 @@ public class Robot extends CustomIterativeRobot {
 		chassisSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		chassisSubsystem.reset();
 		
-		autonomousCommand = new TestCommandGroup(40, chassisSubsystem);
+		autonomousCommand = new TestCommandGroup(-40, chassisSubsystem);
 		
 		// autonomousCommand = new ...();
     	Scheduler.getInstance().add(autonomousCommand);
