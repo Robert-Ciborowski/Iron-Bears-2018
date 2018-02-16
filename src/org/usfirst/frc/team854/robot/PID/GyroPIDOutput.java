@@ -29,8 +29,9 @@ public class GyroPIDOutput implements PIDOutput {
 	public void pidWrite(double outputAngle) {
 		// System.out.println("Output angle: " + outputAngle);
 		// convert from 1/s to in/s
+		// System.out.println("Target Speed: " + targetSpeed);
 		targetSpeed *= RobotStructureConstants.ENCODER_MAX_RATE_LEFT / RobotStructureConstants.ENCODER_COUNTS_PER_INCH;
-
+		
 		double targetAngularSpeed = targetSpeed / RobotStructureConstants.WHEEL_RADIUS;
 		double angleOffset = (outputAngle * RobotStructureConstants.DISTANCE_BETWEEN_WHEELS
 				/ RobotStructureConstants.WHEEL_RADIUS) / 2;
@@ -50,6 +51,8 @@ public class GyroPIDOutput implements PIDOutput {
 		Robot.chassisSubsystem.setMotors(leftSpeed, rightSpeed);
 
 		this.outputAngle = outputAngle;
+		
+		// System.out.println("Left speed output of gyro PID: " + leftSpeed);
 	}
 
 	public void updateDashboard() {
@@ -58,5 +61,6 @@ public class GyroPIDOutput implements PIDOutput {
 
 	public void setTargetSpeed(double targetSpeed) {
 		this.targetSpeed = targetSpeed;
+		System.out.println("Set a new target speed: " + targetSpeed);
 	}
 }

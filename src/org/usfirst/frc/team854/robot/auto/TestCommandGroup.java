@@ -16,7 +16,9 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class TestCommandGroup extends CommandGroup {
 	public TestCommandGroup(double distance, ChassisSubsystem chassisSubsystem) {
+		
 		addSequential(new LinearMotionCommand(distance, chassisSubsystem));
+		
 		//Scheduler.getInstance().add(this);
 	}
 }

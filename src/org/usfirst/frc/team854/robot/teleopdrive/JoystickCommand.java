@@ -17,50 +17,54 @@ public class JoystickCommand extends Command {
 		requires(Robot.chassisSubsystem);
 	}
 
-	boolean driveReverseState = false;
-	boolean reverseButtonHeld = false;
+	private boolean driveReverseState = false;
+	private boolean reverseButtonHeld = false;
 
-	boolean testState = false;
-	boolean testButtonHeld = false;
+	private boolean testState = false;
+	private boolean testButtonHeld = false;
+	
+	private boolean disabled = false;
 	
 	protected void initialize() {
 		
 	}
 	
 	protected void execute() {
-		double speed = Robot.oi.getSpeed();  // Positive forwards
-    	double turn = Robot.oi.getTurn(); // Positive left, sums inputs
-    	
-    	if (Robot.oi.getTestButtonPressed()) {
-    		if(!testButtonHeld) {
-    			testButtonHeld = true;
-    			if (testState) {
-    				testState = false;
-    			} else {
-    				testState = true;
-    			}
-        		Robot.intakeSubsystem.updateState(testState);
-    		}
-    	}
-    	
-    	if(Robot.oi.getDriveReverse()) {
-    		if(!reverseButtonHeld) {
-    			reverseButtonHeld = true;
-    			if (driveReverseState) {
-    				driveReverseState = false;
-    			} else {
-    				driveReverseState = true; 
-    			}
-    		}
-    	} else {
-    		reverseButtonHeld = false;
-    	}
-
-    	if (driveReverseState) {
-    		speed *= -1;
-    	}
-    	
-		Robot.chassisSubsystem.setTeleoperatedTargetMotion(turn, speed);
+		if (!disabled) {
+			double speed = Robot.oi.getSpeed();  // Positive forwards
+	    	double turn = Robot.oi.getTurn(); // Positive left, sums inputs
+	    	
+	    	if (Robot.oi.getTestButtonPressed()) {
+	    		if(!testButtonHeld) {
+	    			testButtonHeld = true;
+	    			if (testState) {
+	    				testState = false;
+	    			} else {
+	    				testState = true;
+	    			}
+	        		Robot.intakeSubsystem.updateState(testState);
+	    		}
+	    	}
+	    	
+	    	if(Robot.oi.getDriveReverse()) {
+	    		if(!reverseButtonHeld) {
+	    			reverseButtonHeld = true;
+	    			if (driveReverseState) {
+	    				driveReverseState = false;
+	    			} else {
+	    				driveReverseState = true; 
+	    			}
+	    		}
+	    	} else {
+	    		reverseButtonHeld = false;
+	    	}
+	
+	    	if (driveReverseState) {
+	    		speed *= -1;
+	    	}
+	    	
+			Robot.chassisSubsystem.setTargetMotion(turn, speed);
+		}
 	}
 
 	protected boolean isFinished() {
@@ -73,5 +77,9 @@ public class JoystickCommand extends Command {
 	
 	protected void interrupted() {
 		end();
+	}
+	
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 }

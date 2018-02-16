@@ -9,6 +9,7 @@
 package org.usfirst.frc.team854.robot.operatorinterface;
 
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
+import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -16,9 +17,12 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OperatorInterface {
-	private Joystick joystick = new Joystick(UserInterfaceConstants.PORT_JOYSTICK);
-	private Button driveReverse = new JoystickButton(joystick, 9);
-	private Button testButton = new JoystickButton(joystick, 10);
+	// I'm going to make this static for now.
+	public static JoystickCommand mainJoystickCommand = new JoystickCommand();
+	
+	private Joystick mainJoystick = new Joystick(UserInterfaceConstants.PORT_JOYSTICK);
+	private Button driveReverse = new JoystickButton(mainJoystick, 9);
+	private Button testButton = new JoystickButton(mainJoystick, 10);
 
 	private Filter turningFilter = new CompoundFilter.Builder()
 			.addFilter(new LinearFilter(UserInterfaceConstants.JOYSTICK_TURNING_OFFSET))
@@ -42,19 +46,19 @@ public class OperatorInterface {
 	
 	/** Returns the filtered speed that is inputed by the user.*/
 	public double getSpeed() {
-		double rawSpeed = -joystick.getRawAxis(UserInterfaceConstants.AXIS_ID_SPEED);
+		double rawSpeed = -mainJoystick.getRawAxis(UserInterfaceConstants.AXIS_ID_SPEED);
 		return speedFilter.filter(rawSpeed);
 	}
 	
 	/** Returns the filtered turn that is inputed by the user.*/
 	public double getTurn() {
-		double rawTurn = -joystick.getRawAxis(UserInterfaceConstants.AXIS_ID_TURN);
+		double rawTurn = -mainJoystick.getRawAxis(UserInterfaceConstants.AXIS_ID_TURN);
 		return turningFilter.filter(rawTurn);
 	}
 	
 	/** Returns the max speed that is inputed by the user.*/
 	public double getMaxSpeed() {
-		double maxSpeed = -joystick.getRawAxis(UserInterfaceConstants.AXIS_ID_MAX_SPEED);
+		double maxSpeed = -mainJoystick.getRawAxis(UserInterfaceConstants.AXIS_ID_MAX_SPEED);
 		maxSpeed = 0.2 * (maxSpeed + 1) + 0.6;
 		return maxSpeed;
 	}
@@ -64,6 +68,7 @@ public class OperatorInterface {
 	}
 	
 	public void periodic() {
+		
 	}
 	
 	public void updateDashboard() {

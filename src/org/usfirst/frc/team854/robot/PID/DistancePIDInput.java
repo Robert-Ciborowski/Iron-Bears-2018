@@ -56,7 +56,7 @@ public class DistancePIDInput implements PIDSource {
 		double averageCurrentCount = (currentCountLeft + currentCountRight) / 2;
 		
 		double returnValue = averageCurrentCount / targetEncoderValue;
-		System.out.println("Scaled Distance: " + returnValue);
+		System.out.println("Target: " + targetEncoderValue + ", Average: " + averageCurrentCount);
 		return returnValue;
 	}
 }

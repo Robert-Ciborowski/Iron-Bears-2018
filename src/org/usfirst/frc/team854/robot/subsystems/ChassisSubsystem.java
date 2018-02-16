@@ -20,6 +20,7 @@ import org.usfirst.frc.team854.robot.constants.RobotStructureConstants;
 import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
+import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
 import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 
 import edu.wpi.first.wpilibj.PIDController;
@@ -56,7 +57,7 @@ public class ChassisSubsystem extends CustomSubsystem {
 		gyroPIDController.setInputRange(-Math.PI, Math.PI);
 		gyroPIDController.setOutputRange(-Math.PI, Math.PI);
 		gyroPIDController.setSetpoint(0);
-		distancePIDController.setInputRange(0, 10);
+		distancePIDController.setInputRange(-100000, 100000);
 		distancePIDController.setOutputRange(-1, 1);
 		distancePIDController.setSetpoint(1);
 		distancePIDController.setAbsoluteTolerance(0.05);
@@ -64,8 +65,9 @@ public class ChassisSubsystem extends CustomSubsystem {
 	}
 
 	public void init() {
+		System.out.println("Re-init!");
 		gyroPIDInput.init();
-		setTeleoperatedTargetMotion(0, 0);
+		setTargetMotion(0, 0);
 	}
 
 	public void reset() {
@@ -79,27 +81,19 @@ public class ChassisSubsystem extends CustomSubsystem {
 			case TELEOPERATED:
 				gyroPIDController.enable();
 				distancePIDController.disable();
-				// distancePIDController.enable();
+				OperatorInterface.mainJoystickCommand.setDisabled(false);
 				break;
 			case AUTONOMOUS:
-				distancePIDController.disable();
 				gyroPIDController.enable();
-				// distancePIDController.enable();
+				distancePIDController.enable();
+				OperatorInterface.mainJoystickCommand.setDisabled(true);
+				break;
+			case DISABLED:
+				gyroPIDController.disable();
+				distancePIDController.disable();
+				OperatorInterface.mainJoystickCommand.setDisabled(true);
 				break;
 		}
-	}
-
-	public void setTeleoperatedTargetMotion(double angle, double speed) {
-		// If it doesn't drive, this is the likely culprit.
-		if (currentMode == RobotMode.TELEOPERATED) {
-			if (!gyroPIDController.isEnabled()) {
-				gyroPIDController.enable();
-			}
-
-			gyroPIDInput.setTargetAngle(angle);
-			gyroPIDOutput.setTargetSpeed(speed);
-		}
-		// System.out.println("Updated joystick turn!: " + angle);
 	}
 
 	public void setAutonomousTarget(double angle, double distance) {
@@ -107,6 +101,7 @@ public class ChassisSubsystem extends CustomSubsystem {
 		if (currentMode == RobotMode.AUTONOMOUS) {
 			distancePIDInput.setDistance(distance);
 			distancePIDController.setSetpoint(1);
+			gyroPIDInput.setTargetAngle(angle);
 			System.out.println("A setpoint has been set: " + distance);
 		}
 		// System.out.println("Updated joystick turn!: " + angle);
@@ -132,7 +127,7 @@ public class ChassisSubsystem extends CustomSubsystem {
 	}
 
 	public void initDefaultCommand() {
-		setDefaultCommand(new JoystickCommand());
+		// setDefaultCommand(new JoystickCommand());
 	}
 
 	@Override
@@ -144,5 +139,19 @@ public class ChassisSubsystem extends CustomSubsystem {
 
 	public boolean isAngleOnTarget() {
 		return gyroPIDController.onTarget();
+	}
+
+	public void setTargetMotion(double angle, double speed) {
+		// If it doesn't drive, this is the likely culprit.
+		// if (currentMode == RobotMode.TELEOPERATED) {
+			if (!gyroPIDController.isEnabled()) {
+				gyroPIDController.enable();
+			}
+
+			gyroPIDInput.setTargetAngle(angle);
+			gyroPIDOutput.setTargetSpeed(speed);
+		// }
+		// System.out.println("Updated joystick turn!: " + angle);
+		
 	}
 }
