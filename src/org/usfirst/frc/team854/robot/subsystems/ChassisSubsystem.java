@@ -57,6 +57,7 @@ public class ChassisSubsystem extends CustomSubsystem {
 		gyroPIDController.setInputRange(-Math.PI, Math.PI);
 		gyroPIDController.setOutputRange(-Math.PI, Math.PI);
 		gyroPIDController.setSetpoint(0);
+		gyroPIDController.setAbsoluteTolerance(0.05);
 		distancePIDController.setInputRange(-100000, 100000);
 		distancePIDController.setOutputRange(-1, 1);
 		distancePIDController.setSetpoint(1);
@@ -81,17 +82,17 @@ public class ChassisSubsystem extends CustomSubsystem {
 			case TELEOPERATED:
 				gyroPIDController.enable();
 				distancePIDController.disable();
-				OperatorInterface.mainJoystickCommand.setDisabled(false);
+				OperatorInterface.mainJoystickCommand.setEnabled(true);
 				break;
 			case AUTONOMOUS:
 				gyroPIDController.enable();
 				distancePIDController.enable();
-				OperatorInterface.mainJoystickCommand.setDisabled(true);
+				OperatorInterface.mainJoystickCommand.setEnabled(false);
 				break;
 			case DISABLED:
 				gyroPIDController.disable();
 				distancePIDController.disable();
-				OperatorInterface.mainJoystickCommand.setDisabled(true);
+				OperatorInterface.mainJoystickCommand.setEnabled(false);
 				break;
 		}
 	}
@@ -127,7 +128,7 @@ public class ChassisSubsystem extends CustomSubsystem {
 	}
 
 	public void initDefaultCommand() {
-		// setDefaultCommand(new JoystickCommand());
+		setDefaultCommand(OperatorInterface.mainJoystickCommand);
 	}
 
 	@Override

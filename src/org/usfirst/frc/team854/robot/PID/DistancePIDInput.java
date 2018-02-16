@@ -23,8 +23,7 @@ public class DistancePIDInput implements PIDSource {
 	private double targetEncoderValue;
 	
 	public DistancePIDInput(double distanceInInches) {
-		targetEncoderValue = distanceInInches * RobotStructureConstants.ENCODER_COUNTS_PER_INCH;
-		
+		setDistance(distanceInInches);
 	}
 	
 	// Do nothing with this method as it is not used.
@@ -43,6 +42,10 @@ public class DistancePIDInput implements PIDSource {
 
 	@Override
 	public double pidGet() {
+		if (targetEncoderValue == 0) {
+			return 1;
+		}
+		
 		if (!intialEncoderValueWasTaken) {
 			initialLeftEncoderValue = Robot.devices.getDeviceValue(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_LEFT);
 			initialRightEncoderValue = Robot.devices.getDeviceValue(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_RIGHT);

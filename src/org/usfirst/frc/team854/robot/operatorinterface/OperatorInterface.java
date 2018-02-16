@@ -14,6 +14,7 @@ import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OperatorInterface {
@@ -36,7 +37,7 @@ public class OperatorInterface {
 			.build();
 	
 	public OperatorInterface() {
-		
+		// Scheduler.getInstance().add(mainJoystickCommand);
 	}
 	
 	/** Returns the drive reverse button.*/
