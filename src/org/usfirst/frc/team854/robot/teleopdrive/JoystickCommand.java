@@ -23,14 +23,15 @@ public class JoystickCommand extends Command {
 	private boolean testState = false;
 	private boolean testButtonHeld = false;
 	
-	private boolean disabled = false;
+	private boolean enabled = false;
 	
 	protected void initialize() {
 		
 	}
 	
 	protected void execute() {
-		if (!disabled) {
+		System.out.println("Joystick: " + enabled);
+		if (enabled) {
 			double speed = Robot.oi.getSpeed();  // Positive forwards
 	    	double turn = Robot.oi.getTurn(); // Positive left, sums inputs
 	    	
@@ -79,7 +80,7 @@ public class JoystickCommand extends Command {
 		end();
 	}
 	
-	public void setDisabled(boolean disabled) {
-		this.disabled = disabled;
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 }

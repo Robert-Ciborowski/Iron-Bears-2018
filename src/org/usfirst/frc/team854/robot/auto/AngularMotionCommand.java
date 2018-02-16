@@ -11,8 +11,8 @@ import org.usfirst.frc.team854.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class AngularMotion extends Command {
-	public AngularMotion(double angle) {
+public class AngularMotionCommand extends Command {
+	public AngularMotionCommand(double angle) {
 		requires(Robot.chassisSubsystem);
 		Robot.chassisSubsystem.setTargetMotion(angle, 0);
 	}
