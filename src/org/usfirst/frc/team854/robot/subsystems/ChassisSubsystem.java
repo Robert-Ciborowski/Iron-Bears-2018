@@ -7,134 +7,142 @@
 
 package org.usfirst.frc.team854.robot.subsystems;
 
-
+import org.usfirst.frc.team854.robot.CustomSubsystem;
+import org.usfirst.frc.team854.robot.Robot;
 import org.usfirst.frc.team854.robot.RobotMode;
-import org.usfirst.frc.team854.robot.PID.TeleoperatedPIDInput;
-import org.usfirst.frc.team854.robot.PID.TeleoperatedPIDOutput;
 import org.usfirst.frc.team854.robot.PID.DistancePID;
+import org.usfirst.frc.team854.robot.PID.DistancePIDInput;
+import org.usfirst.frc.team854.robot.PID.DistancePIDOutput;
+import org.usfirst.frc.team854.robot.PID.GyroPIDInput;
+import org.usfirst.frc.team854.robot.PID.GyroPIDOutput;
+import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.RobotStructureConstants;
 import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
-import org.usfirst.frc.team854.robot.hardware.Motors;
+import org.usfirst.frc.team854.robot.hardware.InterfaceType;
 import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ChassisSubsystem extends CustomSubsystem {
-	private static TeleoperatedPIDInput motorPIDInput = new TeleoperatedPIDInput();
-	private TeleoperatedPIDOutput motorPIDOutput = new TeleoperatedPIDOutput();
-	private PIDController teleoperatedPIDController = new PIDController(
-			RobotTuningConstants.DRIVE_PROPORTIONAL,
-			RobotTuningConstants.DRIVE_INTEGRAL,
-			RobotTuningConstants.DRIVE_DERIVATIVE,
-			RobotTuningConstants.DRIVE_FEED_FORWARD,
-			motorPIDInput,
-			motorPIDOutput);
-	private DistancePID autonomousPIDController = new DistancePID(
-			RobotTuningConstants.DISTANCE_PROPORTIONAL,
-			RobotTuningConstants.DISTANCE_INTEGRAL,
-			RobotTuningConstants.DISTANCE_DERIVATIVE,
-			RobotTuningConstants.DISTANCE_FEED_FORWARD,
-			0,
-			RobotStructureConstants.ENCODER_COUNTS_PER_INCH,
-			this);
+	private GyroPIDInput gyroPIDInput = new GyroPIDInput();
+	private GyroPIDOutput gyroPIDOutput = new GyroPIDOutput();
+	private PIDController gyroPIDController = new PIDController(RobotTuningConstants.DRIVE_PROPORTIONAL,
+			RobotTuningConstants.DRIVE_INTEGRAL, RobotTuningConstants.DRIVE_DERIVATIVE,
+			RobotTuningConstants.DRIVE_FEED_FORWARD, gyroPIDInput, gyroPIDOutput);
+	private DistancePIDInput distancePIDInput = new DistancePIDInput(0);
+	private DistancePIDOutput distancePIDOutput = new DistancePIDOutput();
+	private PIDController distancePIDController = new PIDController(RobotTuningConstants.DISTANCE_PROPORTIONAL,
+			RobotTuningConstants.DISTANCE_INTEGRAL, RobotTuningConstants.DISTANCE_DERIVATIVE,
+			RobotTuningConstants.DISTANCE_FEED_FORWARD, distancePIDInput, distancePIDOutput);
+
 	private RobotMode currentMode;
-	
-    public ChassisSubsystem() {
-    	Motors.leftMotor.setInverted(UserInterfaceConstants.MOTOR_LEFT_INVERT);
-    	Motors.rightMotor.setInverted(UserInterfaceConstants.MOTOR_RIGHT_INVERT);
-    	Motors.leftIntakeMotor.setInverted(UserInterfaceConstants.MINICIM_LEFT_INVERT);
-    	Motors.rightIntakeMotor.setInverted(UserInterfaceConstants.MINICIM_RIGHT_INVERT);
-		
-    	teleoperatedPIDController.setInputRange(-Math.PI, Math.PI);
-    	teleoperatedPIDController.setOutputRange(-Math.PI, Math.PI);
-    	teleoperatedPIDController.setSetpoint(0);
-    	autonomousPIDController.setInputRange(0, 10);
-    	autonomousPIDController.setOutputRange(-1, 1);
-    	autonomousPIDController.setSetpoint(0);
-    	currentMode = RobotMode.DISABLED;
-    }
 
-    public void init() {
-    	motorPIDInput.init();
-    	setTeleoperatedTargetMotion(0, 0);
-    }
+	private Spark leftMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_LEFT);
+	private Spark rightMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_RIGHT);
+	private Spark leftMiniCIMMotor = Robot.devices.getDevice(InterfaceType.PWM,
+			RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT);
+	private Spark rightMiniCIMMotor = Robot.devices.getDevice(InterfaceType.PWM,
+			RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT);
 
-    public void reset() {
-    	teleoperatedPIDController.reset();
-    	// autonomousPIDController.setSetpoint(0);
-    }
+	public ChassisSubsystem() {
+		leftMotor.setInverted(UserInterfaceConstants.MOTOR_LEFT_INVERT);
+		rightMotor.setInverted(UserInterfaceConstants.MOTOR_RIGHT_INVERT);
+		leftMiniCIMMotor.setInverted(UserInterfaceConstants.MINICIM_LEFT_INVERT);
+		rightMiniCIMMotor.setInverted(UserInterfaceConstants.MINICIM_RIGHT_INVERT);
 
-    public void setCurrentMode(RobotMode mode) {
-    	currentMode = mode;
-    	switch (mode) {
-    		case TELEOPERATED:
-    			teleoperatedPIDController.enable();
-    			autonomousPIDController.disable();
-    			break;
-    		case AUTONOMOUS:
-    			teleoperatedPIDController.disable();
-    			autonomousPIDController.enable();
-    			break;
-    	}
-    }
-    
-    public void setTeleoperatedTargetMotion(double angle, double speed) {
+		gyroPIDController.setInputRange(-Math.PI, Math.PI);
+		gyroPIDController.setOutputRange(-Math.PI, Math.PI);
+		gyroPIDController.setSetpoint(0);
+		distancePIDController.setInputRange(0, 10);
+		distancePIDController.setOutputRange(-1, 1);
+		distancePIDController.setSetpoint(1);
+		distancePIDController.setAbsoluteTolerance(0.05);
+		currentMode = RobotMode.DISABLED;
+	}
+
+	public void init() {
+		gyroPIDInput.init();
+		setTeleoperatedTargetMotion(0, 0);
+	}
+
+	public void reset() {
+		gyroPIDController.reset();
+		// autonomousPIDController.setSetpoint(0);
+	}
+
+	public void setCurrentMode(RobotMode mode) {
+		currentMode = mode;
+		switch (mode) {
+			case TELEOPERATED:
+				gyroPIDController.enable();
+				distancePIDController.disable();
+				// distancePIDController.enable();
+				break;
+			case AUTONOMOUS:
+				distancePIDController.disable();
+				gyroPIDController.enable();
+				// distancePIDController.enable();
+				break;
+		}
+	}
+
+	public void setTeleoperatedTargetMotion(double angle, double speed) {
 		// If it doesn't drive, this is the likely culprit.
-    	if (currentMode == RobotMode.TELEOPERATED) {
-    		if (!teleoperatedPIDController.isEnabled()) {
-    			teleoperatedPIDController.enable();
-    		}
+		if (currentMode == RobotMode.TELEOPERATED) {
+			if (!gyroPIDController.isEnabled()) {
+				gyroPIDController.enable();
+			}
 
-			motorPIDInput.setTargetAngle(angle);
-			motorPIDOutput.setTargetSpeed(speed);
-    	}
+			gyroPIDInput.setTargetAngle(angle);
+			gyroPIDOutput.setTargetSpeed(speed);
+		}
 		// System.out.println("Updated joystick turn!: " + angle);
-    }
-    
-    public void setAutonomousTarget(double angle, double distance) {
+	}
+
+	public void setAutonomousTarget(double angle, double distance) {
 		// If it doesn't drive, this is the likely culprit.
-    	if (currentMode == RobotMode.AUTONOMOUS) {
-			autonomousPIDController.setDistance(distance);
-			autonomousPIDController.setSetpoint(1);
+		if (currentMode == RobotMode.AUTONOMOUS) {
+			distancePIDInput.setDistance(distance);
+			distancePIDController.setSetpoint(1);
 			System.out.println("A setpoint has been set: " + distance);
-    	}
+		}
 		// System.out.println("Updated joystick turn!: " + angle);
-    }
-    
-    public boolean isAutonomousOnTarget() {
-    	return autonomousPIDController.onTarget();
-    }
-    
-    public void endAutonomousCommand() {
-    	autonomousPIDController.setSetpoint(0);
-    }
-    
-    public void setMotors(double leftMotors, double rightMotors) {
-    	Motors.leftMotor.pidWrite(leftMotors);
-		Motors.rightMotor.pidWrite(rightMotors);
-		Motors.leftIntakeMotor.pidWrite(-leftMotors);
-		Motors.rightIntakeMotor.pidWrite(-rightMotors);
-    }
-    
-    public void setTurningMode(TurningMode turningMode) {
-    	motorPIDInput.setTurningMode(turningMode);
-    }
+	}
+
+	public boolean isAutonomousOnTarget() {
+		return distancePIDController.onTarget();
+	}
+
+	public void endAutonomousCommand() {
+		distancePIDController.setSetpoint(0);
+	}
+
+	public void setMotors(double leftMotorValue, double rightMotorValue) {
+		leftMotor.pidWrite(leftMotorValue);
+		rightMotor.pidWrite(rightMotorValue);
+		leftMiniCIMMotor.pidWrite(-leftMotorValue);
+		rightMiniCIMMotor.pidWrite(-rightMotorValue);
+	}
+
+	public void setTurningMode(TurningMode turningMode) {
+		gyroPIDInput.setTurningMode(turningMode);
+	}
 
 	public void initDefaultCommand() {
 		setDefaultCommand(new JoystickCommand());
 	}
-	
+
 	@Override
 	public void updateDashboard() {
-		motorPIDInput.updateDashboard();
-		motorPIDOutput.updateDashboard();
-		SmartDashboard.putData("Motor Controller", teleoperatedPIDController);
+		gyroPIDInput.updateDashboard();
+		gyroPIDOutput.updateDashboard();
+		SmartDashboard.putData("Motor Controller", gyroPIDController);
 	}
 
 	public boolean isAngleOnTarget() {
-		return teleoperatedPIDController.onTarget();
+		return gyroPIDController.onTarget();
 	}
 }
-

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class OperatorInterface {
 	private Joystick joystick = new Joystick(UserInterfaceConstants.PORT_JOYSTICK);
 	private Button driveReverse = new JoystickButton(joystick, 9);
+	private Button testButton = new JoystickButton(joystick, 10);
 
 	private Filter turningFilter = new CompoundFilter.Builder()
 			.addFilter(new LinearFilter(UserInterfaceConstants.JOYSTICK_TURNING_OFFSET))
@@ -56,6 +57,10 @@ public class OperatorInterface {
 		double maxSpeed = -joystick.getRawAxis(UserInterfaceConstants.AXIS_ID_MAX_SPEED);
 		maxSpeed = 0.2 * (maxSpeed + 1) + 0.6;
 		return maxSpeed;
+	}
+	
+	public boolean getTestButtonPressed() {
+		return testButton.get();
 	}
 	
 	public void periodic() {

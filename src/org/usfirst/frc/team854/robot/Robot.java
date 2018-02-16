@@ -15,29 +15,32 @@
 package org.usfirst.frc.team854.robot;
 
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
-import org.usfirst.frc.team854.robot.hardware.SensorProvider;
-import org.usfirst.frc.team854.robot.hardware.SensorProvider.SensorType;
-
+import org.usfirst.frc.team854.robot.hardware.DeviceProvider;
+import org.usfirst.frc.team854.robot.hardware.InterfaceType;
 import org.usfirst.frc.team854.robot.auto.TestCommandGroup;
 
 import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
 import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
+import org.usfirst.frc.team854.robot.subsystems.IntakeSubsystem;
 import org.usfirst.frc.team854.robot.utils.PIDSourceLogger;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class Robot extends CustomIterativeRobot {
 
-	public static final ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
+	public static final ChassisSubsystem chassisSubsystem;
+	public static final IntakeSubsystem intakeSubsystem;
 
 	// These are the robot's sensors.
-	public static final SensorProvider sensors;
+	public static final DeviceProvider devices;
 
 	// These represent other parts of the robot.
 	public static OperatorInterface oi;
@@ -48,18 +51,42 @@ public class Robot extends CustomIterativeRobot {
 	private PIDSourceLogger logger;
 	
 	static {
-		sensors = new SensorProvider();
+		devices = new DeviceProvider();
 		
-		///  BEGIN SENSOR INIT   ///
-		sensors.putSensor(SensorType.ANALOG, RobotInterfaceConstants.PORT_GYRO,
+		// This is where device initialisation begins.
+		// These are the analog devices.
+		devices.putDevice(InterfaceType.ANALOG, RobotInterfaceConstants.PORT_GYRO,
 				new AnalogGyro(RobotInterfaceConstants.PORT_GYRO));
-		sensors.putSensor(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_LEFT,
+		
+		// These are the digital devices.
+		devices.putDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_LEFT,
 				new Encoder(RobotInterfaceConstants.PORT_ENCODER_LEFT, RobotInterfaceConstants.PORT_ENCODER_LEFT_2));
-		sensors.putSensor(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_RIGHT,
+		devices.putDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_RIGHT,
 				new Encoder(RobotInterfaceConstants.PORT_ENCODER_RIGHT, RobotInterfaceConstants.PORT_ENCODER_RIGHT_2));
-		sensors.putSensor(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM,
+		devices.putDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM,
 				new Encoder(RobotInterfaceConstants.PORT_ENCODER_ARM, RobotInterfaceConstants.PORT_ENCODER_ARM_2));
+
+		// These are the PWM devices.
+		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_LEFT,
+				new Spark(RobotInterfaceConstants.PORT_MOTOR_LEFT));
+		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_RIGHT,
+				new Spark(RobotInterfaceConstants.PORT_MOTOR_RIGHT));
+		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_ARM,
+				new Spark(RobotInterfaceConstants.PORT_MOTOR_ARM));
+		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT,
+				new Spark(RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT));
+		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT,
+				new Spark(RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT));
+		
+		// These are the relay devices.
+		devices.putDevice(InterfaceType.RELAY, RobotInterfaceConstants.PORT_RELAY_LEFT,
+				new Relay(RobotInterfaceConstants.PORT_RELAY_LEFT));
+		devices.putDevice(InterfaceType.RELAY, RobotInterfaceConstants.PORT_RELAY_RIGHT,
+				new Relay(RobotInterfaceConstants.PORT_RELAY_RIGHT));
 		/// END SENSOR INIT ///
+		
+		chassisSubsystem = new ChassisSubsystem();
+		intakeSubsystem = new IntakeSubsystem();
 	}
 
 	/**
@@ -70,8 +97,7 @@ public class Robot extends CustomIterativeRobot {
 		pdp = new PowerDistributionPanel();
 		oi = new OperatorInterface();
 		
-		logger = new PIDSourceLogger(SensorType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
-//		sensors.getSensorValue(SensorType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
+		logger = new PIDSourceLogger(InterfaceType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
 
 		updateDashboard();
 	}
@@ -98,7 +124,6 @@ public class Robot extends CustomIterativeRobot {
 	public void autonomousInit() {
 		chassisSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		chassisSubsystem.reset();
-		
 
 		autonomousCommand = new TestCommandGroup(-40, chassisSubsystem);
 		

@@ -1,5 +1,5 @@
 /*
- * Class: DriveMotorPIDOutput
+ * Class: GyroPIDOutput
  * Author: Robert Ciborowski
  * Date: 10/01/2018
  * Description: A class which is used by a Motor PID Controller to drive motors. The class is given an offset
@@ -11,19 +11,18 @@ import org.usfirst.frc.team854.robot.Robot;
 import org.usfirst.frc.team854.robot.constants.RobotStructureConstants;
 import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
-import org.usfirst.frc.team854.robot.hardware.Motors;
 import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class TeleoperatedPIDOutput implements PIDOutput {
+public class GyroPIDOutput implements PIDOutput {
 	// These are the base speeds to use.
 	private double targetSpeed;
 	private double outputAngle;
 
-	public TeleoperatedPIDOutput() {
+	public GyroPIDOutput() {
 	}
 
 	@Override
@@ -54,8 +53,6 @@ public class TeleoperatedPIDOutput implements PIDOutput {
 	}
 
 	public void updateDashboard() {
-		SmartDashboard.putData("Left Motor", Motors.leftMotor);
-		SmartDashboard.putData("Right Motor", Motors.rightMotor);
 		SmartDashboard.putNumber("PID Angular Correction", outputAngle);
 	}
 

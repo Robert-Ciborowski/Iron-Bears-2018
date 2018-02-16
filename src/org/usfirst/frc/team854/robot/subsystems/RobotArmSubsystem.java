@@ -11,8 +11,7 @@ import org.usfirst.frc.team854.robot.CustomSubsystem;
 import org.usfirst.frc.team854.robot.Robot;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
-import org.usfirst.frc.team854.robot.hardware.Motors;
-import org.usfirst.frc.team854.robot.hardware.SensorProvider.SensorType;
+import org.usfirst.frc.team854.robot.hardware.InterfaceType;
 import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 
 import edu.wpi.first.wpilibj.Encoder;
@@ -23,12 +22,12 @@ public class RobotArmSubsystem extends CustomSubsystem {
 			RobotTuningConstants.ARM_PROPORTIONAL,
 			RobotTuningConstants.ARM_INTEGRAL,
 			RobotTuningConstants.ARM_DERIVATIVE,
-			Robot.sensors.getSensor(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM),
-			Motors.armMotor);
+			Robot.devices.getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM),
+			Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_ARM));
 
     public RobotArmSubsystem() {
     	armController.setSetpoint(0);
-    	Robot.sensors.<Encoder>getSensor(SensorType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM).reset();
+    	Robot.devices.<Encoder>getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM).reset();
     }
 
     public void reset() {

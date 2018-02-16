@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class TestCommandGroup extends CommandGroup {
 	public TestCommandGroup(double distance, ChassisSubsystem chassisSubsystem) {
-		double InchesPerCount = 1 / RobotStructureConstants.ENCODER_COUNTS_PER_INCH;
 		addSequential(new LinearMotionCommand(distance, chassisSubsystem));
 		//Scheduler.getInstance().add(this);
 	}

@@ -12,8 +12,8 @@ public interface RobotInterfaceConstants {
 	// These are the PWM ports.
 	public static final int PORT_MOTOR_LEFT = 1;
 	public static final int PORT_MOTOR_RIGHT = 0;
-	public static final int PORT_INTAKE_LEFT = 3;
-	public static final int PORT_INTAKE_RIGHT = 2;
+	public static final int PORT_MOTOR_MINICIM_LEFT = 3;
+	public static final int PORT_MOTOR_MINICIM_RIGHT = 2;
 	public static final int PORT_MOTOR_ARM = 4;
 
 	// These are the DIO ports.
@@ -26,4 +26,8 @@ public interface RobotInterfaceConstants {
 
 	// These are the Analog ports.
 	public static final int PORT_GYRO = 0;
+	
+	// These are the relay ports.
+	public static final int PORT_RELAY_LEFT = 0;
+	public static final int PORT_RELAY_RIGHT = 1;
 }

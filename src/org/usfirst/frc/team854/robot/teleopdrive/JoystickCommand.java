@@ -12,13 +12,16 @@ import org.usfirst.frc.team854.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class JoystickCommand extends Command {
-	
+
 	public JoystickCommand() {
 		requires(Robot.chassisSubsystem);
 	}
-	
+
 	boolean driveReverseState = false;
 	boolean reverseButtonHeld = false;
+
+	boolean testState = false;
+	boolean testButtonHeld = false;
 	
 	protected void initialize() {
 		
@@ -27,6 +30,18 @@ public class JoystickCommand extends Command {
 	protected void execute() {
 		double speed = Robot.oi.getSpeed();  // Positive forwards
     	double turn = Robot.oi.getTurn(); // Positive left, sums inputs
+    	
+    	if (Robot.oi.getTestButtonPressed()) {
+    		if(!testButtonHeld) {
+    			testButtonHeld = true;
+    			if (testState) {
+    				testState = false;
+    			} else {
+    				testState = true;
+    			}
+        		Robot.intakeSubsystem.updateState(testState);
+    		}
+    	}
     	
     	if(Robot.oi.getDriveReverse()) {
     		if(!reverseButtonHeld) {
@@ -40,7 +55,7 @@ public class JoystickCommand extends Command {
     	} else {
     		reverseButtonHeld = false;
     	}
-    	
+
     	if (driveReverseState) {
     		speed *= -1;
     	}

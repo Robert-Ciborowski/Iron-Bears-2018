@@ -1,5 +1,5 @@
 /*
- * Class: DriveMotorPIDInput
+ * Class: GyroPIDInput
  * Author: Robert Ciborowski, Julian Dominguez-Schatz
  * Date: 10/01/2018
  * Description: A class which uses a gyro to give a PID controller the robot rotation.
@@ -11,7 +11,7 @@ package org.usfirst.frc.team854.robot.PID;
 import org.usfirst.frc.team854.robot.Robot;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
-import org.usfirst.frc.team854.robot.hardware.SensorProvider.SensorType;
+import org.usfirst.frc.team854.robot.hardware.InterfaceType;
 import org.usfirst.frc.team854.robot.subsystems.TurningMode;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class TeleoperatedPIDInput implements PIDSource {	
+public class GyroPIDInput implements PIDSource {	
 	private double targetAngle = 0;
 	private double currentAngleForRelativePID = 0;
 	private long timeOfLastPIDGet = 0;
@@ -28,8 +28,8 @@ public class TeleoperatedPIDInput implements PIDSource {
 	
 	private final AnalogGyro gyro;
 	
-	public TeleoperatedPIDInput() {
-		gyro = Robot.sensors.<AnalogGyro>getSensor(SensorType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
+	public GyroPIDInput() {
+		gyro = Robot.devices.getDevice(InterfaceType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
 	}
 
 	@Override
