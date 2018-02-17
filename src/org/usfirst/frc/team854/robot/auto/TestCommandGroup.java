@@ -7,15 +7,12 @@
 
 package org.usfirst.frc.team854.robot.auto;
 
-import org.usfirst.frc.team854.robot.constants.RobotStructureConstants;
-import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
+import org.usfirst.frc.team854.robot.command.AngularMotionCommand;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class TestCommandGroup extends CommandGroup {
-	public TestCommandGroup(double angle, ChassisSubsystem chassisSubsystem) {
+	public TestCommandGroup(double angle) {
 		
 		addSequential(new AngularMotionCommand(angle));
 		// addSequential(new LinearMotionCommand(distance, chassisSubsystem));

@@ -61,7 +61,7 @@ public class GyroPIDInput implements PIDSource {
 			// System.out.println("Angle provided by joy: " + transformedTargetAngle + ", Gyro Angle: " + gyroAngle);
 			// System.out.println("Target Angle for PID: " + currentAngleForRelativePID + ", Target Angle: " + targetAngle);
 			// transformedTargetAngle = descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
-			System.out.println("Current angle for relative (input): " + transformedTargetAngle + " " + targetAngle);
+			// System.out.println("Current angle for relative (input): " + transformedTargetAngle + " " + targetAngle);
 			return transformedTargetAngle;
 		} else {
 			throw new IllegalStateException("Stop screwing with the robot.");

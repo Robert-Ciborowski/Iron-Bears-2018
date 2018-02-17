@@ -1,8 +1,9 @@
 /**
  * Name: ChassisSubsystem
- * Authors: Robert Ciborowski
+ * Authors: Robert Ciborowski, Julian-Dominguez-Schatz, Waseef Nayeem,
+ *          Shaiza Hashma, Rana Rauf, Danny Xu
  * Date: 20/01/2018
- * Description: Personal implementation of FRC's periodic subsystem, mainly adding some PID features
+ * Description: The subsystem of our robot that represents the drive chassis.
  */
 
 package org.usfirst.frc.team854.robot.subsystems;
@@ -10,24 +11,22 @@ package org.usfirst.frc.team854.robot.subsystems;
 import org.usfirst.frc.team854.robot.CustomSubsystem;
 import org.usfirst.frc.team854.robot.Robot;
 import org.usfirst.frc.team854.robot.RobotMode;
-import org.usfirst.frc.team854.robot.PID.DistancePID;
 import org.usfirst.frc.team854.robot.PID.DistancePIDInput;
 import org.usfirst.frc.team854.robot.PID.DistancePIDOutput;
 import org.usfirst.frc.team854.robot.PID.GyroPIDInput;
 import org.usfirst.frc.team854.robot.PID.GyroPIDOutput;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
-import org.usfirst.frc.team854.robot.constants.RobotStructureConstants;
 import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
 import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
-import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ChassisSubsystem extends CustomSubsystem {
+	// These are our PID inputs, outputs and controllers.
 	private GyroPIDInput gyroPIDInput = new GyroPIDInput();
 	private GyroPIDOutput gyroPIDOutput = new GyroPIDOutput();
 	private PIDController gyroPIDController = new PIDController(RobotTuningConstants.DRIVE_PROPORTIONAL,
@@ -39,10 +38,12 @@ public class ChassisSubsystem extends CustomSubsystem {
 			RobotTuningConstants.DISTANCE_INTEGRAL, RobotTuningConstants.DISTANCE_DERIVATIVE,
 			RobotTuningConstants.DISTANCE_FEED_FORWARD, distancePIDInput, distancePIDOutput);
 
+	// This represents the current mode of our robot.
 	private RobotMode currentMode;
 
-	private Spark leftMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_LEFT);
-	private Spark rightMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_RIGHT);
+	// These are the drive motors.
+	private Spark leftMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_DRIVE_LEFT);
+	private Spark rightMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_DRIVE_RIGHT);
 	private Spark leftMiniCIMMotor = Robot.devices.getDevice(InterfaceType.PWM,
 			RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT);
 	private Spark rightMiniCIMMotor = Robot.devices.getDevice(InterfaceType.PWM,
@@ -68,7 +69,7 @@ public class ChassisSubsystem extends CustomSubsystem {
 	public void init() {
 		System.out.println("Re-init!");
 		gyroPIDInput.init();
-		setTargetMotion(0, 0);
+		setGyroTargetMotion(0, 0);
 	}
 
 	public void reset() {
@@ -94,6 +95,10 @@ public class ChassisSubsystem extends CustomSubsystem {
 				distancePIDController.disable();
 				OperatorInterface.mainJoystickCommand.setEnabled(false);
 				break;
+			case TEST:
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -117,16 +122,17 @@ public class ChassisSubsystem extends CustomSubsystem {
 	}
 
 	public void setMotors(double leftMotorValue, double rightMotorValue) {
-		leftMotor.pidWrite(leftMotorValue);
-		rightMotor.pidWrite(rightMotorValue);
-		leftMiniCIMMotor.pidWrite(-leftMotorValue);
-		rightMiniCIMMotor.pidWrite(-rightMotorValue);
+//		leftMotor.pidWrite(leftMotorValue);
+//		rightMotor.pidWrite(rightMotorValue);
+//		leftMiniCIMMotor.pidWrite(-leftMotorValue);
+//		rightMiniCIMMotor.pidWrite(-rightMotorValue);
 	}
 
 	public void setTurningMode(TurningMode turningMode) {
 		gyroPIDInput.setTurningMode(turningMode);
 	}
 
+	@Override
 	public void initDefaultCommand() {
 		setDefaultCommand(OperatorInterface.mainJoystickCommand);
 	}
@@ -142,7 +148,7 @@ public class ChassisSubsystem extends CustomSubsystem {
 		return gyroPIDController.onTarget();
 	}
 
-	public void setTargetMotion(double angle, double speed) {
+	public void setGyroTargetMotion(double angle, double speed) {
 		// If it doesn't drive, this is the likely culprit.
 		// if (currentMode == RobotMode.TELEOPERATED) {
 			if (!gyroPIDController.isEnabled()) {

@@ -17,6 +17,6 @@ public class DistancePIDOutput implements PIDOutput {
 	public void pidWrite(double output) {
 		// Robot.chassisSubsystem.setMotors(output, output);
 		// We're currently setting the angle to zero. We will change this to not do that later.
-		Robot.chassisSubsystem.setTargetMotion(0, output);
+		Robot.chassisSubsystem.setGyroTargetMotion(0, output);
 	}
 }

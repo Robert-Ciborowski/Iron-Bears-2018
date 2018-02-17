@@ -61,6 +61,5 @@ public class GyroPIDOutput implements PIDOutput {
 
 	public void setTargetSpeed(double targetSpeed) {
 		this.targetSpeed = targetSpeed;
-		System.out.println("Set a new target speed: " + targetSpeed);
 	}
 }
