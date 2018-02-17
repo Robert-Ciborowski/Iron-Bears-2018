@@ -1,3 +1,10 @@
+/*
+ * Name: CurvedMotionCommand
+ * Author: Robert Ciborowski
+ * Date: 17/02/2018
+ * Description: A command for moving the robot along an arc.
+ */
+
 package org.usfirst.frc.team854.robot.command;
 
 import org.usfirst.frc.team854.robot.Robot;
@@ -20,8 +27,7 @@ public class CurvedMotionCommand extends Command {
 	
 	@Override
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
-		return false;
+		return Robot.chassisSubsystem.isAutonomousOnTarget();
 	}
 
 }

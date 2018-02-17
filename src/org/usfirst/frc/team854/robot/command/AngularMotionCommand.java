@@ -15,24 +15,17 @@ public class AngularMotionCommand extends Command {
 	public double angle;
 	
 	public AngularMotionCommand(double angle) {
-		this.angle = angle;
 		requires(Robot.chassisSubsystem);
-		
-		// Robot.chassisSubsystem.setGyroTargetMotion(angle, 0);
+		this.angle = angle;
 	}
 
 	@Override
 	public void initialize() {
 		Robot.chassisSubsystem.setAutonomousTarget(angle, 0);
 	}
-
-	public void execute() {
-		
-	}
 	
 	@Override
 	protected boolean isFinished() {
-		
 		return Robot.chassisSubsystem.isAngleOnTarget();
 	}
 }

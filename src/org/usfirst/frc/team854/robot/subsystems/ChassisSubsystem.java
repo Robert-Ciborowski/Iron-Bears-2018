@@ -59,22 +59,25 @@ public class ChassisSubsystem extends CustomSubsystem {
 		gyroPIDController.setOutputRange(-Math.PI, Math.PI);
 		gyroPIDController.setSetpoint(0);
 		gyroPIDController.setAbsoluteTolerance(0.05);
+		gyroPIDController.setContinuous(true);
+		
 		distancePIDController.setInputRange(-100000, 100000);
 		distancePIDController.setOutputRange(-1, 1);
 		distancePIDController.setSetpoint(1);
 		distancePIDController.setAbsoluteTolerance(0.05);
+		distancePIDController.setContinuous(false);
+		
 		currentMode = RobotMode.DISABLED;
 	}
 
 	public void init() {
-		System.out.println("Re-init!");
 		gyroPIDInput.init();
 		setGyroTargetMotion(0, 0);
 	}
 
 	public void reset() {
 		gyroPIDController.reset();
-		// autonomousPIDController.setSetpoint(0);
+		distancePIDController.reset();
 	}
 
 	public void setCurrentMode(RobotMode mode) {
@@ -108,24 +111,18 @@ public class ChassisSubsystem extends CustomSubsystem {
 			distancePIDInput.setDistance(distance);
 			distancePIDController.setSetpoint(1);
 			gyroPIDInput.setTargetAngle(angle);
-			System.out.println("A setpoint has been set: " + distance);
 		}
-		// System.out.println("Updated joystick turn!: " + angle);
 	}
 
 	public boolean isAutonomousOnTarget() {
-		return distancePIDController.onTarget();
-	}
-
-	public void endAutonomousCommand() {
-		distancePIDController.setSetpoint(0);
+		return distancePIDController.onTarget() && gyroPIDController.onTarget();
 	}
 
 	public void setMotors(double leftMotorValue, double rightMotorValue) {
-//		leftMotor.pidWrite(leftMotorValue);
-//		rightMotor.pidWrite(rightMotorValue);
-//		leftMiniCIMMotor.pidWrite(-leftMotorValue);
-//		rightMiniCIMMotor.pidWrite(-rightMotorValue);
+		leftMotor.pidWrite(leftMotorValue);
+		rightMotor.pidWrite(rightMotorValue);
+		leftMiniCIMMotor.pidWrite(-leftMotorValue);
+		rightMiniCIMMotor.pidWrite(-rightMotorValue);
 	}
 
 	public void setTurningMode(TurningMode turningMode) {
@@ -149,16 +146,10 @@ public class ChassisSubsystem extends CustomSubsystem {
 	}
 
 	public void setGyroTargetMotion(double angle, double speed) {
-		// If it doesn't drive, this is the likely culprit.
-		// if (currentMode == RobotMode.TELEOPERATED) {
-			if (!gyroPIDController.isEnabled()) {
-				gyroPIDController.enable();
-			}
-
-			gyroPIDInput.setTargetAngle(angle);
-			gyroPIDOutput.setTargetSpeed(speed);
-		// }
-		// System.out.println("Updated joystick turn!: " + angle);
-		
+		if (!gyroPIDController.isEnabled()) {
+			gyroPIDController.enable();
+		}
+		gyroPIDInput.setTargetAngle(angle);
+		gyroPIDOutput.setTargetSpeed(speed);
 	}
 }

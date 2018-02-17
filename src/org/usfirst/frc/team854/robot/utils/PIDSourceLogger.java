@@ -1,3 +1,11 @@
+/**
+ * Name: PIDSourceLogger
+ * Authors: Julian Dominguez-Schatz
+ * Date: 03/02/2018
+ * Description: A class which can periodically store values from a PID source
+ *              (to be outputted later).
+ */
+
 package org.usfirst.frc.team854.robot.utils;
 
 import java.util.ArrayList;
@@ -26,10 +34,9 @@ public class PIDSourceLogger {
 		for (Double doubleToOutput : values) {
 			System.out.print(doubleToOutput + "\t");
 		}
-		//System.out.flush();
-		System.out.print("\n");
+		System.out.println();
 		
-		// Clear the array
+		// This clears the array.
 		values.clear();
 	}
 }

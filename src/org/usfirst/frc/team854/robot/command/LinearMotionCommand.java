@@ -15,24 +15,16 @@ public class LinearMotionCommand extends Command {
 	private double distance;
 	
 	public LinearMotionCommand(double distance) {
+		requires(Robot.chassisSubsystem);
+
 		// This initialises and starts the motion.
 		this.distance = distance;
-		System.out.println("Constructed the Linear Command.");
 	}
 	
 	@Override
 	public void initialize() {
 		Robot.chassisSubsystem.setAutonomousTarget(0, distance);
 	}
-	
-	public void execute() {
-		
-	}
-	
-	@Override
-	public void end() {
-		Robot.chassisSubsystem.endAutonomousCommand();
-	} 
 	
 	@Override
 	protected boolean isFinished() {

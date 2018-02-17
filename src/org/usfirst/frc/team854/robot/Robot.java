@@ -34,12 +34,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends CustomIterativeRobot {
-
+	// These are the subsystems of the robot.
 	public static final ChassisSubsystem chassisSubsystem;
 	public static final ArmSubsystem armSubsystem;
 	public static final IntakeSubsystem intakeSubsystem;
 
-	// These are the robot's sensors.
+	// This provides all devices to the robot.
 	public static final DeviceProvider devices;
 
 	// These represent other parts of the robot.
@@ -48,7 +48,7 @@ public class Robot extends CustomIterativeRobot {
 
 	private Command autonomousCommand;
 	
-	//private PIDSourceLogger logger;
+	// private PIDSourceLogger logger;
 	
 	static {
 		devices = new DeviceProvider();
@@ -67,6 +67,8 @@ public class Robot extends CustomIterativeRobot {
 				new Encoder(RobotInterfaceConstants.PORT_ENCODER_ARM, RobotInterfaceConstants.PORT_ENCODER_ARM_2));
 		devices.putDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_SWITCH_ARM_HOME,
 				new DigitalInput(RobotInterfaceConstants.PORT_SWITCH_ARM_HOME));
+		devices.putDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_SWITCH_INTAKE_FULL,
+				new DigitalInput(RobotInterfaceConstants.PORT_SWITCH_INTAKE_FULL));
 
 		// These are the PWM devices.
 		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_DRIVE_LEFT,
@@ -97,7 +99,6 @@ public class Robot extends CustomIterativeRobot {
 				new DoubleSolenoid(RobotInterfaceConstants.PORT_PCM,
 						RobotInterfaceConstants.PORT_PNEUMATIC_RIGHT,
 						RobotInterfaceConstants.PORT_PNEUMATIC_RIGHT_REVERSE));
-		/// END SENSOR INIT ///
 		
 		chassisSubsystem = new ChassisSubsystem();
 		armSubsystem = new ArmSubsystem();
@@ -112,7 +113,7 @@ public class Robot extends CustomIterativeRobot {
 		pdp = new PowerDistributionPanel();
 		oi = new OperatorInterface();
 		
-		//logger = new PIDSourceLogger(InterfaceType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
+		// logger = new PIDSourceLogger(InterfaceType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
 
 		updateDashboard();
 	}
@@ -125,7 +126,7 @@ public class Robot extends CustomIterativeRobot {
 	/** This runs when the robot's disabled mode is enabled.*/
 	public void disabledInit() {
 		chassisSubsystem.setCurrentMode(RobotMode.DISABLED);
-		//logger.output();
+		// logger.output();
 		updateDashboard();
 	}
 
@@ -139,11 +140,10 @@ public class Robot extends CustomIterativeRobot {
 	public void autonomousInit() {
 		chassisSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		chassisSubsystem.reset();
+		intakeSubsystem.initAutonomous();
 
 		autonomousCommand = new TestCommandGroup(-6);
-		
-		// autonomousCommand = new ...();
-
+		// autonomousCommand = new AutoCommandGroup(DriverStation.getInstance().getGameSpecificMessage());
     	Scheduler.getInstance().add(autonomousCommand);
     	
         updateDashboard();
@@ -152,7 +152,7 @@ public class Robot extends CustomIterativeRobot {
 	/** This runs during the robot's autonomous mode, periodically.*/
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		//subsystemPeriodic();
+		subsystemPeriodic();
 		updateDashboard();
 	}
 
@@ -171,7 +171,7 @@ public class Robot extends CustomIterativeRobot {
 
 	/** This runs during the robot's tele-operated mode, periodically.*/
 	public void teleopPeriodic() {
-		//logger.log();
+		// logger.log();
 		Scheduler.getInstance().run();
 		subsystemPeriodic();
 		updateDashboard();
@@ -185,20 +185,24 @@ public class Robot extends CustomIterativeRobot {
 
 	/** This runs during the robot's disabled mode, periodically.*/
 	public void testPeriodic() {
-		//LiveWindow.run();
+		// LiveWindow.run();
 	}
 
-	/** This runs every subsystem's periodic method and should be called inside of
-	 * an autonomous mode's periodic method.
+	/**
+	 * This runs every subsystem's periodic method.
 	 */
 	private void subsystemPeriodic() {
-		oi.periodic();
+		chassisSubsystem.periodic();
+		intakeSubsystem.periodic();
+		armSubsystem.periodic();
 	}
 
 	/** This updates the FRC dashboard.*/
 	private void updateDashboard() {
 		// This updates all subsystem OI dashboard items.
 		chassisSubsystem.updateDashboard();
+		intakeSubsystem.updateDashboard();
+		armSubsystem.updateDashboard();
 		oi.updateDashboard();
 	}
 }

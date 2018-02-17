@@ -1,3 +1,10 @@
+/*
+ * Name: InterfaceType
+ * Author: Julian Dominguez-Schatz
+ * Date: 10/02/2018
+ * Description: An enum for different types of ports on the RoboRIO.
+ */
+
 package org.usfirst.frc.team854.robot.hardware;
 
 import java.util.HashMap;

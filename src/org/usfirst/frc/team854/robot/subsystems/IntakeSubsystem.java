@@ -9,11 +9,11 @@ package org.usfirst.frc.team854.robot.subsystems;
 
 import org.usfirst.frc.team854.robot.CustomSubsystem;
 import org.usfirst.frc.team854.robot.Robot;
+import org.usfirst.frc.team854.robot.constants.RobotCommandConstants;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
-import org.usfirst.frc.team854.robot.teleopdrive.IntakeCommand;
+import org.usfirst.frc.team854.robot.utils.Direction1D;
 
-import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Spark;
@@ -29,18 +29,20 @@ public class IntakeSubsystem extends CustomSubsystem {
 	private Spark rightIntakeOuterMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_INTAKE_OUTER_RIGHT);
 
 	private DigitalInput fullLimitSwitch = Robot.devices.getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_SWITCH_INTAKE_FULL);
-	private Counter fullCounter = new Counter(fullLimitSwitch);
 
     public IntakeSubsystem() {
-    	resetFullCounter();
     }
     
-    public void resetFullCounter() {
-    	fullCounter.reset();
+    public void initAutonomous() {
+    	setOuterIntakeDirection(Direction1D.REVERSE);
+    }
+    
+    @Override
+    public void periodic() {
     }
     
     public boolean isFull() {
-    	return fullCounter.get() > 0;
+    	return fullLimitSwitch.get();
     }
     
     public void setPneumaticsExtended(boolean extended) {
@@ -56,12 +58,12 @@ public class IntakeSubsystem extends CustomSubsystem {
     public void setInnerIntakeDirection(Direction1D direction) {
     	switch (direction) {
 			case FORWARD:
-				leftIntakeInnerMotor.set(1);
-				rightIntakeInnerMotor.set(-1);
+				leftIntakeInnerMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
+				rightIntakeInnerMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
 				break;
 			case REVERSE:
-				leftIntakeInnerMotor.set(-1);
-				rightIntakeInnerMotor.set(1);
+				leftIntakeInnerMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
+				rightIntakeInnerMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
 				break;
 			case OFF:
 				leftIntakeInnerMotor.set(0);
@@ -73,12 +75,12 @@ public class IntakeSubsystem extends CustomSubsystem {
     public void setOuterIntakeDirection(Direction1D direction) {
     	switch (direction) {
 			case FORWARD:
-				leftIntakeOuterMotor.set(1);
-				rightIntakeOuterMotor.set(-1);
+				leftIntakeOuterMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
+				rightIntakeOuterMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
 				break;
 			case REVERSE:
-				leftIntakeOuterMotor.set(-1);
-				rightIntakeOuterMotor.set(1);
+				leftIntakeOuterMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
+				rightIntakeOuterMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
 				break;
 			case OFF:
 				leftIntakeOuterMotor.set(0);
@@ -87,8 +89,9 @@ public class IntakeSubsystem extends CustomSubsystem {
     	}
     }
 
+    @Override
 	public void initDefaultCommand() {
-		setDefaultCommand(new IntakeCommand());
+		
 	}
 
 	@Override

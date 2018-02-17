@@ -1,3 +1,10 @@
+/*
+ * Name: DeviceProvider
+ * Author: Julian Dominguez-Schatz
+ * Date: 10/02/2018
+ * Description: A class which provides access to devices.
+ */
+
 package org.usfirst.frc.team854.robot.hardware;
 
 import edu.wpi.first.wpilibj.PIDSource;
@@ -15,8 +22,7 @@ public class DeviceProvider {
 	}
 
 	public double getDeviceValue(InterfaceType type, int port) {
-		SendableBase device = type.deviceList
-				.get(port);
+		SendableBase device = type.deviceList.get(port);
 		
 		if (!(device instanceof PIDSource)) {
 			throw new IllegalStateException("Are you kidding me? Why on earth would you try to get a \"value\" from a motor?");

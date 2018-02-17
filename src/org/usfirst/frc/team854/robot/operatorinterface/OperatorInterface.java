@@ -8,9 +8,9 @@
 
 package org.usfirst.frc.team854.robot.operatorinterface;
 
+import org.usfirst.frc.team854.robot.command.IntakeSpitCommand;
+import org.usfirst.frc.team854.robot.command.IntakeSwallowCommand;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
-import org.usfirst.frc.team854.robot.teleopdrive.IntakeSpitCommand;
-import org.usfirst.frc.team854.robot.teleopdrive.IntakeSwallowCommand;
 import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -80,9 +80,5 @@ public class OperatorInterface {
 		SmartDashboard.putNumber("Max speed", getMaxSpeed());
 		SmartDashboard.putNumber("Joystick speed value", getSpeed());
 		SmartDashboard.putNumber("Joystick turn value", getTurn());
-	}
-
-	public void periodic() {
-		// TODO Auto-generated method stub
 	}
 }

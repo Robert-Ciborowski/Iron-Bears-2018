@@ -13,6 +13,7 @@ import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
 import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
+import org.usfirst.frc.team854.robot.utils.Direction1D;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
@@ -33,7 +34,7 @@ public class ArmSubsystem extends CustomSubsystem {
 
     public ArmSubsystem() {
     	armController.setSetpoint(0);
-    	armController.setAbsoluteTolerance(.05);
+    	armController.setAbsoluteTolerance(0.05);
     	armController.setContinuous(false);
     	Robot.devices.<Encoder>getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM).reset();
     }

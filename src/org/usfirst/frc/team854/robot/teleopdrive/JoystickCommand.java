@@ -1,14 +1,14 @@
 /**
  * Name: JoystickCommand
- * Authors: Robert Ciborowski
+ * Authors: Robert Ciborowski, Julian Dominguez-Schatz
  * Date: 20/01/2018
- * Description: Interfaces the joystick hardware input in a software environment
+ * Description: Interfaces the joystick hardware input in a software environment.
  */
 
 package org.usfirst.frc.team854.robot.teleopdrive;
 
 import org.usfirst.frc.team854.robot.Robot;
-import org.usfirst.frc.team854.robot.subsystems.Direction1D;
+import org.usfirst.frc.team854.robot.utils.Direction1D;
 
 import edu.wpi.first.wpilibj.command.Command;
 

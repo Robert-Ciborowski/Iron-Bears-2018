@@ -1,9 +1,9 @@
 /*
- * Class: CompoundFilter
+ * Class: RobotInterfaceConstants
  * Author: Julian Dominguez-Schatz, Robert Ciborowski, Waseef Nayeem
  * Date: 13/01/2018
  * Description: An interface which stores constants related to the inputs and outputs on
- *              the RoboRIO and operator interface.
+ *              the RoboRIO.
  */
 
 package org.usfirst.frc.team854.robot.constants;
