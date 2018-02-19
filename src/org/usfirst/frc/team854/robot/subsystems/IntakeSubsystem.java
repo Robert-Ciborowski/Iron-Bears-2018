@@ -9,14 +9,17 @@ package org.usfirst.frc.team854.robot.subsystems;
 
 import org.usfirst.frc.team854.robot.CustomSubsystem;
 import org.usfirst.frc.team854.robot.Robot;
+import org.usfirst.frc.team854.robot.RobotMode;
 import org.usfirst.frc.team854.robot.constants.RobotCommandConstants;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
+import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
 import org.usfirst.frc.team854.robot.utils.Direction1D;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSubsystem extends CustomSubsystem {
 
@@ -30,22 +33,71 @@ public class IntakeSubsystem extends CustomSubsystem {
 
 	private DigitalInput fullLimitSwitch = Robot.devices.getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_SWITCH_INTAKE_FULL);
 
+	private long fullElapsedTime;
+	private long fullStartTime;
+
     public IntakeSubsystem() {
+    }
+
+    @Override
+	public void setCurrentMode(RobotMode mode) {
+    	super.setCurrentMode(mode);
+    	
+    	// reset
+    	fullElapsedTime = -1;
+    	fullStartTime = 0;
+
+		setInnerIntakeDirection(Direction1D.OFF);
+		setOuterIntakeDirection(Direction1D.OFF);
+		setPneumaticsExtended(false);
+	}
+    
+    @Override
+    public void setEnabled(boolean enabled) {
+    	super.setEnabled(enabled);
+    	if (!enabled) {
+    		leftIntakeInnerMotor.set(0);
+    		rightIntakeInnerMotor.set(0);
+    		leftIntakeOuterMotor.set(0);
+    		rightIntakeOuterMotor.set(0);
+    	}
     }
     
     public void initAutonomous() {
+    	if (!enabled) {
+    		return;
+    	}
+
     	setOuterIntakeDirection(Direction1D.REVERSE);
     }
     
     @Override
     public void periodic() {
+    	//System.out.println(fullLimitSwitch.get());
     }
     
     public boolean isFull() {
-    	return fullLimitSwitch.get();
+    	boolean value = fullLimitSwitch.get();
+    	if (!value) {
+    		fullElapsedTime = -1;
+    		return false;
+    	}
+
+    	if (fullElapsedTime == -1) {
+    		fullStartTime = System.currentTimeMillis();
+    		fullElapsedTime = 0;
+    		return false;
+    	}
+
+    	fullElapsedTime = System.currentTimeMillis() - fullStartTime;
+    	return fullElapsedTime >= RobotCommandConstants.INTAKE_FULL_SWITCH_DELAY_MS;
     }
     
     public void setPneumaticsExtended(boolean extended) {
+    	if (!enabled) {
+    		return;
+    	}
+
     	if (extended) {
     		leftSolenoid.set(DoubleSolenoid.Value.kForward);
     		rightSolenoid.set(DoubleSolenoid.Value.kForward);
@@ -56,14 +108,18 @@ public class IntakeSubsystem extends CustomSubsystem {
     }
 
     public void setInnerIntakeDirection(Direction1D direction) {
+    	if (!enabled) {
+    		return;
+    	}
+
     	switch (direction) {
 			case FORWARD:
-				leftIntakeInnerMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
-				rightIntakeInnerMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
-				break;
-			case REVERSE:
 				leftIntakeInnerMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
 				rightIntakeInnerMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
+				break;
+			case REVERSE:
+				leftIntakeInnerMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
+				rightIntakeInnerMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
 				break;
 			case OFF:
 				leftIntakeInnerMotor.set(0);
@@ -73,13 +129,17 @@ public class IntakeSubsystem extends CustomSubsystem {
     }
 
     public void setOuterIntakeDirection(Direction1D direction) {
+    	if (!enabled) {
+    		return;
+    	}
+
     	switch (direction) {
 			case FORWARD:
-				leftIntakeOuterMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
+				leftIntakeOuterMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
 				rightIntakeOuterMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
 				break;
 			case REVERSE:
-				leftIntakeOuterMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
+				leftIntakeOuterMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
 				rightIntakeOuterMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
 				break;
 			case OFF:
@@ -91,10 +151,10 @@ public class IntakeSubsystem extends CustomSubsystem {
 
     @Override
 	public void initDefaultCommand() {
-		
 	}
 
 	@Override
 	public void updateDashboard() {
+		SmartDashboard.putString("Is there a box?", fullLimitSwitch.get() ? "yes" : "no");
 	}
 }

@@ -25,7 +25,6 @@ public class IntakeSpitCommand extends Command {
 	protected void initialize() {
 		startTime = System.currentTimeMillis();
 
-		Robot.intakeSubsystem.setPneumaticsExtended(true);
 		Robot.intakeSubsystem.setInnerIntakeDirection(Direction1D.REVERSE);
 		Robot.intakeSubsystem.setOuterIntakeDirection(Direction1D.REVERSE);
 	}

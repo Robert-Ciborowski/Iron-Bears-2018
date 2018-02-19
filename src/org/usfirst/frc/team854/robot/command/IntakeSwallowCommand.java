@@ -20,11 +20,10 @@ public class IntakeSwallowCommand extends Command {
 
 	@Override
 	protected void initialize() {
-		if (!Robot.armSubsystem.isInHomePosition()) {
-			return;
-		}
+//		if (!Robot.armSubsystem.isInHomePosition()) {
+//			return;
+//		}
 
-		Robot.intakeSubsystem.setPneumaticsExtended(false);
 		Robot.intakeSubsystem.setInnerIntakeDirection(Direction1D.FORWARD);
 		Robot.intakeSubsystem.setOuterIntakeDirection(Direction1D.FORWARD);
 	}
@@ -36,6 +35,7 @@ public class IntakeSwallowCommand extends Command {
 
 	@Override
 	protected void end() {
+		Robot.intakeSubsystem.setInnerIntakeDirection(Direction1D.OFF);
 		Robot.intakeSubsystem.setOuterIntakeDirection(Direction1D.REVERSE);
 	}
 }

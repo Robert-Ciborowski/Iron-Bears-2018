@@ -9,5 +9,6 @@ package org.usfirst.frc.team854.robot.constants;
 
 public interface RobotCommandConstants {
 	public static long INTAKE_SPIT_DURATION_MS = 1000;
-	public static double INTAKE_MOTOR_SPEED = 0.2;
+	public static long INTAKE_FULL_SWITCH_DELAY_MS = 750;
+	public static double INTAKE_MOTOR_SPEED = 0.4;
 }

@@ -38,22 +38,19 @@ public class ChassisSubsystem extends CustomSubsystem {
 			RobotTuningConstants.DISTANCE_INTEGRAL, RobotTuningConstants.DISTANCE_DERIVATIVE,
 			RobotTuningConstants.DISTANCE_FEED_FORWARD, distancePIDInput, distancePIDOutput);
 
-	// This represents the current mode of our robot.
-	private RobotMode currentMode;
-
 	// These are the drive motors.
 	private Spark leftMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_DRIVE_LEFT);
 	private Spark rightMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_DRIVE_RIGHT);
-	private Spark leftMiniCIMMotor = Robot.devices.getDevice(InterfaceType.PWM,
-			RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT);
-	private Spark rightMiniCIMMotor = Robot.devices.getDevice(InterfaceType.PWM,
-			RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT);
+//	private Spark leftMiniCIMMotor = Robot.devices.getDevice(InterfaceType.PWM,
+//			RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT);
+//	private Spark rightMiniCIMMotor = Robot.devices.getDevice(InterfaceType.PWM,
+//			RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT);
 
 	public ChassisSubsystem() {
 		leftMotor.setInverted(UserInterfaceConstants.MOTOR_LEFT_INVERT);
 		rightMotor.setInverted(UserInterfaceConstants.MOTOR_RIGHT_INVERT);
-		leftMiniCIMMotor.setInverted(UserInterfaceConstants.MINICIM_LEFT_INVERT);
-		rightMiniCIMMotor.setInverted(UserInterfaceConstants.MINICIM_RIGHT_INVERT);
+//		leftMiniCIMMotor.setInverted(UserInterfaceConstants.MINICIM_LEFT_INVERT);
+//		rightMiniCIMMotor.setInverted(UserInterfaceConstants.MINICIM_RIGHT_INVERT);
 
 		gyroPIDController.setInputRange(-Math.PI, Math.PI);
 		gyroPIDController.setOutputRange(-Math.PI, Math.PI);
@@ -79,9 +76,22 @@ public class ChassisSubsystem extends CustomSubsystem {
 		gyroPIDController.reset();
 		distancePIDController.reset();
 	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		if (enabled) {
+			setCurrentMode(currentMode);
+		} else {
+			gyroPIDController.disable();
+			distancePIDController.disable();
+//			OperatorInterface.mainJoystickCommand.setEnabled(false);
+		}
+	}
 
+	@Override
 	public void setCurrentMode(RobotMode mode) {
-		currentMode = mode;
+		super.setCurrentMode(mode);
 		switch (mode) {
 			case TELEOPERATED:
 				gyroPIDController.enable();
@@ -119,10 +129,10 @@ public class ChassisSubsystem extends CustomSubsystem {
 	}
 
 	public void setMotors(double leftMotorValue, double rightMotorValue) {
-		leftMotor.pidWrite(leftMotorValue);
-		rightMotor.pidWrite(rightMotorValue);
-		leftMiniCIMMotor.pidWrite(-leftMotorValue);
-		rightMiniCIMMotor.pidWrite(-rightMotorValue);
+//		leftMotor.pidWrite(leftMotorValue);
+//		rightMotor.pidWrite(rightMotorValue);
+//		leftMiniCIMMotor.pidWrite(-leftMotorValue);
+//		rightMiniCIMMotor.pidWrite(-rightMotorValue);
 	}
 
 	public void setTurningMode(TurningMode turningMode) {

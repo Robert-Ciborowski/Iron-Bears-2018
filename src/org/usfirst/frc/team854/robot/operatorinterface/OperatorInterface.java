@@ -8,6 +8,7 @@
 
 package org.usfirst.frc.team854.robot.operatorinterface;
 
+import org.usfirst.frc.team854.robot.command.IntakeFeelersCommand;
 import org.usfirst.frc.team854.robot.command.IntakeSpitCommand;
 import org.usfirst.frc.team854.robot.command.IntakeSwallowCommand;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
@@ -24,8 +25,9 @@ public class OperatorInterface {
 	private Joystick mainController = new Joystick(UserInterfaceConstants.PORT_JOYSTICK);
 	private Button driveReverse = new JoystickButton(mainController, 9);
 	private Button testButton = new JoystickButton(mainController, 10);
-	private Button intakeSwallowButton = new JoystickButton(mainController, 0);
+	private Button intakeSwallowButton = new JoystickButton(mainController, 1);
 	private Button intakeSpitButton = new JoystickButton(mainController, 2);
+	private Button intakeFeelersButton = new JoystickButton(mainController, 7);
 
 	private Filter turningFilter = new CompoundFilter.Builder()
 			.addFilter(new LinearFilter(UserInterfaceConstants.JOYSTICK_TURNING_OFFSET))
@@ -42,6 +44,7 @@ public class OperatorInterface {
 		// Scheduler.getInstance().add(mainJoystickCommand);
 		intakeSwallowButton.whenPressed(new IntakeSwallowCommand());
 		intakeSpitButton.whenPressed(new IntakeSpitCommand());
+		intakeFeelersButton.whenPressed(new IntakeFeelersCommand());
 	}
 	
 	/** Returns the drive reverse button.*/

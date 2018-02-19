@@ -9,55 +9,112 @@ package org.usfirst.frc.team854.robot.subsystems;
 
 import org.usfirst.frc.team854.robot.CustomSubsystem;
 import org.usfirst.frc.team854.robot.Robot;
+import org.usfirst.frc.team854.robot.RobotMode;
+import org.usfirst.frc.team854.robot.PID.ArmPIDInput;
+import org.usfirst.frc.team854.robot.PID.ArmPIDOutput;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
+import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
 import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 import org.usfirst.frc.team854.robot.utils.Direction1D;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmSubsystem extends CustomSubsystem {
 	private DigitalInput homeLimitSwitch = Robot.devices.getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_SWITCH_INTAKE_FULL);
 	private Encoder encoder = Robot.devices.getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM);
 	private RobotArmLevel targetLevel = RobotArmLevel.GROUND;
 	private boolean isCalibrated = false;
+	
+	private Encoder armEncoder = Robot.devices.getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM);
 
+	private ArmPIDInput armPIDInput = new ArmPIDInput();
+	private ArmPIDOutput armPIDOutput = new ArmPIDOutput();
 	private PIDController armController = new PIDController(
-			RobotTuningConstants.ARM_PROPORTIONAL,
-			RobotTuningConstants.ARM_INTEGRAL,
-			RobotTuningConstants.ARM_DERIVATIVE,
-			Robot.devices.getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM),
-			Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_ARM));
+			RobotTuningConstants.ARM_UP_PROPORTIONAL,
+			RobotTuningConstants.ARM_UP_INTEGRAL,
+			RobotTuningConstants.ARM_UP_DERIVATIVE,
+			armPIDInput,
+			armPIDOutput);
 
     public ArmSubsystem() {
     	armController.setSetpoint(0);
     	armController.setAbsoluteTolerance(0.05);
     	armController.setContinuous(false);
-    	Robot.devices.<Encoder>getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM).reset();
+    	armController.setOutputRange(-1, 1);
+    	armController.setInputRange(-10000, 10000);
     }
 
     @Override
     public void periodic() {
-    	if (!isCalibrated && homeLimitSwitch.get()) {
-    		isCalibrated = true;
-    		encoder.reset();
+//    	if (!isCalibrated && homeLimitSwitch.get()) {
+//    		isCalibrated = true;
+//    		armEncoder.reset();
+//    	}
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+    	super.setEnabled(enabled);
+    	
+    	if (!enabled) {
+    		armController.disable();
+    	} else {
+    		armController.enable();
     	}
     }
 
-    public void reset() {
+    @Override
+	public void setCurrentMode(RobotMode mode) {
+    	super.setCurrentMode(mode);
     	armController.reset();
-    }
+    	armEncoder.reset();
+
+		switch (mode) {
+			case TELEOPERATED:
+				armController.enable();
+				break;
+			case AUTONOMOUS:
+				armController.enable();
+				break;
+			case DISABLED:
+				armController.disable();
+				break;
+			case TEST:
+				armController.enable();
+				break;
+			default:
+				armController.disable();
+				break;
+		}
+	}
     
     public boolean isInHomePosition() {
     	return homeLimitSwitch.get();
     }
+    
 
     public void setArmLevel(RobotArmLevel level) {
     	armController.setSetpoint(level.getSetpoint());
+    	if (targetLevel.ordinal() < level.ordinal()) {
+//    		armController.setPID(RobotTuningConstants.ARM_UP_PROPORTIONAL, RobotTuningConstants.ARM_UP_INTEGRAL,
+//    				RobotTuningConstants.ARM_UP_DERIVATIVE);
+//    		System.out.println("UP!");
+    	} else if (targetLevel.ordinal() > level.ordinal()) {
+    		armController.setPID(RobotTuningConstants.ARM_DOWN_PROPORTIONAL, RobotTuningConstants.ARM_DOWN_INTEGRAL,
+    				RobotTuningConstants.ARM_DOWN_DERIVATIVE);
+    		System.out.println("DOWN!");
+    	}
     	targetLevel = level;
+    }
+    
+    public void setMotor(double speed) {
+    	((Spark) Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_ARM)).set(speed);
     }
 
     public void increaseTargetLevel() {
@@ -123,6 +180,8 @@ public class ArmSubsystem extends CustomSubsystem {
 	
 	@Override
 	public void updateDashboard() {
+		SmartDashboard.putData(armController);
+		SmartDashboard.putData(Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_ARM));
 	}
 }
 

@@ -22,6 +22,7 @@ import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
 import org.usfirst.frc.team854.robot.subsystems.ArmSubsystem;
 import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
 import org.usfirst.frc.team854.robot.subsystems.IntakeSubsystem;
+import org.usfirst.frc.team854.robot.utils.PIDSourceLogger;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -35,22 +36,22 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class Robot extends CustomIterativeRobot {
 	// These are the subsystems of the robot.
-	public static final ChassisSubsystem chassisSubsystem;
-	public static final ArmSubsystem armSubsystem;
-	public static final IntakeSubsystem intakeSubsystem;
+	public static ChassisSubsystem chassisSubsystem;
+	public static ArmSubsystem armSubsystem;
+	public static IntakeSubsystem intakeSubsystem;
 
 	// This provides all devices to the robot.
-	public static final DeviceProvider devices;
+	public static DeviceProvider devices;
 
 	// These represent other parts of the robot.
 	public static OperatorInterface oi;
 	public static PowerDistributionPanel pdp;
 
 	private Command autonomousCommand;
-	
-	// private PIDSourceLogger logger;
-	
-	static {
+
+	private PIDSourceLogger logger;
+
+	private void initDevices() {
 		devices = new DeviceProvider();
 		
 		// This is where device initialisation begins.
@@ -77,10 +78,10 @@ public class Robot extends CustomIterativeRobot {
 				new Spark(RobotInterfaceConstants.PORT_MOTOR_DRIVE_RIGHT));
 		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_ARM,
 				new Spark(RobotInterfaceConstants.PORT_MOTOR_ARM));
-		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT,
-				new Spark(RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT));
-		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT,
-				new Spark(RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT));
+//		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT,
+//				new Spark(RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT));
+//		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT,
+//				new Spark(RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT));
 		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_INTAKE_INNER_LEFT,
 				new Spark(RobotInterfaceConstants.PORT_MOTOR_INTAKE_INNER_LEFT));
 		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_INTAKE_INNER_RIGHT,
@@ -99,21 +100,28 @@ public class Robot extends CustomIterativeRobot {
 				new DoubleSolenoid(RobotInterfaceConstants.PORT_PCM,
 						RobotInterfaceConstants.PORT_PNEUMATIC_RIGHT,
 						RobotInterfaceConstants.PORT_PNEUMATIC_RIGHT_REVERSE));
-		
+
 		chassisSubsystem = new ChassisSubsystem();
+		chassisSubsystem.setEnabled(false);
+		
 		armSubsystem = new ArmSubsystem();
+//		armSubsystem.setEnabled(false);
+
 		intakeSubsystem = new IntakeSubsystem();
+//		intakeSubsystem.setEnabled(false);
+
+		oi = new OperatorInterface();
+		pdp = new PowerDistributionPanel();
 	}
 
 	/**
 	 * The robot's initialisation method.
 	 */
 	public void robotInit() {
-		CameraServer.getInstance().startAutomaticCapture("Front camera", 0);
-		pdp = new PowerDistributionPanel();
-		oi = new OperatorInterface();
+		// CameraServer.getInstance().startAutomaticCapture("Front camera", 0);
+		initDevices();
 		
-		// logger = new PIDSourceLogger(InterfaceType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
+		logger = new PIDSourceLogger(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM);
 
 		updateDashboard();
 	}
@@ -126,7 +134,9 @@ public class Robot extends CustomIterativeRobot {
 	/** This runs when the robot's disabled mode is enabled.*/
 	public void disabledInit() {
 		chassisSubsystem.setCurrentMode(RobotMode.DISABLED);
-		// logger.output();
+		armSubsystem.setCurrentMode(RobotMode.DISABLED);
+		intakeSubsystem.setCurrentMode(RobotMode.DISABLED);
+		logger.output();
 		updateDashboard();
 	}
 
@@ -140,7 +150,9 @@ public class Robot extends CustomIterativeRobot {
 	public void autonomousInit() {
 		chassisSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		chassisSubsystem.reset();
+		armSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		intakeSubsystem.initAutonomous();
+		intakeSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 
 		autonomousCommand = new TestCommandGroup(-6);
 		// autonomousCommand = new AutoCommandGroup(DriverStation.getInstance().getGameSpecificMessage());
@@ -159,6 +171,8 @@ public class Robot extends CustomIterativeRobot {
 	/** This runs when the robot's disabled mode is enabled.*/
 	public void teleopInit() {
 		chassisSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
+		armSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
+		intakeSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
 		
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
@@ -171,7 +185,7 @@ public class Robot extends CustomIterativeRobot {
 
 	/** This runs during the robot's tele-operated mode, periodically.*/
 	public void teleopPeriodic() {
-		// logger.log();
+		logger.log();
 		Scheduler.getInstance().run();
 		subsystemPeriodic();
 		updateDashboard();
@@ -180,6 +194,8 @@ public class Robot extends CustomIterativeRobot {
 	/** This runs when the robot's test mode is enabled.*/
 	public void testInit() {
 		chassisSubsystem.setCurrentMode(RobotMode.TEST);
+		armSubsystem.setCurrentMode(RobotMode.TEST);
+		intakeSubsystem.setCurrentMode(RobotMode.TEST);
 		updateDashboard();
 	}
 

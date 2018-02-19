@@ -26,10 +26,9 @@ public class GyroPIDInput implements PIDSource {
 
 	private TurningMode turningMode = UserInterfaceConstants.INITIAL_TURNING_MODE;
 	
-	private final AnalogGyro gyro;
+//	private final AnalogGyro gyro = Robot.devices.getDevice(InterfaceType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
 	
 	public GyroPIDInput() {
-		gyro = Robot.devices.getDevice(InterfaceType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
 	}
 
 	@Override
@@ -44,24 +43,25 @@ public class GyroPIDInput implements PIDSource {
 
 	@Override
 	public double pidGet() {
-		if (turningMode == TurningMode.ABSOLUTE) {
-			// This takes the difference between the actual heading and the target angle. If travelling at the right
-			// angle, this should be 0.
-			double gyroAngle = Math.toRadians(gyro.getAngle());
-			double transformedTargetAngle = targetAngle - gyroAngle;
-			return descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
-		} else if (turningMode == TurningMode.RELATIVE) {
-			long currentTime = System.currentTimeMillis();
-			currentAngleForRelativePID -= targetAngle * (currentTime - timeOfLastPIDGet) / 1000;
-			timeOfLastPIDGet = currentTime;
-			
-			double gyroAngle = Math.toRadians(gyro.getAngle());
-			double transformedTargetAngle = currentAngleForRelativePID - gyroAngle;
-			// transformedTargetAngle = descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
-			return transformedTargetAngle;
-		} else {
-			throw new IllegalStateException("Stop screwing with the robot.");
-		}
+		return 0;
+//		if (turningMode == TurningMode.ABSOLUTE) {
+//			// This takes the difference between the actual heading and the target angle. If travelling at the right
+//			// angle, this should be 0.
+//			double gyroAngle = Math.toRadians(gyro.getAngle());
+//			double transformedTargetAngle = targetAngle - gyroAngle;
+//			return descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
+//		} else if (turningMode == TurningMode.RELATIVE) {
+//			long currentTime = System.currentTimeMillis();
+//			currentAngleForRelativePID -= targetAngle * (currentTime - timeOfLastPIDGet) / 1000;
+//			timeOfLastPIDGet = currentTime;
+//			
+//			double gyroAngle = Math.toRadians(gyro.getAngle());
+//			double transformedTargetAngle = currentAngleForRelativePID - gyroAngle;
+//			// transformedTargetAngle = descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
+//			return transformedTargetAngle;
+//		} else {
+//			throw new IllegalStateException("Stop screwing with the robot.");
+//		}
 	}
 	
 	/**
@@ -94,20 +94,20 @@ public class GyroPIDInput implements PIDSource {
 	}
 	
 	public void updateDashboard() {
-		SmartDashboard.putNumber("Gyro angle", gyro.getAngle());
-		SmartDashboard.putNumber("Gyro offset", gyro.getOffset());
-		SmartDashboard.putData("Gyro", gyro);
+//		SmartDashboard.putNumber("Gyro angle", gyro.getAngle());
+//		SmartDashboard.putNumber("Gyro offset", gyro.getOffset());
+//		SmartDashboard.putData("Gyro", gyro);
 		SmartDashboard.putNumber("angle", currentAngleForRelativePID);
 	}
 
 	public void init() {		
-		gyro.initGyro();
-		gyro.setSensitivity(UserInterfaceConstants.GYRO_SENSITIVITY);
-		gyro.calibrate();
+//		gyro.initGyro();
+//		gyro.setSensitivity(UserInterfaceConstants.GYRO_SENSITIVITY);
+//		gyro.calibrate();
 	}
 
 	public void reset() {
-		gyro.reset();
+//		gyro.reset();
 	}
 
 	public void setTargetAngle(double targetAngle) {

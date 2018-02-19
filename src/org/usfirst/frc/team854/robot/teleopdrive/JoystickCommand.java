@@ -8,8 +8,12 @@
 package org.usfirst.frc.team854.robot.teleopdrive;
 
 import org.usfirst.frc.team854.robot.Robot;
+import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
+import org.usfirst.frc.team854.robot.hardware.InterfaceType;
+import org.usfirst.frc.team854.robot.subsystems.RobotArmLevel;
 import org.usfirst.frc.team854.robot.utils.Direction1D;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class JoystickCommand extends Command {
@@ -46,10 +50,14 @@ public class JoystickCommand extends Command {
 	    			} else {
 	    				testState = true;
 	    			}
-	        		Robot.intakeSubsystem.setPneumaticsExtended(testState);
+//	        		Robot.intakeSubsystem.setInnerIntakeDirection(testState ? Direction1D.FORWARD : Direction1D.OFF);
+//	        		Robot.intakeSubsystem.setOuterIntakeDirection(testState ? Direction1D.FORWARD : Direction1D.OFF);
+	    			Robot.armSubsystem.setArmLevel(testState ? RobotArmLevel.SWITCH : RobotArmLevel.GROUND);
 	    		}
+//	    		Robot.armSubsystem.setMotor(0.8);
 	    	} else {
 	    		testButtonHeld = false;
+//	    		Robot.armSubsystem.setMotor(0);
 	    	}
 
 	    	if(Robot.oi.getDriveReverse()) {
