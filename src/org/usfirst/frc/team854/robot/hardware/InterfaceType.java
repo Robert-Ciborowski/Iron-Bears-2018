@@ -12,7 +12,7 @@ import java.util.HashMap;
 import edu.wpi.first.wpilibj.SendableBase;
 
 public enum InterfaceType {
-	ANALOG, DIGITAL, PWM, RELAY, PCM;
+	ANALOG, DIGITAL, PWM, RELAY, PCM, MXP;
 
 	HashMap<Integer, SendableBase> deviceList;
 

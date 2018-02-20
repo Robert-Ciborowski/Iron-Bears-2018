@@ -9,8 +9,8 @@ package org.usfirst.frc.team854.robot.constants;
 
 public interface RobotStructureConstants {
 	// The following variables use inches.
-	public static final double DISTANCE_BETWEEN_WHEELS = 19.25;
-	public static final int WHEEL_RADIUS = 2;
+	public static final double DISTANCE_BETWEEN_WHEELS = 23.75;// 19.25;
+	public static final int WHEEL_RADIUS = 3;// 2;
 	double ENCODER_COUNTS_PER_INCH = 141.7761453778885;
 	
 	// These are encoder max rates, in counts/second

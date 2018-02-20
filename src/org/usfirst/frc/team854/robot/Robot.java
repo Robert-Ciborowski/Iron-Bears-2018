@@ -24,6 +24,8 @@ import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
 import org.usfirst.frc.team854.robot.subsystems.IntakeSubsystem;
 import org.usfirst.frc.team854.robot.utils.PIDSourceLogger;
 
+import com.analog.adis16448.frc.ADIS16448_IMU;
+
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -100,15 +102,21 @@ public class Robot extends CustomIterativeRobot {
 				new DoubleSolenoid(RobotInterfaceConstants.PORT_PCM,
 						RobotInterfaceConstants.PORT_PNEUMATIC_RIGHT,
 						RobotInterfaceConstants.PORT_PNEUMATIC_RIGHT_REVERSE));
+		
+		// This is our MXP device, an ADIS16448 gyro. It automatically takes the next 4 seconds to calibrate,
+		// blocking changes in other WPILib devices.
+		ADIS16448_IMU gyro = new ADIS16448_IMU();
+		gyro.reset();
+		devices.putDevice(InterfaceType.MXP, RobotInterfaceConstants.PORT_GYRO, gyro);
 
 		chassisSubsystem = new ChassisSubsystem();
 		chassisSubsystem.setEnabled(false);
 		
 		armSubsystem = new ArmSubsystem();
-//		armSubsystem.setEnabled(false);
+		// armSubsystem.setEnabled(false);
 
 		intakeSubsystem = new IntakeSubsystem();
-//		intakeSubsystem.setEnabled(false);
+		intakeSubsystem.setEnabled(false);
 
 		oi = new OperatorInterface();
 		pdp = new PowerDistributionPanel();
@@ -136,6 +144,7 @@ public class Robot extends CustomIterativeRobot {
 		chassisSubsystem.setCurrentMode(RobotMode.DISABLED);
 		armSubsystem.setCurrentMode(RobotMode.DISABLED);
 		intakeSubsystem.setCurrentMode(RobotMode.DISABLED);
+		oi.setCurrentMode(RobotMode.DISABLED);
 		logger.output();
 		updateDashboard();
 	}
@@ -153,6 +162,7 @@ public class Robot extends CustomIterativeRobot {
 		armSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		intakeSubsystem.initAutonomous();
 		intakeSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
+		oi.setCurrentMode(RobotMode.AUTONOMOUS);
 
 		autonomousCommand = new TestCommandGroup(-6);
 		// autonomousCommand = new AutoCommandGroup(DriverStation.getInstance().getGameSpecificMessage());
@@ -173,6 +183,7 @@ public class Robot extends CustomIterativeRobot {
 		chassisSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
 		armSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
 		intakeSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
+		oi.setCurrentMode(RobotMode.TELEOPERATED);
 		
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
@@ -196,6 +207,7 @@ public class Robot extends CustomIterativeRobot {
 		chassisSubsystem.setCurrentMode(RobotMode.TEST);
 		armSubsystem.setCurrentMode(RobotMode.TEST);
 		intakeSubsystem.setCurrentMode(RobotMode.TEST);
+		oi.setCurrentMode(RobotMode.TEST);
 		updateDashboard();
 	}
 

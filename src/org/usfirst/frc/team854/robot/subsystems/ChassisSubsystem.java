@@ -56,7 +56,7 @@ public class ChassisSubsystem extends CustomSubsystem {
 		gyroPIDController.setOutputRange(-Math.PI, Math.PI);
 		gyroPIDController.setSetpoint(0);
 		gyroPIDController.setAbsoluteTolerance(0.05);
-		gyroPIDController.setContinuous(true);
+		gyroPIDController.setContinuous(false);
 		
 		distancePIDController.setInputRange(-100000, 100000);
 		distancePIDController.setOutputRange(-1, 1);
@@ -69,7 +69,6 @@ public class ChassisSubsystem extends CustomSubsystem {
 
 	public void init() {
 		gyroPIDInput.init();
-		setGyroTargetMotion(0, 0);
 	}
 
 	public void reset() {
@@ -92,26 +91,29 @@ public class ChassisSubsystem extends CustomSubsystem {
 	@Override
 	public void setCurrentMode(RobotMode mode) {
 		super.setCurrentMode(mode);
-		switch (mode) {
-			case TELEOPERATED:
-				gyroPIDController.enable();
-				distancePIDController.disable();
-				OperatorInterface.mainJoystickCommand.setEnabled(true);
-				break;
-			case AUTONOMOUS:
-				gyroPIDController.enable();
-				distancePIDController.enable();
-				OperatorInterface.mainJoystickCommand.setEnabled(false);
-				break;
-			case DISABLED:
-				gyroPIDController.disable();
-				distancePIDController.disable();
-				OperatorInterface.mainJoystickCommand.setEnabled(false);
-				break;
-			case TEST:
-				break;
-			default:
-				break;
+		if (enabled) {
+			switch (mode) {
+				case TELEOPERATED:
+					setGyroTargetMotion(0, 0);
+					gyroPIDController.enable();
+					distancePIDController.disable();
+					OperatorInterface.mainJoystickCommand.setEnabled(true);
+					break;
+				case AUTONOMOUS:
+					gyroPIDController.enable();
+					distancePIDController.enable();
+					OperatorInterface.mainJoystickCommand.setEnabled(false);
+					break;
+				case DISABLED:
+					gyroPIDController.disable();
+					distancePIDController.disable();
+					OperatorInterface.mainJoystickCommand.setEnabled(false);
+					break;
+				case TEST:
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
@@ -129,10 +131,12 @@ public class ChassisSubsystem extends CustomSubsystem {
 	}
 
 	public void setMotors(double leftMotorValue, double rightMotorValue) {
-//		leftMotor.pidWrite(leftMotorValue);
-//		rightMotor.pidWrite(rightMotorValue);
-//		leftMiniCIMMotor.pidWrite(-leftMotorValue);
-//		rightMiniCIMMotor.pidWrite(-rightMotorValue);
+		if (enabled) {
+			leftMotor.pidWrite(leftMotorValue);
+			rightMotor.pidWrite(rightMotorValue);
+	//		leftMiniCIMMotor.pidWrite(-leftMotorValue);
+	//		rightMiniCIMMotor.pidWrite(-rightMotorValue);
+		}
 	}
 
 	public void setTurningMode(TurningMode turningMode) {
@@ -156,9 +160,6 @@ public class ChassisSubsystem extends CustomSubsystem {
 	}
 
 	public void setGyroTargetMotion(double angle, double speed) {
-		if (!gyroPIDController.isEnabled()) {
-			gyroPIDController.enable();
-		}
 		gyroPIDInput.setTargetAngle(angle);
 		gyroPIDOutput.setTargetSpeed(speed);
 	}

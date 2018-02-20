@@ -8,6 +8,7 @@
 
 package org.usfirst.frc.team854.robot.operatorinterface;
 
+import org.usfirst.frc.team854.robot.RobotMode;
 import org.usfirst.frc.team854.robot.command.IntakeFeelersCommand;
 import org.usfirst.frc.team854.robot.command.IntakeSpitCommand;
 import org.usfirst.frc.team854.robot.command.IntakeSwallowCommand;
@@ -45,6 +46,24 @@ public class OperatorInterface {
 		intakeSwallowButton.whenPressed(new IntakeSwallowCommand());
 		intakeSpitButton.whenPressed(new IntakeSpitCommand());
 		intakeFeelersButton.whenPressed(new IntakeFeelersCommand());
+	}
+	
+	public void setCurrentMode(RobotMode mode) {
+		switch (mode) {
+			case TELEOPERATED:
+				mainJoystickCommand.setEnabled(true);
+				break;
+			case AUTONOMOUS:
+				mainJoystickCommand.setEnabled(false);
+				break;
+			case DISABLED:
+				mainJoystickCommand.setEnabled(false);
+				break;
+			case TEST:
+				break;
+			default:
+				break;
+		}
 	}
 	
 	/** Returns the drive reverse button.*/

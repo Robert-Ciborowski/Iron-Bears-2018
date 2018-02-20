@@ -40,7 +40,7 @@ public class JoystickCommand extends Command {
 	protected void execute() {
 		if (enabled) {
 			double speed = Robot.oi.getSpeed();  // Positive forward
-	    	double turn = Robot.oi.getTurn(); // Positive left
+	    	double turn = Robot.oi.getTurn(); // Positive Right
 
 	    	if (Robot.oi.isTestButtonPressed()) {
 	    		if (!testButtonHeld) {
@@ -53,6 +53,7 @@ public class JoystickCommand extends Command {
 //	        		Robot.intakeSubsystem.setInnerIntakeDirection(testState ? Direction1D.FORWARD : Direction1D.OFF);
 //	        		Robot.intakeSubsystem.setOuterIntakeDirection(testState ? Direction1D.FORWARD : Direction1D.OFF);
 	    			Robot.armSubsystem.setArmLevel(testState ? RobotArmLevel.SWITCH : RobotArmLevel.GROUND);
+	    			// Robot.intakeSubsystem.setPneumaticsExtended(testState);
 	    		}
 //	    		Robot.armSubsystem.setMotor(0.8);
 	    	} else {

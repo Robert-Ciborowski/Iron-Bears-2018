@@ -72,26 +72,29 @@ public class ArmSubsystem extends CustomSubsystem {
     @Override
 	public void setCurrentMode(RobotMode mode) {
     	super.setCurrentMode(mode);
-    	armController.reset();
-    	armEncoder.reset();
-
-		switch (mode) {
-			case TELEOPERATED:
-				armController.enable();
-				break;
-			case AUTONOMOUS:
-				armController.enable();
-				break;
-			case DISABLED:
-				armController.disable();
-				break;
-			case TEST:
-				armController.enable();
-				break;
-			default:
-				armController.disable();
-				break;
-		}
+    	
+    	if (enabled) {
+	    	armController.reset();
+	    	armEncoder.reset();
+	
+			switch (mode) {
+				case TELEOPERATED:
+					armController.enable();
+					break;
+				case AUTONOMOUS:
+					armController.enable();
+					break;
+				case DISABLED:
+					armController.disable();
+					break;
+				case TEST:
+					armController.enable();
+					break;
+				default:
+					armController.disable();
+					break;
+			}
+    	}
 	}
     
     public boolean isInHomePosition() {

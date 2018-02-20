@@ -43,13 +43,15 @@ public class IntakeSubsystem extends CustomSubsystem {
 	public void setCurrentMode(RobotMode mode) {
     	super.setCurrentMode(mode);
     	
-    	// reset
-    	fullElapsedTime = -1;
-    	fullStartTime = 0;
-
-		setInnerIntakeDirection(Direction1D.OFF);
-		setOuterIntakeDirection(Direction1D.OFF);
-		setPneumaticsExtended(false);
+    	if (enabled) {
+	    	// This resets time values.
+	    	fullElapsedTime = -1;
+	    	fullStartTime = 0;
+	
+			setInnerIntakeDirection(Direction1D.OFF);
+			setOuterIntakeDirection(Direction1D.OFF);
+			setPneumaticsExtended(false);
+    	}
 	}
     
     @Override

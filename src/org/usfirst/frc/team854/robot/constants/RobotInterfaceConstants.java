@@ -31,7 +31,7 @@ public interface RobotInterfaceConstants {
 	public static final int PORT_SWITCH_INTAKE_FULL = 7;
 
 	// These are the analog ports.
-	public static final int PORT_GYRO = 0;
+	// public static final int PORT_GYRO = 0;
 	
 	// These are the CAN ports.
 	public static final int PORT_PCM = 0;
@@ -41,4 +41,8 @@ public interface RobotInterfaceConstants {
 	public static final int PORT_PNEUMATIC_LEFT_REVERSE = 6;
 	public static final int PORT_PNEUMATIC_RIGHT = 0;
 	public static final int PORT_PNEUMATIC_RIGHT_REVERSE = 1;
+	
+	// This is our MXP Port. We only need this defined so that we can access it from the
+	// device provider (the RoboRIO only has one MXP port).
+	public static final int PORT_GYRO = 0;
 }

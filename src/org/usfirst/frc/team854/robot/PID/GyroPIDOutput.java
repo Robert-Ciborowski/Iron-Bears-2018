@@ -18,6 +18,7 @@ public class GyroPIDOutput implements PIDOutput {
 	// These are the base values to use.
 	private double targetSpeed;
 	private double outputAngle;
+	private double minimumAngleOffset = 0.05;
 
 	public GyroPIDOutput() {
 	}
@@ -33,15 +34,22 @@ public class GyroPIDOutput implements PIDOutput {
 
 		// Because we're bad and because our algorithm is sketchy, we have to multiply by some random constant.
 		angleOffset *= RobotTuningConstants.TURN_POST_SCALE;
+		
+		System.out.println(angleOffset);
 
 		// This converts the previous speed to speed of the wheel in rotations/s.
-		double leftSpeed = targetAngularSpeed + angleOffset;
-		double rightSpeed = targetAngularSpeed - angleOffset;
+		double leftSpeed = targetAngularSpeed - angleOffset;
+		double rightSpeed = targetAngularSpeed + angleOffset;
 
 		leftSpeed /= (RobotStructureConstants.ENCODER_MAX_RATE_LEFT / RobotStructureConstants.ENCODER_COUNTS_PER_INCH);
 		rightSpeed /= (UserInterfaceConstants.ENCODER_MAX_RATE_RIGHT / RobotStructureConstants.ENCODER_COUNTS_PER_INCH);
 		
+//		leftSpeed = Math.max(0, Math.min(0.1, leftSpeed));
+//		rightSpeed = Math.max(0, Math.min(0.1, rightSpeed));
+		
 		Robot.chassisSubsystem.setMotors(leftSpeed, rightSpeed);
+//		System.out.println("Motors: " + leftSpeed + " " + rightSpeed);
+		SmartDashboard.putNumber("Output Angle: ", outputAngle);
 
 		this.outputAngle = outputAngle;
 	}
