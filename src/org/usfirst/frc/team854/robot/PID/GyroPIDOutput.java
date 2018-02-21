@@ -17,8 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class GyroPIDOutput implements PIDOutput {
 	// These are the base values to use.
 	private double targetSpeed;
-	private double outputAngle;
-	private double minimumAngleOffset = 0.05;
 
 	public GyroPIDOutput() {
 	}
@@ -34,8 +32,6 @@ public class GyroPIDOutput implements PIDOutput {
 
 		// Because we're bad and because our algorithm is sketchy, we have to multiply by some random constant.
 		angleOffset *= RobotTuningConstants.TURN_POST_SCALE;
-		
-		System.out.println(angleOffset);
 
 		// This converts the previous speed to speed of the wheel in rotations/s.
 		double leftSpeed = targetAngularSpeed - angleOffset;
@@ -50,12 +46,9 @@ public class GyroPIDOutput implements PIDOutput {
 		Robot.chassisSubsystem.setMotors(leftSpeed, rightSpeed);
 //		System.out.println("Motors: " + leftSpeed + " " + rightSpeed);
 		SmartDashboard.putNumber("Output Angle: ", outputAngle);
-
-		this.outputAngle = outputAngle;
 	}
 
 	public void updateDashboard() {
-		SmartDashboard.putNumber("PID Angular Correction", outputAngle);
 	}
 
 	public void setTargetSpeed(double targetSpeed) {

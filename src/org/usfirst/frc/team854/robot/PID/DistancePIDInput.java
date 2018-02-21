@@ -16,6 +16,7 @@ import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DistancePIDInput implements PIDSource {
 	private double initialLeftEncoderValue, initialRightEncoderValue;
@@ -61,5 +62,12 @@ public class DistancePIDInput implements PIDSource {
 		double returnValue = averageCurrentCount / targetEncoderValue;
 		System.out.println("Target: " + targetEncoderValue + ", Average: " + averageCurrentCount);
 		return returnValue;
+	}
+	
+	public void updateDashboard() {
+		SmartDashboard.putNumber("Drive Encoder Left",
+				Robot.devices.getDeviceValue(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_LEFT));
+		SmartDashboard.putNumber("Drive Encoder Right",
+				Robot.devices.getDeviceValue(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_RIGHT));
 	}
 }

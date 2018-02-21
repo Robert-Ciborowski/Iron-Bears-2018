@@ -70,11 +70,6 @@ public class ChassisSubsystem extends CustomSubsystem {
 	public void init() {
 		gyroPIDInput.init();
 	}
-
-	public void reset() {
-		gyroPIDController.reset();
-		distancePIDController.reset();
-	}
 	
 	@Override
 	public void setEnabled(boolean enabled) {
@@ -98,11 +93,15 @@ public class ChassisSubsystem extends CustomSubsystem {
 					gyroPIDController.enable();
 					distancePIDController.disable();
 					OperatorInterface.mainJoystickCommand.setEnabled(true);
+					gyroPIDInput.reset();
 					break;
 				case AUTONOMOUS:
+					gyroPIDController.reset();
+					distancePIDController.reset();
 					gyroPIDController.enable();
 					distancePIDController.enable();
 					OperatorInterface.mainJoystickCommand.setEnabled(false);
+					gyroPIDInput.reset();
 					break;
 				case DISABLED:
 					gyroPIDController.disable();
@@ -134,6 +133,8 @@ public class ChassisSubsystem extends CustomSubsystem {
 		if (enabled) {
 			leftMotor.pidWrite(leftMotorValue);
 			rightMotor.pidWrite(rightMotorValue);
+//			System.out.println(leftMotorValue);
+//			System.out.println(rightMotorValue);
 	//		leftMiniCIMMotor.pidWrite(-leftMotorValue);
 	//		rightMiniCIMMotor.pidWrite(-rightMotorValue);
 		}
@@ -152,7 +153,9 @@ public class ChassisSubsystem extends CustomSubsystem {
 	public void updateDashboard() {
 		gyroPIDInput.updateDashboard();
 		gyroPIDOutput.updateDashboard();
-		SmartDashboard.putData("Motor Controller", gyroPIDController);
+		distancePIDInput.updateDashboard();
+		SmartDashboard.putData("Gyro Controller", gyroPIDController);
+		SmartDashboard.putData("Distance Controller", distancePIDController);
 	}
 
 	public boolean isAngleOnTarget() {

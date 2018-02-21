@@ -100,7 +100,5 @@ public class OperatorInterface {
 	
 	public void updateDashboard() {
 		SmartDashboard.putNumber("Max speed", getMaxSpeed());
-		SmartDashboard.putNumber("Joystick speed value", getSpeed());
-		SmartDashboard.putNumber("Joystick turn value", getTurn());
 	}
 }

@@ -13,7 +13,6 @@ import org.usfirst.frc.team854.robot.RobotMode;
 import org.usfirst.frc.team854.robot.constants.RobotCommandConstants;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
-import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
 import org.usfirst.frc.team854.robot.utils.Direction1D;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -22,7 +21,6 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSubsystem extends CustomSubsystem {
-
 	private DoubleSolenoid leftSolenoid = Robot.devices.getDevice(InterfaceType.PCM, RobotInterfaceConstants.PORT_PNEUMATIC_LEFT);
 	private DoubleSolenoid rightSolenoid = Robot.devices.getDevice(InterfaceType.PCM, RobotInterfaceConstants.PORT_PNEUMATIC_RIGHT);
 
@@ -49,8 +47,8 @@ public class IntakeSubsystem extends CustomSubsystem {
 	    	fullStartTime = 0;
 	
 			setInnerIntakeDirection(Direction1D.OFF);
-			setOuterIntakeDirection(Direction1D.OFF);
-			setPneumaticsExtended(false);
+			setOuterIntakeDirection(Direction1D.REVERSE);
+//			setPneumaticsExtended(false);
     	}
 	}
     
@@ -65,17 +63,8 @@ public class IntakeSubsystem extends CustomSubsystem {
     	}
     }
     
-    public void initAutonomous() {
-    	if (!enabled) {
-    		return;
-    	}
-
-    	setOuterIntakeDirection(Direction1D.REVERSE);
-    }
-    
     @Override
     public void periodic() {
-    	//System.out.println(fullLimitSwitch.get());
     }
     
     public boolean isFull() {
@@ -158,5 +147,17 @@ public class IntakeSubsystem extends CustomSubsystem {
 	@Override
 	public void updateDashboard() {
 		SmartDashboard.putString("Is there a box?", fullLimitSwitch.get() ? "yes" : "no");
+//		BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
+//		img.getGraphics().setColor(Color.RED);
+//		img.getGraphics().fillRect(0, 0, 100, 100);
+//		try {
+//			ByteArrayOutputStream b = new ByteArrayOutputStream();
+//			ImageIO.write(img, "png", b);
+//			SmartDashboard.putRaw("abcdefg", b.toByteArray());
+//			GyroBase
+//			img.getGraphics().dispose();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}	
 	}
 }

@@ -1,8 +1,8 @@
 /*
  * Name: AutoLeftCommandGroup
  * Author: Julian Dominguez-Schatz, Robert Ciborowski
- * Date: 17/02/2018
- * Description: The command that runs when auto starts if the robot starts on the left.
+ * Date: 20/02/2018
+ * Description: The command that runs when auto starts if the robot starts at the middle.
  */
 
 package org.usfirst.frc.team854.robot.auto;
@@ -13,10 +13,11 @@ import org.usfirst.frc.team854.robot.command.IntakeSpitCommand;
 import org.usfirst.frc.team854.robot.command.LinearMotionCommand;
 import org.usfirst.frc.team854.robot.subsystems.RobotArmLevel;
 
-public class AutoLeftCommandGroup extends AutoCommandGroup {
-	public AutoLeftCommandGroup() {
+public class AutoMiddleCommandGroup extends AutoCommandGroup {
+	public AutoMiddleCommandGroup() {
 	}
 	
+	@Override
 	public void init(String fieldState, AutoTarget target) {
 		if (fieldState.length() < 3) {
 			throw new IllegalStateException("You aren't in auto.");
@@ -44,14 +45,17 @@ public class AutoLeftCommandGroup extends AutoCommandGroup {
 	private void loadSwitch(boolean targetOnLeft) {
 		addParallel(new ArmLevelCommand(RobotArmLevel.SWITCH));
 		if (targetOnLeft) {
-			addSequential(new LinearMotionCommand(30));
-			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
-		} else {
-			addSequential(new LinearMotionCommand(20));
-			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
-			addSequential(new LinearMotionCommand(50));
+			addSequential(new LinearMotionCommand(15));
 			addSequential(new AngularMotionCommand(Math.PI / 2));
-			addSequential(new LinearMotionCommand(10));
+			addSequential(new LinearMotionCommand(5));
+			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
+			addSequential(new LinearMotionCommand(15));
+		} else {
+			addSequential(new LinearMotionCommand(15));
+			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
+			addSequential(new LinearMotionCommand(5));
+			addSequential(new AngularMotionCommand(Math.PI / 2));
+			addSequential(new LinearMotionCommand(15));
 		}
 		addSequential(new IntakeSpitCommand());
 	}
@@ -59,11 +63,17 @@ public class AutoLeftCommandGroup extends AutoCommandGroup {
 	private void loadScale(boolean targetOnLeft) {
 		addParallel(new ArmLevelCommand(RobotArmLevel.SCALE));
 		if (targetOnLeft) {
-			addSequential(new LinearMotionCommand(50));
+			addSequential(new LinearMotionCommand(15));
+			addSequential(new AngularMotionCommand(Math.PI / 2));
+			addSequential(new LinearMotionCommand(15));
+			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
+			addSequential(new LinearMotionCommand(30));
 		} else {
-			addSequential(new LinearMotionCommand(40));
-			addSequential(new AngularMotionCommand(-(Math.PI / 4)));
-			addSequential(new LinearMotionCommand(5));
+			addSequential(new LinearMotionCommand(15));
+			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
+			addSequential(new LinearMotionCommand(15));
+			addSequential(new AngularMotionCommand(Math.PI / 2));
+			addSequential(new LinearMotionCommand(30));
 		}
 		addSequential(new IntakeSpitCommand());
 	}

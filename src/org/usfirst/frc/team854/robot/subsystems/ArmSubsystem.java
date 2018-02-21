@@ -118,6 +118,7 @@ public class ArmSubsystem extends CustomSubsystem {
     
     public void setMotor(double speed) {
     	((Spark) Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_ARM)).set(speed);
+    	System.out.println(speed);
     }
 
     public void increaseTargetLevel() {
@@ -183,8 +184,9 @@ public class ArmSubsystem extends CustomSubsystem {
 	
 	@Override
 	public void updateDashboard() {
-		SmartDashboard.putData(armController);
-		SmartDashboard.putData(Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_ARM));
+		SmartDashboard.putData("Arm Controller", armController);
+		SmartDashboard.putNumber("Arm Setpoint", armController.getSetpoint());
+		SmartDashboard.putNumber("Arm Encoder", encoder.get());
 	}
 }
 

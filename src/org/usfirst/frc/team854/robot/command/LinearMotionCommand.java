@@ -24,6 +24,7 @@ public class LinearMotionCommand extends Command {
 	@Override
 	public void initialize() {
 		Robot.chassisSubsystem.setAutonomousTarget(0, distance);
+		System.out.println(distance);
 	}
 	
 	@Override

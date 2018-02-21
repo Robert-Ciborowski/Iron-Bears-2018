@@ -14,7 +14,11 @@
 
 package org.usfirst.frc.team854.robot;
 
-import org.usfirst.frc.team854.robot.auto.TestCommandGroup;
+import org.usfirst.frc.team854.robot.auto.AutoCommandGroup;
+import org.usfirst.frc.team854.robot.auto.AutoLeftCommandGroup;
+import org.usfirst.frc.team854.robot.auto.AutoMiddleCommandGroup;
+import org.usfirst.frc.team854.robot.auto.AutoRightCommandGroup;
+import org.usfirst.frc.team854.robot.auto.AutoTarget;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.DeviceProvider;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
@@ -27,14 +31,15 @@ import org.usfirst.frc.team854.robot.utils.PIDSourceLogger;
 import com.analog.adis16448.frc.ADIS16448_IMU;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends CustomIterativeRobot {
 	// These are the subsystems of the robot.
@@ -49,9 +54,12 @@ public class Robot extends CustomIterativeRobot {
 	public static OperatorInterface oi;
 	public static PowerDistributionPanel pdp;
 
-	private Command autonomousCommand;
+	private AutoCommandGroup autonomousCommand;
 
 	private PIDSourceLogger logger;
+
+	private SendableChooser<AutoCommandGroup> locationChooser;
+	private SendableChooser<AutoTarget> targetChooser;
 
 	private void initDevices() {
 		devices = new DeviceProvider();
@@ -106,17 +114,16 @@ public class Robot extends CustomIterativeRobot {
 		// This is our MXP device, an ADIS16448 gyro. It automatically takes the next 4 seconds to calibrate,
 		// blocking changes in other WPILib devices.
 		ADIS16448_IMU gyro = new ADIS16448_IMU();
-		gyro.reset();
 		devices.putDevice(InterfaceType.MXP, RobotInterfaceConstants.PORT_GYRO, gyro);
 
 		chassisSubsystem = new ChassisSubsystem();
-		chassisSubsystem.setEnabled(false);
+		// chassisSubsystem.setEnabled(false);
 		
 		armSubsystem = new ArmSubsystem();
 		// armSubsystem.setEnabled(false);
 
 		intakeSubsystem = new IntakeSubsystem();
-		intakeSubsystem.setEnabled(false);
+//		intakeSubsystem.setEnabled(false);
 
 		oi = new OperatorInterface();
 		pdp = new PowerDistributionPanel();
@@ -129,9 +136,26 @@ public class Robot extends CustomIterativeRobot {
 		// CameraServer.getInstance().startAutomaticCapture("Front camera", 0);
 		initDevices();
 		
+		initDashboard();
+		
 		logger = new PIDSourceLogger(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM);
 
 		updateDashboard();
+	}
+	
+	private void initDashboard() {
+		locationChooser = new SendableChooser<>();
+		locationChooser.addDefault("Left", new AutoLeftCommandGroup());
+		locationChooser.addObject("Middle", new AutoMiddleCommandGroup());
+		locationChooser.addObject("Right", new AutoRightCommandGroup());
+
+		targetChooser = new SendableChooser<>();
+		targetChooser.addDefault("Switch", AutoTarget.SWITCH);
+		targetChooser.addObject("Scale", AutoTarget.SCALE);
+		targetChooser.addObject("None", AutoTarget.NONE);
+
+		SmartDashboard.putData("Location", locationChooser);
+		SmartDashboard.putData("Target", targetChooser);
 	}
 	
 	@Override
@@ -155,30 +179,36 @@ public class Robot extends CustomIterativeRobot {
 		updateDashboard();
 	}
 
-	/** This runs when the robot's autonomous mode is enabled.*/
+	/**
+	 * This runs when the robot's autonomous mode is enabled.
+	 */
 	public void autonomousInit() {
 		chassisSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
-		chassisSubsystem.reset();
 		armSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
-		intakeSubsystem.initAutonomous();
 		intakeSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		oi.setCurrentMode(RobotMode.AUTONOMOUS);
 
-		autonomousCommand = new TestCommandGroup(-6);
-		// autonomousCommand = new AutoCommandGroup(DriverStation.getInstance().getGameSpecificMessage());
+//		autonomousCommand = new TestCommandGroup(-6);
+		AutoTarget target = targetChooser.getSelected();
+		autonomousCommand = locationChooser.getSelected();
+		autonomousCommand.init(DriverStation.getInstance().getGameSpecificMessage(), target);
     	Scheduler.getInstance().add(autonomousCommand);
     	
         updateDashboard();
     }
 
-	/** This runs during the robot's autonomous mode, periodically.*/
+	/**
+	 * This runs during the robot's autonomous mode, periodically.
+	 */
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 		subsystemPeriodic();
 		updateDashboard();
 	}
 
-	/** This runs when the robot's disabled mode is enabled.*/
+	/**
+	 * This runs when the robot's disabled mode is enabled.
+	 */
 	public void teleopInit() {
 		chassisSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
 		armSubsystem.setCurrentMode(RobotMode.TELEOPERATED);

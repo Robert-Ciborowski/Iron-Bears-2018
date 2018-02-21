@@ -125,17 +125,6 @@ public class GyroPIDInput implements PIDSource {
 	
 	public void updateDashboard() {
 		SmartDashboard.putNumber("Gyro-X (radians)", gyro.getAngleX() * (Math.PI / 180.0));
-		SmartDashboard.putNumber("Gyro-X", gyro.getAngleX());
-	    SmartDashboard.putNumber("Gyro-Y", gyro.getAngleY());
-	    SmartDashboard.putNumber("Gyro-Z", gyro.getAngleZ());
-	    SmartDashboard.putNumber("Accel-X", gyro.getAccelX());
-	    SmartDashboard.putNumber("Accel-Y", gyro.getAccelY());
-	    SmartDashboard.putNumber("Accel-Z", gyro.getAccelZ());
-	    SmartDashboard.putNumber("Pitch", gyro.getPitch());
-	    SmartDashboard.putNumber("Roll", gyro.getRoll());
-	    SmartDashboard.putNumber("Yaw", gyro.getYaw());
-	    SmartDashboard.putNumber("Pressure: ", gyro.getBarometricPressure());
-	    SmartDashboard.putNumber("Temperature: ", gyro.getTemperature()); 
 		SmartDashboard.putNumber("angle", currentAngleForRelativePID);
 	}
 
@@ -147,8 +136,8 @@ public class GyroPIDInput implements PIDSource {
 	}
 
 	public void reset() {
-		// This was made for the old gyro, not the new one.
-//		gyro.reset();
+		gyro.reset();
+		currentAngleForRelativePID = 0;
 	}
 
 	public void setTargetAngle(double targetAngle) {

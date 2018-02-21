@@ -1,6 +1,6 @@
 /*
  * Class: UserInterfaceConstants
- * Authors: Waseef Nayeem, Robert Ciborowski
+ * Authors: Robert Ciborowski, Waseef Nayeem
  * Date: 06/01/2018
  * Description: Contains constants related to the robot's IO interface.
  */
@@ -13,7 +13,7 @@ public interface UserInterfaceConstants {
 	public static final boolean FLIP_GYRO = false;
 
 	// This value is based on the individual gyro and is determined from a data sheet (in volts/degree/second).
-	public static final double GYRO_SENSITIVITY = 0.00700;
+	// public static final double GYRO_SENSITIVITY = 0.00700;
 
 	public static final double ENCODER_COUNTS_PER_INCH = 141.7761453778885;
 
