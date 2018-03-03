@@ -109,9 +109,9 @@ public class ArmSubsystem extends CustomSubsystem {
 //    				RobotTuningConstants.ARM_UP_DERIVATIVE);
 //    		System.out.println("UP!");
     	} else if (targetLevel.ordinal() > level.ordinal()) {
-    		armController.setPID(RobotTuningConstants.ARM_DOWN_PROPORTIONAL, RobotTuningConstants.ARM_DOWN_INTEGRAL,
-    				RobotTuningConstants.ARM_DOWN_DERIVATIVE);
-    		System.out.println("DOWN!");
+//    		armController.setPID(RobotTuningConstants.ARM_DOWN_PROPORTIONAL, RobotTuningConstants.ARM_DOWN_INTEGRAL,
+//    				RobotTuningConstants.ARM_DOWN_DERIVATIVE);
+//    		System.out.println("DOWN!");
     	}
     	targetLevel = level;
     }
@@ -173,10 +173,6 @@ public class ArmSubsystem extends CustomSubsystem {
     public RobotArmLevel getTargetLevel() {
     	return targetLevel;
     }
-
-	public void initDefaultCommand() {
-		setDefaultCommand(new JoystickCommand());
-	}
 	
 	public boolean isArmCalibrated() {
 		return isCalibrated;
@@ -187,6 +183,12 @@ public class ArmSubsystem extends CustomSubsystem {
 		SmartDashboard.putData("Arm Controller", armController);
 		SmartDashboard.putNumber("Arm Setpoint", armController.getSetpoint());
 		SmartDashboard.putNumber("Arm Encoder", encoder.get());
+	}
+
+	@Override
+	protected void initDefaultCommand() {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

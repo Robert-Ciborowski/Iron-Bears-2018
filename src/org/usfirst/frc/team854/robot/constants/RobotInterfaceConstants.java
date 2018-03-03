@@ -12,8 +12,8 @@ public interface RobotInterfaceConstants {
 	// These are the PWM ports.
 	public static final int PORT_MOTOR_DRIVE_LEFT = 0;
 	public static final int PORT_MOTOR_DRIVE_RIGHT = 1;
-//	public static final int PORT_MOTOR_MINICIM_LEFT = 3;
-//	public static final int PORT_MOTOR_MINICIM_RIGHT = 2;
+	public static final int PORT_MOTOR_MINICIM_LEFT = 3;
+	public static final int PORT_MOTOR_MINICIM_RIGHT = 2;
 	public static final int PORT_MOTOR_ARM = 2;
 	public static final int PORT_MOTOR_INTAKE_INNER_LEFT = 3;
 	public static final int PORT_MOTOR_INTAKE_INNER_RIGHT = 4;
