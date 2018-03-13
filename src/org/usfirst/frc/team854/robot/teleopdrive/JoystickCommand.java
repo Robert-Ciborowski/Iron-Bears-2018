@@ -38,7 +38,7 @@ public class JoystickCommand extends Command {
 		Robot.chassisSubsystem.setTurningMode(TurningMode.RELATIVE);
 
 		double speed = Robot.oi.getSpeed(); // Positive forward
-		double turn = Robot.oi.getTurn(); // Positive Right
+		double turn = Robot.oi.getRawTurn(); // Positive Right
 
 		if (Robot.oi.isTestButtonPressed()) {
 			if (!testButtonHeld) {
@@ -54,13 +54,11 @@ public class JoystickCommand extends Command {
 				// Robot.intakeSubsystem.setOuterIntakeDirection(testState ?
 				// Direction1D.FORWARD : Direction1D.OFF);
 				// Robot.armSubsystem.setArmLevel(testState ? RobotArmLevel.SWITCH : RobotArmLevel.GROUND);
-				// Robot.armSubsystem.setMotor(1);
+				Robot.armSubsystem.setMotor(testState ? 0.5 : 0);
 				// Robot.intakeSubsystem.setPneumaticsExtended(testState);
 			}
-			// Robot.armSubsystem.setMotor(0.8);
 		} else {
 			testButtonHeld = false;
-			// Robot.armSubsystem.setMotor(0);
 		}
 
 		if (Robot.oi.getDriveReverse()) {
@@ -80,7 +78,12 @@ public class JoystickCommand extends Command {
 			speed *= -1;
 		}
 
-		Robot.chassisSubsystem.setGyroTargetMotion(turn, speed);
+		if (turn > 0) {
+			Robot.chassisSubsystem.setMotors(speed - turn, speed);
+		} else {
+			Robot.chassisSubsystem.setMotors(speed, speed + turn);
+		}
+		// Robot.chassisSubsystem.setGyroTargetMotion(turn, speed);
 
 		Direction1D newDirection = getDirection(Robot.oi.getPOVPosition());
 		if (newDirection != previousPOVDirection) {

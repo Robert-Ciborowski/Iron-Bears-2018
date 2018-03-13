@@ -9,11 +9,11 @@ package org.usfirst.frc.team854.robot.constants;
 
 public interface RobotTuningConstants {
 	// These are for the real robot:
-	public static final double DRIVE_PROPORTIONAL = 2;// 7.0, 3.02, 2.5, 9
-	public static final double DRIVE_INTEGRAL = 0.0021;// 0.3, 0.18072289, 0, 0.36
-	public static final double DRIVE_DERIVATIVE = 15;// 35, 0.12048192, 0, 0.24
+	public static final double DRIVE_PROPORTIONAL = 0.8;// 7.0, 3.02, 2.5, 9
+	public static final double DRIVE_INTEGRAL = 0.00022;// 0.3, 0.18072289, 0, 0.36
+	public static final double DRIVE_DERIVATIVE = 0.2;// 35, 0.12048192, 0, 0.24
 	public static final double DRIVE_FEED_FORWARD = 0; // 1.0
-	public static final double TURN_POST_SCALE = 8.0;
+	public static final double TURN_POST_SCALE = -8.0;
 
 	// This is for the test robot:
 //	public static final double DRIVE_PROPORTIONAL = 0.1;//7.0;//, 3.02, 2.5, 9

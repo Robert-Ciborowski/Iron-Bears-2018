@@ -18,12 +18,14 @@ public class ClimberStateCommand extends Command {
 	private Direction1D direction;
 
 	public ClimberStateCommand(Direction1D direction) {
-		this.direction = direction;
+		requires(Robot.climberSubsystem);
 		requires(Robot.intakeSubsystem);
+		this.direction = direction;
 	}
 
 	@Override
 	protected void initialize() {
+		Robot.intakeSubsystem.setPneumaticsExtended(true);
 		switch (direction) {
 			case FORWARD:
 				Robot.climberSubsystem.setMotor(RobotCommandConstants.CLIMBER_MOTOR_RAISE_SPEED);

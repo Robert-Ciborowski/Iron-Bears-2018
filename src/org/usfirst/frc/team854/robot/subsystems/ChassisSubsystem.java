@@ -61,7 +61,7 @@ public class ChassisSubsystem extends CustomSubsystem {
 		// Test robot:
 		// gyroPIDController.setAbsoluteTolerance(0.3);
 		
-		gyroPIDController.setContinuous(false);
+		gyroPIDController.setContinuous(true);
 		
 		distancePIDController.setInputRange(-100000, 100000);
 		distancePIDController.setOutputRange(-1, 1);
@@ -101,7 +101,8 @@ public class ChassisSubsystem extends CustomSubsystem {
 			switch (mode) {
 				case TELEOPERATED:
 					// setGyroTargetMotion(0, 0);
-					gyroPIDController.enable();
+					// gyroPIDController.enable();
+					gyroPIDController.disable();
 					distancePIDController.disable();
 					gyroPIDInput.reset();
 					break;
@@ -135,7 +136,7 @@ public class ChassisSubsystem extends CustomSubsystem {
 			distancePIDController.setSetpoint(1);
 			gyroPIDInput.setTargetAngle(angle);
 			distancePIDOutput.setTargetAngle(angle);
-//			System.out.println(angle + " is the new target.");
+			System.out.println(angle + " is the new target.");
 		}
 	}
 	
@@ -156,11 +157,9 @@ public class ChassisSubsystem extends CustomSubsystem {
 		if (enabled) {
 			leftMotor.pidWrite(leftMotorValue);
 			rightMotor.pidWrite(rightMotorValue);
-//			System.out.println(leftMotorValue);
-//			System.out.println(rightMotorValue);
 //			leftMiniCIMMotor.pidWrite(-leftMotorValue);
 //			rightMiniCIMMotor.pidWrite(-rightMotorValue);
-			System.out.println("Set Motors: " + leftMotorValue + " " + rightMotorValue);
+			// System.out.println("Set Motors: " + leftMotorValue + ", " + rightMotorValue);
 		}
 	}
 
@@ -177,9 +176,12 @@ public class ChassisSubsystem extends CustomSubsystem {
 		SmartDashboard.putData("Distance Controller", distancePIDController);
 		SmartDashboard.putBoolean("Is Gyro On Target",gyroPIDController.onTarget());
 		SmartDashboard.putBoolean("Is Distance On Target", distancePIDController.onTarget());
+		SmartDashboard.putBoolean("Angular PID is Enabled", gyroPIDController.isEnabled());
+		SmartDashboard.putBoolean("Distance PID is Enabled", distancePIDController.isEnabled());
 	}
 
 	public boolean isAngleOnTarget() {
+		System.out.println("");
 		return gyroPIDController.onTarget();
 	}
 	

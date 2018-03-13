@@ -1,6 +1,6 @@
 /**
  * Name: ArmSubsystem
- * Authors: Julian Dominguez-Schatz, Robert Ciborowski, Shaiza Hashmi
+ * Authors: Robert Ciborowski, Julian Dominguez-Schatz, Shaiza Hashmi
  * Date: 10/02/2018
  * Description: The subsystem of our robot that controls its arm.
  */
@@ -33,7 +33,7 @@ public class ArmSubsystemWithoutPID extends CustomSubsystem {
 	private boolean moving = false;
 	private Direction1D directionOfMoving;
 	private final double tolerance = 15;
-	private final double switchArmHoldValue = 0.1, scaleArmHoldValue = -0.1, climbArmHoldValue = 0.1;
+	private final double switchArmHoldValue = 0.15, scaleArmHoldValue = 0.15, climbArmHoldValue = 0.1;
 
     public ArmSubsystemWithoutPID() {
     }
@@ -91,7 +91,7 @@ public class ArmSubsystemWithoutPID extends CustomSubsystem {
     	super.setCurrentMode(mode);
     	
     	if (enabled) {
-	    	armEncoder.reset();
+	    	// armEncoder.reset();
 	
 			switch (mode) {
 				case TELEOPERATED:
@@ -116,7 +116,7 @@ public class ArmSubsystemWithoutPID extends CustomSubsystem {
     public void setArmLevel(RobotArmLevel level) {
     	if (targetLevel.getSetpoint() > level.getSetpoint()) {
     		directionOfMoving = Direction1D.REVERSE;
-    		setMotor(-0.1);
+    		setMotor(-0.7);
     		moving = true;
 //    		armController.setPID(RobotTuningConstants.ARM_UP_PROPORTIONAL, RobotTuningConstants.ARM_UP_INTEGRAL,
 //    				RobotTuningConstants.ARM_UP_DERIVATIVE);
@@ -171,7 +171,7 @@ public class ArmSubsystemWithoutPID extends CustomSubsystem {
     			setArmLevel(RobotArmLevel.SWITCH);
     			break;
     		case SWITCH:
-    			if (temporaryHomeLockOverride) {
+    			if (temporaryHomeLockOverride || !Robot.intakeSubsystem.isFull()) {
     				setArmLevel(RobotArmLevel.GROUND);
     			}
     			break;
@@ -181,6 +181,7 @@ public class ArmSubsystemWithoutPID extends CustomSubsystem {
 				break;
     	}
     }
+    
     public boolean isArmOnTarget() {
     	return !moving;
     }

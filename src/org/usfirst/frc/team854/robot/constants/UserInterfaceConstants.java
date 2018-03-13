@@ -15,12 +15,13 @@ public interface UserInterfaceConstants {
 	// This value is based on the individual gyro and is determined from a data sheet (in volts/degree/second).
 	// public static final double GYRO_SENSITIVITY = 0.00700;
 
-	public static final boolean MOTOR_LEFT_INVERT = true;
-	public static final boolean MOTOR_RIGHT_INVERT = false;
-	public static final boolean MINICIM_LEFT_INVERT = true;
-	public static final boolean MINICIM_RIGHT_INVERT = false;
+	public static final boolean MOTOR_LEFT_INVERT = false;
+	public static final boolean MOTOR_RIGHT_INVERT = true;
+	public static final boolean MINICIM_LEFT_INVERT = false;
+	public static final boolean MINICIM_RIGHT_INVERT = true;
 
 	public static final double JOYSTICK_TURNING_CUTOFF = 0.2;
+	public static final double JOYSTICK_TURNING_MAX_RAW = 1.5;
 	public static final double JOYSTICK_SPEED_CUTOFF = 0.05;
 	public static final double JOYSTICK_TURNING_OFFSET = 0;
 	public static final double JOYSTICK_SPEED_OFFSET = 0;

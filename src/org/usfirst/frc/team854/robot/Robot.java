@@ -143,7 +143,7 @@ public class Robot extends CustomIterativeRobot {
 	 * The robot's initialisation method.
 	 */
 	public void robotInit() {
-		CameraServer.getInstance().startAutomaticCapture("Front camera", 0);
+		// CameraServer.getInstance().startAutomaticCapture("Front camera", 0);
 		initDevices();
 		
 		initDashboard();
@@ -206,15 +206,15 @@ public class Robot extends CustomIterativeRobot {
 
 //		AngularMotionCommand command = new AngularMotionCommand(-6);
 //		LinearMotionCommand command = new LinearMotionCommand(15);
-//		TestCommandGroup command = new TestCommandGroup();
-//		Scheduler.getInstance().add(command);
+		TestCommandGroup command = new TestCommandGroup();
+		Scheduler.getInstance().add(command);
 		
 		// autonomousCommand = new TestCommandGroup(-6);
 		// autonomousCommand.start();
 		// chassisSubsystem.resetTargetAngle();
-		AutoTarget target = targetChooser.getSelected();
-		autonomousCommand = locationChooser.getSelected();
-		autonomousCommand.init(DriverStation.getInstance().getGameSpecificMessage(), target);
+//		AutoTarget target = targetChooser.getSelected();
+//		autonomousCommand = locationChooser.getSelected();
+//		autonomousCommand.init(DriverStation.getInstance().getGameSpecificMessage(), target);
     	// Scheduler.getInstance().add(autonomousCommand);
     	
         updateDashboard();

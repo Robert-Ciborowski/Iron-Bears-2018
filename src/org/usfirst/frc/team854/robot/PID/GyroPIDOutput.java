@@ -40,17 +40,9 @@ public class GyroPIDOutput implements PIDOutput {
 		double rightSpeed = targetAngularSpeed + angleOffset;
 
 //		System.out.println("TAS: " + targetAngularSpeed);
-		
-		// someRandomConstant is actually supposed to be the values commented out below, according to our algorithm.
-		// However, it doesn't seem to be (due to the values of RobotStrucureConstants potentially being wrong). So
-		// instead, we can find some random constant experimentally and use it!
-		double someRandomConstant = 0.01798360938;
 
-//		leftSpeed *= RobotStructureConstants.WHEEL_RADIUS * (RobotStructureConstants.ENCODER_COUNTS_PER_INCH / RobotStructureConstants.MOTOR_MAX_RATE);
-//		rightSpeed *= RobotStructureConstants.WHEEL_RADIUS * (RobotStructureConstants.ENCODER_COUNTS_PER_INCH / RobotStructureConstants.MOTOR_MAX_RATE);
-		
-		leftSpeed *= someRandomConstant;
-		rightSpeed *= someRandomConstant;
+		leftSpeed *= RobotStructureConstants.WHEEL_RADIUS * (RobotStructureConstants.ENCODER_COUNTS_PER_INCH / RobotStructureConstants.MOTOR_MAX_RATE);
+		rightSpeed *= RobotStructureConstants.WHEEL_RADIUS * (RobotStructureConstants.ENCODER_COUNTS_PER_INCH / RobotStructureConstants.MOTOR_MAX_RATE);
 
 		leftSpeed = Math.max(-1, Math.min(1, leftSpeed));
 		rightSpeed = Math.max(-1, Math.min(1, rightSpeed));
@@ -58,7 +50,7 @@ public class GyroPIDOutput implements PIDOutput {
 //		System.out.println("Target Speed: " + targetSpeed);
 //		System.out.println("Target Angular Speed: " + targetAngularSpeed);
 //		System.out.println("Angle Offset: " + angleOffset);
-		System.out.println("Left Gyro PID Output: " + leftSpeed);
+		// System.out.println("Left Gyro PID Output: " + leftSpeed + ", Right Gyro PID Output: " + rightSpeed);
 //		System.out.println("Right: " + rightSpeed);
 //		System.out.println("--------------------");
 		// System.out.println("Left speed: " + leftSpeed);

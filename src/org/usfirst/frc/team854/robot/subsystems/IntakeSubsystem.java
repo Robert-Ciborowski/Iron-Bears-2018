@@ -147,7 +147,7 @@ public class IntakeSubsystem extends CustomSubsystem {
 	@Override
 	public void updateDashboard() {
 		SmartDashboard.putString("Is there a box?", fullLimitSwitch.get() ? "yes" : "no");
-		SmartDashboard.putBoolean("cube", true);
+		SmartDashboard.putBoolean("cube", fullLimitSwitch.get());
 //		BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
 //		img.getGraphics().setColor(Color.RED);
 //		img.getGraphics().fillRect(0, 0, 100, 100);

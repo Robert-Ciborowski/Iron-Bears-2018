@@ -41,6 +41,11 @@ public class OperatorInterface {
 			.addFilter(new LogarithmicFilter(Math.PI))
 			.addFilter(new CutoffFilter(UserInterfaceConstants.JOYSTICK_TURNING_CUTOFF))
 			.build();
+	private Filter rawTurningFilter = new CompoundFilter.Builder()
+			.addFilter(new LinearFilter(UserInterfaceConstants.JOYSTICK_TURNING_OFFSET))
+			.addFilter(new LogarithmicFilter(UserInterfaceConstants.JOYSTICK_TURNING_MAX_RAW))
+			.addFilter(new CutoffFilter(UserInterfaceConstants.JOYSTICK_TURNING_CUTOFF))
+			.build();
 	private Filter speedFilter = new CompoundFilter.Builder()
 			.addFilter(new LinearFilter(UserInterfaceConstants.JOYSTICK_SPEED_OFFSET))
 			.addFilter(new LogarithmicFilter())
@@ -55,7 +60,7 @@ public class OperatorInterface {
 		climberUpButton.whenReleased(new ClimberStateCommand(Direction1D.OFF));
 		climberDownButton.whenPressed(new ClimberStateCommand(Direction1D.REVERSE));
 		climberDownButton.whenReleased(new ClimberStateCommand(Direction1D.OFF));
-		// testButton.whenPressed(new LinearMotionCommand(1));
+		testButton.whenPressed(new LinearMotionCommand(1));
 	}
 	
 	public void setCurrentMode(RobotMode mode) {
@@ -93,6 +98,11 @@ public class OperatorInterface {
 	public double getTurn() {
 		double rawTurn = -mainController.getRawAxis(UserInterfaceConstants.AXIS_ID_TURN);
 		return turningFilter.filter(rawTurn);
+	}
+	
+	public double getRawTurn() {
+		double rawTurn = -mainController.getRawAxis(UserInterfaceConstants.AXIS_ID_TURN);
+		return rawTurningFilter.filter(rawTurn);
 	}
 	
 	/** Returns the max speed that is inputed by the user.*/

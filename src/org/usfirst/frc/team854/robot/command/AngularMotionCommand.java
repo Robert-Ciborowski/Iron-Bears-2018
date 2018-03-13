@@ -23,7 +23,6 @@ public class AngularMotionCommand extends Command {
 	
 	@Override
 	public void execute() {
-		System.out.println("Angular.");
 //		Robot.chassisSubsystem.setAutonomousTarget(angle - Robot.chassisSubsystem.getGyroAngle(), 0);
 //		System.out.println("New: " + (angle - Robot.chassisSubsystem.getGyroAngle()));
 	}

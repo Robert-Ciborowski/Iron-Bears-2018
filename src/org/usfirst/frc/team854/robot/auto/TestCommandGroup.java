@@ -35,7 +35,8 @@ public class TestCommandGroup extends AutoCommandGroup {
 //		addSequential(new LinearMotionCommand(5));
 //		addSequential(new AngularMotionCommand(Math.PI / 2));
 		// addSequential(new CurvedMotionCommand(Math.PI / 2, 15));
-		//addSequential(new AngularMotionCommand(-Math.PI / 2));
+		addSequential(new AngularMotionCommand(-Math.PI));
+		// addSequential(new AngularMotionCommand(Math.PI));
 	}
 
 	@Override
