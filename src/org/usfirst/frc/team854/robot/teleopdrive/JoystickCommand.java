@@ -9,15 +9,11 @@ package org.usfirst.frc.team854.robot.teleopdrive;
 
 import org.usfirst.frc.team854.robot.Robot;
 import org.usfirst.frc.team854.robot.RobotMode;
-import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
-import org.usfirst.frc.team854.robot.hardware.InterfaceType;
 import org.usfirst.frc.team854.robot.subsystems.RobotArmLevel;
 import org.usfirst.frc.team854.robot.subsystems.TurningMode;
 import org.usfirst.frc.team854.robot.utils.Direction1D;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class JoystickCommand extends Command {
 	public JoystickCommand() {
@@ -39,9 +35,8 @@ public class JoystickCommand extends Command {
 
 	@Override
 	protected void execute() {
-		System.out.println("Executing joystick!");
 		Robot.chassisSubsystem.setTurningMode(TurningMode.RELATIVE);
-		
+
 		double speed = Robot.oi.getSpeed(); // Positive forward
 		double turn = Robot.oi.getTurn(); // Positive Right
 
@@ -53,11 +48,12 @@ public class JoystickCommand extends Command {
 				} else {
 					testState = true;
 				}
+
 				// Robot.intakeSubsystem.setInnerIntakeDirection(testState ?
 				// Direction1D.FORWARD : Direction1D.OFF);
 				// Robot.intakeSubsystem.setOuterIntakeDirection(testState ?
 				// Direction1D.FORWARD : Direction1D.OFF);
-				Robot.armSubsystem.setArmLevel(testState ? RobotArmLevel.SWITCH : RobotArmLevel.GROUND);
+				// Robot.armSubsystem.setArmLevel(testState ? RobotArmLevel.SWITCH : RobotArmLevel.GROUND);
 				// Robot.armSubsystem.setMotor(1);
 				// Robot.intakeSubsystem.setPneumaticsExtended(testState);
 			}
@@ -111,8 +107,6 @@ public class JoystickCommand extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		System.out.println("Checking finished!");
-		System.out.println(Robot.currentMode != RobotMode.TELEOPERATED);
 		return Robot.currentMode != RobotMode.TELEOPERATED;
 	}
 

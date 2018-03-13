@@ -21,6 +21,5 @@ public class ArmPIDOutput implements PIDOutput {
 	@Override
 	public void pidWrite(double output) {
 		armMotor.set(output);
-		System.out.println(output);
 	}
 }

@@ -20,14 +20,14 @@ import org.usfirst.frc.team854.robot.auto.AutoMiddleCommandGroup;
 import org.usfirst.frc.team854.robot.auto.AutoRightCommandGroup;
 import org.usfirst.frc.team854.robot.auto.AutoTarget;
 import org.usfirst.frc.team854.robot.auto.TestCommandGroup;
-import org.usfirst.frc.team854.robot.command.AngularMotionCommand;
-import org.usfirst.frc.team854.robot.command.LinearMotionCommand;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.DeviceProvider;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
 import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
 import org.usfirst.frc.team854.robot.subsystems.ArmSubsystem;
+import org.usfirst.frc.team854.robot.subsystems.ArmSubsystemWithoutPID;
 import org.usfirst.frc.team854.robot.subsystems.ChassisSubsystem;
+import org.usfirst.frc.team854.robot.subsystems.ClimberSubsystem;
 import org.usfirst.frc.team854.robot.subsystems.IntakeSubsystem;
 import org.usfirst.frc.team854.robot.utils.PIDSourceLogger;
 
@@ -48,8 +48,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends CustomIterativeRobot {
 	// These are the subsystems of the robot.
 	public static ChassisSubsystem chassisSubsystem;
-	public static ArmSubsystem armSubsystem;
+//	public static ArmSubsystem armSubsystem;
+	public static ArmSubsystemWithoutPID armSubsystem;
 	public static IntakeSubsystem intakeSubsystem;
+	public static ClimberSubsystem climberSubsystem;
 
 	// This provides all devices to the robot.
 	public static DeviceProvider devices;
@@ -82,8 +84,8 @@ public class Robot extends CustomIterativeRobot {
 				new Encoder(RobotInterfaceConstants.PORT_ENCODER_RIGHT, RobotInterfaceConstants.PORT_ENCODER_RIGHT_2));
 		devices.putDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM,
 				new Encoder(RobotInterfaceConstants.PORT_ENCODER_ARM, RobotInterfaceConstants.PORT_ENCODER_ARM_2));
-		devices.putDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_SWITCH_ARM_HOME,
-				new DigitalInput(RobotInterfaceConstants.PORT_SWITCH_ARM_HOME));
+		//devices.putDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_SWITCH_ARM_HOME,
+			//	new DigitalInput(RobotInterfaceConstants.PORT_SWITCH_ARM_HOME));
 		devices.putDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_SWITCH_INTAKE_FULL,
 				new DigitalInput(RobotInterfaceConstants.PORT_SWITCH_INTAKE_FULL));
 
@@ -94,10 +96,6 @@ public class Robot extends CustomIterativeRobot {
 				new Spark(RobotInterfaceConstants.PORT_MOTOR_DRIVE_RIGHT));
 		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_ARM,
 				new Spark(RobotInterfaceConstants.PORT_MOTOR_ARM));
-//		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT,
-//				new Spark(RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT));
-//		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT,
-//				new Spark(RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT));
 		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_INTAKE_INNER_LEFT,
 				new Spark(RobotInterfaceConstants.PORT_MOTOR_INTAKE_INNER_LEFT));
 		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_INTAKE_INNER_RIGHT,
@@ -106,6 +104,8 @@ public class Robot extends CustomIterativeRobot {
 				new Spark(RobotInterfaceConstants.PORT_MOTOR_INTAKE_OUTER_LEFT));
 		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_INTAKE_OUTER_RIGHT,
 				new Spark(RobotInterfaceConstants.PORT_MOTOR_INTAKE_OUTER_RIGHT));
+		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_CLIMBER,
+				new Spark(RobotInterfaceConstants.PORT_MOTOR_CLIMBER));
 		
 		// These are the PCM devices.
 		devices.putDevice(InterfaceType.PCM, RobotInterfaceConstants.PORT_PNEUMATIC_LEFT,
@@ -119,17 +119,21 @@ public class Robot extends CustomIterativeRobot {
 		
 		// This is our MXP device, an ADIS16448 gyro. It automatically takes the next 4 seconds to calibrate,
 		// blocking changes in other WPILib devices.
-//		ADIS16448_IMU gyro = new ADIS16448_IMU();
-//		devices.putDevice(InterfaceType.MXP, RobotInterfaceConstants.PORT_GYRO, gyro);
+		ADIS16448_IMU gyro = new ADIS16448_IMU();	
+		devices.putDevice(InterfaceType.MXP, RobotInterfaceConstants.PORT_GYRO, gyro);
 
 		chassisSubsystem = new ChassisSubsystem();
-		// chassisSubsystem.setEnabled(false);
+		chassisSubsystem.setEnabled(true);
 		
-		armSubsystem = new ArmSubsystem();
-		armSubsystem.setEnabled(false);
+//		armSubsystem = new ArmSubsystem();
+		armSubsystem = new ArmSubsystemWithoutPID();
+		armSubsystem.setEnabled(true);
 
 		intakeSubsystem = new IntakeSubsystem();
-		intakeSubsystem.setEnabled(false);
+		intakeSubsystem.setEnabled(true);
+		
+		climberSubsystem = new ClimberSubsystem();
+		climberSubsystem.setEnabled(false);
 
 		oi = new OperatorInterface();
 		pdp = new PowerDistributionPanel();
@@ -175,8 +179,9 @@ public class Robot extends CustomIterativeRobot {
 		chassisSubsystem.setCurrentMode(RobotMode.DISABLED);
 		armSubsystem.setCurrentMode(RobotMode.DISABLED);
 		intakeSubsystem.setCurrentMode(RobotMode.DISABLED);
+		climberSubsystem.setCurrentMode(RobotMode.DISABLED);
 		oi.setCurrentMode(RobotMode.DISABLED);
-		logger.output();
+		// logger.output();
 		updateDashboard();
 	}
 
@@ -194,18 +199,22 @@ public class Robot extends CustomIterativeRobot {
 		chassisSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		armSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		intakeSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
+		climberSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		oi.setCurrentMode(RobotMode.AUTONOMOUS);
+		
+		chassisSubsystem.resetTargetAngle();
 
 //		AngularMotionCommand command = new AngularMotionCommand(-6);
 //		LinearMotionCommand command = new LinearMotionCommand(15);
-		TestCommandGroup command = new TestCommandGroup();
-		Scheduler.getInstance().add(command);
+//		TestCommandGroup command = new TestCommandGroup();
+//		Scheduler.getInstance().add(command);
 		
 		// autonomousCommand = new TestCommandGroup(-6);
 		// autonomousCommand.start();
-//		AutoTarget target = targetChooser.getSelected();
-//		autonomousCommand = locationChooser.getSelected();
-//		autonomousCommand.init(DriverStation.getInstance().getGameSpecificMessage(), target);
+		// chassisSubsystem.resetTargetAngle();
+		AutoTarget target = targetChooser.getSelected();
+		autonomousCommand = locationChooser.getSelected();
+		autonomousCommand.init(DriverStation.getInstance().getGameSpecificMessage(), target);
     	// Scheduler.getInstance().add(autonomousCommand);
     	
         updateDashboard();
@@ -228,6 +237,7 @@ public class Robot extends CustomIterativeRobot {
 		chassisSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
 		armSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
 		intakeSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
+		climberSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
 		oi.setCurrentMode(RobotMode.TELEOPERATED);
 		
 		// This makes sure that the autonomous stops running when
@@ -253,6 +263,7 @@ public class Robot extends CustomIterativeRobot {
 		chassisSubsystem.setCurrentMode(RobotMode.TEST);
 		armSubsystem.setCurrentMode(RobotMode.TEST);
 		intakeSubsystem.setCurrentMode(RobotMode.TEST);
+		climberSubsystem.setCurrentMode(RobotMode.TEST);
 		oi.setCurrentMode(RobotMode.TEST);
 		updateDashboard();
 	}
@@ -269,6 +280,7 @@ public class Robot extends CustomIterativeRobot {
 		chassisSubsystem.periodic();
 		intakeSubsystem.periodic();
 		armSubsystem.periodic();
+		climberSubsystem.periodic();
 	}
 
 	/** This updates the FRC dashboard.*/
@@ -277,6 +289,7 @@ public class Robot extends CustomIterativeRobot {
 		chassisSubsystem.updateDashboard();
 		intakeSubsystem.updateDashboard();
 		armSubsystem.updateDashboard();
+		climberSubsystem.updateDashboard();
 		oi.updateDashboard();
 	}
 }

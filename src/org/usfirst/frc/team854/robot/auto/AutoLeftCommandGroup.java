@@ -33,16 +33,19 @@ public class AutoLeftCommandGroup extends AutoCommandGroup {
 				loadNone();
 				break;
 			default:
+				System.out.println("hi");
 				break;
 		}
 	}
 
 	private void loadNone() {
-		addSequential(new LinearMotionCommand(20));
+		System.out.println("hin");
+		addSequential(new LinearMotionCommand(10));
 	}
 
 	private void loadSwitch(boolean targetOnLeft) {
-		addParallel(new ArmLevelCommand(RobotArmLevel.SWITCH));
+		System.out.println("hisw");
+		//addParallel(new ArmLevelCommand(RobotArmLevel.SWITCH));
 		if (targetOnLeft) {
 			addSequential(new LinearMotionCommand(30));
 			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
@@ -57,6 +60,7 @@ public class AutoLeftCommandGroup extends AutoCommandGroup {
 	}
 
 	private void loadScale(boolean targetOnLeft) {
+		System.out.println("hisc");
 		addParallel(new ArmLevelCommand(RobotArmLevel.SCALE));
 		if (targetOnLeft) {
 			addSequential(new LinearMotionCommand(50));

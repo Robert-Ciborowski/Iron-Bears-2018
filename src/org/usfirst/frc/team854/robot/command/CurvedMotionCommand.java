@@ -8,6 +8,7 @@
 package org.usfirst.frc.team854.robot.command;
 
 import org.usfirst.frc.team854.robot.Robot;
+import org.usfirst.frc.team854.robot.subsystems.TurningMode;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -22,12 +23,18 @@ public class CurvedMotionCommand extends Command {
 	
 	@Override
 	public void initialize() {
+		Robot.chassisSubsystem.setTurningMode(TurningMode.ABSOLUTE);
 		Robot.chassisSubsystem.setAutonomousTarget(angle, distance);
+		Robot.chassisSubsystem.enableAllPIDs();
+	}
+	
+	@Override
+	protected void end() {
+		Robot.chassisSubsystem.disableAllComponents();
 	}
 	
 	@Override
 	protected boolean isFinished() {
 		return Robot.chassisSubsystem.isAutonomousOnTarget();
 	}
-
 }

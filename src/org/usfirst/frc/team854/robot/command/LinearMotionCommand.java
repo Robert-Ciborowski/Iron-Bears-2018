@@ -23,29 +23,26 @@ public class LinearMotionCommand extends Command {
 	
 	@Override
 	public void initialize() {
+		System.out.println("Lineari.");
+		// Robot.chassisSubsystem.resetTargetAngle();
 		angle = Robot.chassisSubsystem.getTargetAngle();
 		Robot.chassisSubsystem.setAutonomousTarget(angle, distance);
-		System.out.println(angle + ", " + distance);
 		Robot.chassisSubsystem.enableAllPIDs();
 	}
 	
 	@Override
 	protected boolean isFinished() {
-		if (Robot.chassisSubsystem.isAutonomousOnTarget()) {
-			System.out.println("DONE LINEAR!");
-		}
 		return Robot.chassisSubsystem.isAutonomousOnTarget();
 	}
 	
-	// We were hear. The robot was changing its angle!
 	@Override
 	protected void execute() {
-		// System.out.println("Linear.");
+		System.out.println("Linear.");
 	}
 	
 	@Override
 	protected void end() {
-		System.out.println("ENDED LINEAR!");
+		System.out.println("lend");
 		Robot.chassisSubsystem.disableAllComponents();
 	}
 }

@@ -12,13 +12,12 @@ public interface RobotInterfaceConstants {
 	// These are the PWM ports.
 	public static final int PORT_MOTOR_DRIVE_LEFT = 0;
 	public static final int PORT_MOTOR_DRIVE_RIGHT = 1;
-	public static final int PORT_MOTOR_MINICIM_LEFT = 3;
-	public static final int PORT_MOTOR_MINICIM_RIGHT = 2;
 	public static final int PORT_MOTOR_ARM = 2;
 	public static final int PORT_MOTOR_INTAKE_INNER_LEFT = 3;
 	public static final int PORT_MOTOR_INTAKE_INNER_RIGHT = 4;
 	public static final int PORT_MOTOR_INTAKE_OUTER_LEFT = 5;
 	public static final int PORT_MOTOR_INTAKE_OUTER_RIGHT = 6;
+	public static final int PORT_MOTOR_CLIMBER = 7;
 
 	// These are the DIO ports.
 	public static final int PORT_ENCODER_LEFT = 2;
@@ -27,7 +26,7 @@ public interface RobotInterfaceConstants {
 	public static final int PORT_ENCODER_RIGHT_2 = 1;
 	public static final int PORT_ENCODER_ARM = 8;
 	public static final int PORT_ENCODER_ARM_2 = 9;
-	public static final int PORT_SWITCH_ARM_HOME = 6;
+	// public static final int PORT_SWITCH_ARM_HOME = 6;
 	public static final int PORT_SWITCH_INTAKE_FULL = 7;
 
 	// These are the analog ports.

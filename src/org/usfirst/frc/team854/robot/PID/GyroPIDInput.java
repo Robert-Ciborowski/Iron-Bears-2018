@@ -28,8 +28,8 @@ public class GyroPIDInput implements PIDSource {
 
 	private TurningMode turningMode = UserInterfaceConstants.INITIAL_TURNING_MODE;
 	
-	private final AnalogGyro gyro = Robot.devices.getDevice(InterfaceType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
-	// private final ADIS16448_IMU gyro = Robot.devices.getDevice(InterfaceType.MXP, RobotInterfaceConstants.PORT_GYRO);
+	// private final AnalogGyro gyro = Robot.devices.getDevice(InterfaceType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
+	private final ADIS16448_IMU gyro = Robot.devices.getDevice(InterfaceType.MXP, RobotInterfaceConstants.PORT_GYRO);
 	
 	public GyroPIDInput() {
 	}
@@ -114,22 +114,23 @@ public class GyroPIDInput implements PIDSource {
 	
 	public void updateDashboard() {
 		// This is for the old gyro.
-		SmartDashboard.putNumber("Gyro-X (radians)", -gyro.getAngle() * (Math.PI / 180.0));
+		// SmartDashboard.putNumber("Gyro-X (radians)", -gyro.getAngle() * (Math.PI / 180.0));
 		
 		// This is for the new gyro.
-		// SmartDashboard.putNumber("Gyro-X (radians)", gyro.getAngleX() * (Math.PI / 180.0));
+		SmartDashboard.putNumber("Gyro-X (radians)", gyro.getAngleX() * (Math.PI / 180.0));
 		SmartDashboard.putNumber("angle", currentAngleForRelativePID);
 	}
 
 	public void init() {
 		// This was all made for the old gyro, not the new one.
-		gyro.initGyro();
-		gyro.setSensitivity(UserInterfaceConstants.GYRO_SENSITIVITY);
-		gyro.calibrate();
+//		gyro.initGyro();
+//		gyro.setSensitivity(UserInterfaceConstants.GYRO_SENSITIVITY);
+//		gyro.calibrate();
 	}
 
 	public void reset() {
 		gyro.reset();
+		targetAngle = 0;
 		currentAngleForRelativePID = 0;
 	}
 
@@ -144,8 +145,8 @@ public class GyroPIDInput implements PIDSource {
 
 	public double getGyroAngle() {
 		// Test robot:
-		return gyro.getAngle();
+		// return gyro.getAngle();
 		// Actual robot:
-		// return stuff
+		return gyro.getAngleX();
 	}
 }

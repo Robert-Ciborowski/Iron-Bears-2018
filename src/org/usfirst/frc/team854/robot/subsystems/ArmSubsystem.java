@@ -1,5 +1,5 @@
 /**
- * Name: RobotArmSubsystem
+ * Name: ArmSubsystem
  * Authors: Julian Dominguez-Schatz, Robert Ciborowski, Shaiza Hashmi
  * Date: 10/02/2018
  * Description: The subsystem of our robot that controls its arm.
@@ -15,8 +15,6 @@ import org.usfirst.frc.team854.robot.PID.ArmPIDOutput;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
-import org.usfirst.frc.team854.robot.operatorinterface.OperatorInterface;
-import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 import org.usfirst.frc.team854.robot.utils.Direction1D;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -29,7 +27,7 @@ public class ArmSubsystem extends CustomSubsystem {
 	private DigitalInput homeLimitSwitch = Robot.devices.getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_SWITCH_INTAKE_FULL);
 	private Encoder encoder = Robot.devices.getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM);
 	private RobotArmLevel targetLevel = RobotArmLevel.GROUND;
-	private boolean isCalibrated = false;
+	private boolean calibrated = false;
 	
 	private Encoder armEncoder = Robot.devices.getDevice(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_ARM);
 
@@ -118,7 +116,6 @@ public class ArmSubsystem extends CustomSubsystem {
     
     public void setMotor(double speed) {
     	((Spark) Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_ARM)).set(speed);
-    	System.out.println(speed);
     }
 
     public void increaseTargetLevel() {
@@ -175,7 +172,7 @@ public class ArmSubsystem extends CustomSubsystem {
     }
 	
 	public boolean isArmCalibrated() {
-		return isCalibrated;
+		return calibrated;
 	}
 	
 	@Override

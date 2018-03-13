@@ -19,12 +19,11 @@ public class AngularMotionCommand extends Command {
 		super("AngularMotionCommand");
 		requires(Robot.chassisSubsystem);
 		this.angle = angle;
-		System.out.println("Constructed.");
 	}
 	
 	@Override
 	public void execute() {
-		// System.out.println("Angular.");
+		System.out.println("Angular.");
 //		Robot.chassisSubsystem.setAutonomousTarget(angle - Robot.chassisSubsystem.getGyroAngle(), 0);
 //		System.out.println("New: " + (angle - Robot.chassisSubsystem.getGyroAngle()));
 	}
@@ -33,20 +32,17 @@ public class AngularMotionCommand extends Command {
 	public void initialize() {
 		Robot.chassisSubsystem.setTurningMode(TurningMode.ABSOLUTE);
 		Robot.chassisSubsystem.setAutonomousTarget(angle, 0);
-		Robot.chassisSubsystem.enableAllPIDs();
-		System.out.println("Inited.");
+		Robot.chassisSubsystem.useGyroPIDOnly();
 	}
 	
 	@Override
 	protected void end() {
-		Robot.chassisSubsystem.disableAllComponents();
+		// Robot.chassisSubsystem.disableAllComponents();
+		Robot.chassisSubsystem.disableDistancePIDOnly();
 	}
 	
 	@Override
 	protected boolean isFinished() {
-		if (Robot.chassisSubsystem.isAngleOnTarget()) {
-			System.out.println("ANGLE IS ON TARGET!");
-		}
 		return Robot.chassisSubsystem.isAngleOnTarget();
 	}
 }
