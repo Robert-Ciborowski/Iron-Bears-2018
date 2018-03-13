@@ -18,6 +18,10 @@ public class IntakeFeelersCommand extends Command {
 	public IntakeFeelersCommand() {
 		requires(Robot.intakeSubsystem);
 	}
+	
+	public void execute() {
+		System.out.println("Executing.");
+	}
 
 	@Override
 	protected void initialize() {

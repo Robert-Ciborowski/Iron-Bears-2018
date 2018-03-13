@@ -36,15 +36,25 @@ public class GyroPIDOutput implements PIDOutput {
 		// This converts the previous speed to speed of the wheel in rotations/s.
 		double leftSpeed = targetAngularSpeed - angleOffset;
 		double rightSpeed = targetAngularSpeed + angleOffset;
+		
+//		System.out.println("TAS: " + targetAngularSpeed);
 
 		leftSpeed /= (RobotStructureConstants.ENCODER_MAX_RATE_LEFT / RobotStructureConstants.ENCODER_COUNTS_PER_INCH);
-		rightSpeed /= (UserInterfaceConstants.ENCODER_MAX_RATE_RIGHT / RobotStructureConstants.ENCODER_COUNTS_PER_INCH);
+		rightSpeed /= (RobotStructureConstants.ENCODER_MAX_RATE_RIGHT / RobotStructureConstants.ENCODER_COUNTS_PER_INCH);
 		
 //		leftSpeed = Math.max(0, Math.min(0.1, leftSpeed));
 //		rightSpeed = Math.max(0, Math.min(0.1, rightSpeed));
 		
+		
+		
+//		System.out.println("Target Speed: " + targetSpeed);
+//		System.out.println("Target Angular Speed: " + targetAngularSpeed);
+//		System.out.println("Angle Offset: " + angleOffset);
+//		System.out.println("Left: " + leftSpeed);
+//		System.out.println("Right: " + rightSpeed);
+//		System.out.println("--------------------");
 		Robot.chassisSubsystem.setMotors(leftSpeed, rightSpeed);
-		System.out.println("Motors: " + leftSpeed + " " + rightSpeed);
+//		System.out.println("Motors: " + leftSpeed + " " + rightSpeed);
 		SmartDashboard.putNumber("Output Angle: ", outputAngle);
 	}
 

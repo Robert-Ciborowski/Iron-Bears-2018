@@ -41,27 +41,39 @@ public class ChassisSubsystem extends CustomSubsystem {
 	// These are the drive motors.
 	private Spark leftMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_DRIVE_LEFT);
 	private Spark rightMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_DRIVE_RIGHT);
-//	private Spark leftMiniCIMMotor = Robot.devices.getDevice(InterfaceType.PWM,
-//			RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT);
-//	private Spark rightMiniCIMMotor = Robot.devices.getDevice(InterfaceType.PWM,
-//			RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT);
+	private Spark leftMiniCIMMotor = Robot.devices.getDevice(InterfaceType.PWM,
+			RobotInterfaceConstants.PORT_MOTOR_MINICIM_LEFT);
+	private Spark rightMiniCIMMotor = Robot.devices.getDevice(InterfaceType.PWM,
+			RobotInterfaceConstants.PORT_MOTOR_MINICIM_RIGHT);
 
 	public ChassisSubsystem() {
 		leftMotor.setInverted(UserInterfaceConstants.MOTOR_LEFT_INVERT);
 		rightMotor.setInverted(UserInterfaceConstants.MOTOR_RIGHT_INVERT);
-//		leftMiniCIMMotor.setInverted(UserInterfaceConstants.MINICIM_LEFT_INVERT);
-//		rightMiniCIMMotor.setInverted(UserInterfaceConstants.MINICIM_RIGHT_INVERT);
+		leftMiniCIMMotor.setInverted(UserInterfaceConstants.MINICIM_LEFT_INVERT);
+		rightMiniCIMMotor.setInverted(UserInterfaceConstants.MINICIM_RIGHT_INVERT);
 
-		gyroPIDController.setInputRange(-Math.PI, Math.PI);
+		gyroPIDController.setInputRange(-1000000, 1000000);
 		gyroPIDController.setOutputRange(-Math.PI, Math.PI);
 		gyroPIDController.setSetpoint(0);
-		gyroPIDController.setAbsoluteTolerance(0.05);
+		
+		// Real robot:
+		// gyroPIDController.setAbsoluteTolerance(0.05);
+		
+		// Test robot:
+		gyroPIDController.setAbsoluteTolerance(0.3);
+		
 		gyroPIDController.setContinuous(false);
 		
 		distancePIDController.setInputRange(-100000, 100000);
 		distancePIDController.setOutputRange(-1, 1);
 		distancePIDController.setSetpoint(1);
-		distancePIDController.setAbsoluteTolerance(0.05);
+		
+		// Real robot:
+		// distancePIDController.setAbsoluteTolerance(0.05);
+		
+		// Test robot:
+		distancePIDController.setAbsoluteTolerance(40);
+		
 		distancePIDController.setContinuous(false);
 		
 		currentMode = RobotMode.DISABLED;
@@ -92,7 +104,6 @@ public class ChassisSubsystem extends CustomSubsystem {
 					setGyroTargetMotion(0, 0);
 					gyroPIDController.enable();
 					distancePIDController.disable();
-					OperatorInterface.mainJoystickCommand.setEnabled(true);
 					gyroPIDInput.reset();
 					break;
 				case AUTONOMOUS:
@@ -100,13 +111,11 @@ public class ChassisSubsystem extends CustomSubsystem {
 					distancePIDController.reset();
 					gyroPIDController.enable();
 					distancePIDController.enable();
-					OperatorInterface.mainJoystickCommand.setEnabled(false);
 					gyroPIDInput.reset();
 					break;
 				case DISABLED:
 					gyroPIDController.disable();
 					distancePIDController.disable();
-					OperatorInterface.mainJoystickCommand.setEnabled(false);
 					break;
 				case TEST:
 					break;
@@ -115,14 +124,25 @@ public class ChassisSubsystem extends CustomSubsystem {
 			}
 		}
 	}
+	
+	public void setAutonomousDistance(double distance) {
+		distancePIDInput.setDistance(distance);
+	}
 
 	public void setAutonomousTarget(double angle, double distance) {
+		System.out.println(angle + " is the angle.");
 		// If it doesn't drive, this is the likely culprit.
 		if (currentMode == RobotMode.AUTONOMOUS) {
 			distancePIDInput.setDistance(distance);
 			distancePIDController.setSetpoint(1);
 			gyroPIDInput.setTargetAngle(angle);
+			distancePIDOutput.setTargetAngle(angle);
+//			System.out.println(angle + " is the new target.");
 		}
+	}
+	
+	public double getTargetAngle() {
+		return gyroPIDInput.getTargetAngle();
 	}
 
 	public boolean isAutonomousOnTarget() {
@@ -135,18 +155,14 @@ public class ChassisSubsystem extends CustomSubsystem {
 			rightMotor.pidWrite(rightMotorValue);
 //			System.out.println(leftMotorValue);
 //			System.out.println(rightMotorValue);
-	//		leftMiniCIMMotor.pidWrite(-leftMotorValue);
-	//		rightMiniCIMMotor.pidWrite(-rightMotorValue);
+			leftMiniCIMMotor.pidWrite(-leftMotorValue);
+			rightMiniCIMMotor.pidWrite(-rightMotorValue);
+//			System.out.println("Motors: " + leftMotorValue + " " + rightMotorValue);
 		}
 	}
 
 	public void setTurningMode(TurningMode turningMode) {
 		gyroPIDInput.setTurningMode(turningMode);
-	}
-
-	@Override
-	public void initDefaultCommand() {
-		setDefaultCommand(OperatorInterface.mainJoystickCommand);
 	}
 
 	@Override
@@ -156,14 +172,37 @@ public class ChassisSubsystem extends CustomSubsystem {
 		distancePIDInput.updateDashboard();
 		SmartDashboard.putData("Gyro Controller", gyroPIDController);
 		SmartDashboard.putData("Distance Controller", distancePIDController);
+		SmartDashboard.putBoolean("Is Gyro On Target",gyroPIDController.onTarget());
+		SmartDashboard.putBoolean("Is Distance On Target", distancePIDController.onTarget());
 	}
 
 	public boolean isAngleOnTarget() {
 		return gyroPIDController.onTarget();
 	}
+	
+	public double getGyroAngle() {
+		return gyroPIDInput.getGyroAngle();
+	}
 
 	public void setGyroTargetMotion(double angle, double speed) {
 		gyroPIDInput.setTargetAngle(angle);
 		gyroPIDOutput.setTargetSpeed(speed);
+	}
+
+	@Override
+	protected void initDefaultCommand() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void enableAllPIDs() {
+		gyroPIDController.enable();
+		distancePIDController.enable();
+	}
+	
+	public void disableAllComponents() {
+		gyroPIDController.disable();
+		distancePIDController.disable();
+		setMotors(0, 0);
 	}
 }

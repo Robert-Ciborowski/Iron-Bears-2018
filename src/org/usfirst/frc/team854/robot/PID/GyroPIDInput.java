@@ -28,8 +28,8 @@ public class GyroPIDInput implements PIDSource {
 
 	private TurningMode turningMode = UserInterfaceConstants.INITIAL_TURNING_MODE;
 	
-	// private final AnalogGyro gyro = Robot.devices.getDevice(InterfaceType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
-	private final ADIS16448_IMU gyro = Robot.devices.getDevice(InterfaceType.MXP, RobotInterfaceConstants.PORT_GYRO);
+	private final AnalogGyro gyro = Robot.devices.getDevice(InterfaceType.ANALOG, RobotInterfaceConstants.PORT_GYRO);
+	// private final ADIS16448_IMU gyro = Robot.devices.getDevice(InterfaceType.MXP, RobotInterfaceConstants.PORT_GYRO);
 	
 	public GyroPIDInput() {
 	}
@@ -48,21 +48,26 @@ public class GyroPIDInput implements PIDSource {
 	public double pidGet() {
 		if (turningMode == TurningMode.ABSOLUTE) {
 			// This was done using the old gyro.
-			// double gyroAngle = Math.toRadians(gyro.getAngle());
+			double gyroAngle = -Math.toRadians(gyro.getAngle());
 			
 			// This gets the angle via the new gyro.
-			double gyroAngle = Math.toRadians(gyro.getAngleX());
+			// double gyroAngle = Math.toRadians(gyro.getAngleX());
 			
 			// This takes the difference between the actual heading and the target angle. If travelling at the right
 			// angle, this should be 0. That's how absolute turning works.
 			double transformedTargetAngle = targetAngle - gyroAngle;
-			return descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
+			// System.out.println("Target angle: " + targetAngle);
+			// System.out.println(targetAngle + " is the target angle, " + gyroAngle + " is the gyro angle!");
+			// return descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
+			return transformedTargetAngle;
 		} else if (turningMode == TurningMode.RELATIVE) {
 			long currentTime = System.currentTimeMillis();
 			currentAngleForRelativePID += targetAngle * (currentTime - timeOfLastPIDGet) / 1000;
+			// System.out.println("Actual target: " + targetAngle);
 			timeOfLastPIDGet = currentTime;
 			
-			double gyroAngle = Math.toRadians(gyro.getAngleX());
+			double gyroAngle = -Math.toRadians(gyro.getAngle());
+			// double gyroAngle = Math.toRadians(gyro.getAngleX());
 			double transformedTargetAngle = currentAngleForRelativePID - gyroAngle;
 			//System.out.println("Joystick-Stored Angle: " + currentAngleForRelativePID);
 			//System.out.println("Angle provided by joy: " + transformedTargetAngle + ", Gyro Angle: " + gyroAngle);
@@ -73,22 +78,6 @@ public class GyroPIDInput implements PIDSource {
 			// System.out.println("Trans: " + transformedTargetAngle);
 			SmartDashboard.putNumber("Target Angle: ", currentAngleForRelativePID);
 			return transformedTargetAngle;
-
-//			// This was done using the old gyro.
-//			// double gyroAngle = Math.toRadians(gyro.getAngle());
-//			
-//			// This gets the angle via the new gyro.
-//			double gyroAngle = Math.toRadians(gyro.getAngleX());
-//						
-//			// This uses the often-preferred relative turning mode.
-//			long currentTime = System.currentTimeMillis();
-//			currentAngleForRelativePID -= targetAngle * (currentTime - timeOfLastPIDGet) / 1000;
-//			timeOfLastPIDGet = currentTime;
-//			
-//			double transformedTargetAngle = currentAngleForRelativePID - gyroAngle;
-//			// transformedTargetAngle = descaleValue(transformedTargetAngle, -Math.PI, Math.PI);
-//			System.out.println("Current " + currentAngleForRelativePID);
-//			return transformedTargetAngle;
 		} else {
 			throw new IllegalStateException("Stop screwing with the robot.");
 		}
@@ -124,15 +113,19 @@ public class GyroPIDInput implements PIDSource {
 	}
 	
 	public void updateDashboard() {
-		SmartDashboard.putNumber("Gyro-X (radians)", gyro.getAngleX() * (Math.PI / 180.0));
+		// This is for the old gyro.
+		SmartDashboard.putNumber("Gyro-X (radians)", -gyro.getAngle() * (Math.PI / 180.0));
+		
+		// This is for the new gyro.
+		// SmartDashboard.putNumber("Gyro-X (radians)", gyro.getAngleX() * (Math.PI / 180.0));
 		SmartDashboard.putNumber("angle", currentAngleForRelativePID);
 	}
 
 	public void init() {
 		// This was all made for the old gyro, not the new one.
-//		gyro.initGyro();
-//		gyro.setSensitivity(UserInterfaceConstants.GYRO_SENSITIVITY);
-//		gyro.calibrate();
+		gyro.initGyro();
+		gyro.setSensitivity(UserInterfaceConstants.GYRO_SENSITIVITY);
+		gyro.calibrate();
 	}
 
 	public void reset() {
@@ -142,5 +135,17 @@ public class GyroPIDInput implements PIDSource {
 
 	public void setTargetAngle(double targetAngle) {
 		this.targetAngle = targetAngle;
+		// System.out.println("Target angle is set to: " + targetAngle);
+	}
+	
+	public double getTargetAngle() {
+		return targetAngle;
+	}
+
+	public double getGyroAngle() {
+		// Test robot:
+		return gyro.getAngle();
+		// Actual robot:
+		// return stuff
 	}
 }
