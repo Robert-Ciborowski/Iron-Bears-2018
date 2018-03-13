@@ -19,9 +19,6 @@ import org.usfirst.frc.team854.robot.auto.AutoLeftCommandGroup;
 import org.usfirst.frc.team854.robot.auto.AutoMiddleCommandGroup;
 import org.usfirst.frc.team854.robot.auto.AutoRightCommandGroup;
 import org.usfirst.frc.team854.robot.auto.AutoTarget;
-import org.usfirst.frc.team854.robot.auto.TestCommandGroup;
-import org.usfirst.frc.team854.robot.command.AngularMotionCommand;
-import org.usfirst.frc.team854.robot.command.LinearMotionCommand;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.DeviceProvider;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
@@ -34,7 +31,6 @@ import org.usfirst.frc.team854.robot.utils.PIDSourceLogger;
 import com.analog.adis16448.frc.ADIS16448_IMU;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -64,8 +60,6 @@ public class Robot extends CustomIterativeRobot {
 
 	private SendableChooser<AutoCommandGroup> locationChooser;
 	private SendableChooser<AutoTarget> targetChooser;
-	
-	public static RobotMode currentMode;
 
 	private void initDevices() {
 		devices = new DeviceProvider();
@@ -119,8 +113,8 @@ public class Robot extends CustomIterativeRobot {
 		
 		// This is our MXP device, an ADIS16448 gyro. It automatically takes the next 4 seconds to calibrate,
 		// blocking changes in other WPILib devices.
-//		ADIS16448_IMU gyro = new ADIS16448_IMU();
-//		devices.putDevice(InterfaceType.MXP, RobotInterfaceConstants.PORT_GYRO, gyro);
+		ADIS16448_IMU gyro = new ADIS16448_IMU();
+		devices.putDevice(InterfaceType.MXP, RobotInterfaceConstants.PORT_GYRO, gyro);
 
 		chassisSubsystem = new ChassisSubsystem();
 		// chassisSubsystem.setEnabled(false);
@@ -129,7 +123,7 @@ public class Robot extends CustomIterativeRobot {
 		armSubsystem.setEnabled(false);
 
 		intakeSubsystem = new IntakeSubsystem();
-		intakeSubsystem.setEnabled(false);
+//		intakeSubsystem.setEnabled(false);
 
 		oi = new OperatorInterface();
 		pdp = new PowerDistributionPanel();
@@ -139,7 +133,7 @@ public class Robot extends CustomIterativeRobot {
 	 * The robot's initialisation method.
 	 */
 	public void robotInit() {
-		CameraServer.getInstance().startAutomaticCapture("Front camera", 0);
+		// CameraServer.getInstance().startAutomaticCapture("Front camera", 0);
 		initDevices();
 		
 		initDashboard();
@@ -171,7 +165,6 @@ public class Robot extends CustomIterativeRobot {
 
 	/** This runs when the robot's disabled mode is enabled.*/
 	public void disabledInit() {
-		currentMode = RobotMode.DISABLED;
 		chassisSubsystem.setCurrentMode(RobotMode.DISABLED);
 		armSubsystem.setCurrentMode(RobotMode.DISABLED);
 		intakeSubsystem.setCurrentMode(RobotMode.DISABLED);
@@ -190,23 +183,16 @@ public class Robot extends CustomIterativeRobot {
 	 * This runs when the robot's autonomous mode is enabled.
 	 */
 	public void autonomousInit() {
-		currentMode = RobotMode.AUTONOMOUS;
 		chassisSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		armSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		intakeSubsystem.setCurrentMode(RobotMode.AUTONOMOUS);
 		oi.setCurrentMode(RobotMode.AUTONOMOUS);
 
-//		AngularMotionCommand command = new AngularMotionCommand(-6);
-//		LinearMotionCommand command = new LinearMotionCommand(15);
-		TestCommandGroup command = new TestCommandGroup();
-		Scheduler.getInstance().add(command);
-		
-		// autonomousCommand = new TestCommandGroup(-6);
-		// autonomousCommand.start();
-//		AutoTarget target = targetChooser.getSelected();
-//		autonomousCommand = locationChooser.getSelected();
-//		autonomousCommand.init(DriverStation.getInstance().getGameSpecificMessage(), target);
-    	// Scheduler.getInstance().add(autonomousCommand);
+//		autonomousCommand = new TestCommandGroup(-6);
+		AutoTarget target = targetChooser.getSelected();
+		autonomousCommand = locationChooser.getSelected();
+		autonomousCommand.init(DriverStation.getInstance().getGameSpecificMessage(), target);
+    	Scheduler.getInstance().add(autonomousCommand);
     	
         updateDashboard();
     }
@@ -224,7 +210,6 @@ public class Robot extends CustomIterativeRobot {
 	 * This runs when the robot's disabled mode is enabled.
 	 */
 	public void teleopInit() {
-		currentMode = RobotMode.TELEOPERATED;
 		chassisSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
 		armSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
 		intakeSubsystem.setCurrentMode(RobotMode.TELEOPERATED);
@@ -249,7 +234,6 @@ public class Robot extends CustomIterativeRobot {
 	
 	/** This runs when the robot's test mode is enabled.*/
 	public void testInit() {
-		currentMode = RobotMode.TEST;
 		chassisSubsystem.setCurrentMode(RobotMode.TEST);
 		armSubsystem.setCurrentMode(RobotMode.TEST);
 		intakeSubsystem.setCurrentMode(RobotMode.TEST);

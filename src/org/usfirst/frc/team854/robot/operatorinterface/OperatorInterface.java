@@ -9,7 +9,6 @@
 package org.usfirst.frc.team854.robot.operatorinterface;
 
 import org.usfirst.frc.team854.robot.RobotMode;
-import org.usfirst.frc.team854.robot.command.AngularMotionCommand;
 import org.usfirst.frc.team854.robot.command.IntakeFeelersCommand;
 import org.usfirst.frc.team854.robot.command.IntakeSpitCommand;
 import org.usfirst.frc.team854.robot.command.IntakeSwallowCommand;
@@ -19,7 +18,6 @@ import org.usfirst.frc.team854.robot.teleopdrive.JoystickCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OperatorInterface {
@@ -28,7 +26,6 @@ public class OperatorInterface {
 	private Joystick mainController = new Joystick(UserInterfaceConstants.PORT_JOYSTICK);
 	private Button driveReverse = new JoystickButton(mainController, 9);
 	private Button testButton = new JoystickButton(mainController, 10);
-	private Button testButton2 = new JoystickButton(mainController, 8);
 	private Button intakeSwallowButton = new JoystickButton(mainController, 1);
 	private Button intakeSpitButton = new JoystickButton(mainController, 2);
 	private Button intakeFeelersButton = new JoystickButton(mainController, 7);
@@ -45,26 +42,24 @@ public class OperatorInterface {
 			.build();
 	
 	public OperatorInterface() {
+		// Scheduler.getInstance().add(mainJoystickCommand);
 		intakeSwallowButton.whenPressed(new IntakeSwallowCommand());
 		intakeSpitButton.whenPressed(new IntakeSpitCommand());
 		intakeFeelersButton.whenPressed(new IntakeFeelersCommand());
-		testButton2.whenPressed(new AngularMotionCommand(-6));
 	}
 	
 	public void setCurrentMode(RobotMode mode) {
 		switch (mode) {
 			case TELEOPERATED:
-				Scheduler.getInstance().removeAll();
-				Scheduler.getInstance().add(mainJoystickCommand);
+				mainJoystickCommand.setEnabled(true);
 				break;
 			case AUTONOMOUS:
-				Scheduler.getInstance().removeAll();
+				mainJoystickCommand.setEnabled(false);
 				break;
 			case DISABLED:
-				Scheduler.getInstance().removeAll();
+				mainJoystickCommand.setEnabled(false);
 				break;
 			case TEST:
-				Scheduler.getInstance().removeAll();
 				break;
 			default:
 				break;

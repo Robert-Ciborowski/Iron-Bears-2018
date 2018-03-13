@@ -56,15 +56,11 @@ public class DistancePIDInput implements PIDSource {
 
 		double currentCountLeft = Robot.devices.getDeviceValue(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_LEFT) - initialLeftEncoderValue;
 		double currentCountRight = Robot.devices.getDeviceValue(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_RIGHT) - initialRightEncoderValue;
-	
 
 		double averageCurrentCount = (currentCountLeft + currentCountRight) / 2;
 		
-		// double returnValue = averageCurrentCount / targetEncoderValue;
-		double returnValue = averageCurrentCount - targetEncoderValue;
-		// System.out.println("Target: " + targetEncoderValue + ", Average: " + averageCurrentCount);
-		
-		// Note: the setpoint is zero!
+		double returnValue = averageCurrentCount / targetEncoderValue;
+		System.out.println("Target: " + targetEncoderValue + ", Average: " + averageCurrentCount);
 		return returnValue;
 	}
 	
