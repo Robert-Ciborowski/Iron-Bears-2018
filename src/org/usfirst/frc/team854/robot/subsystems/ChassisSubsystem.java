@@ -101,8 +101,11 @@ public class ChassisSubsystem extends CustomSubsystem {
 			switch (mode) {
 				case TELEOPERATED:
 					// setGyroTargetMotion(0, 0);
-					// gyroPIDController.enable();
-					gyroPIDController.disable();
+					if (UserInterfaceConstants.GYRO_PID_DURING_TELEOP) {
+						gyroPIDController.disable();
+					} else {
+						gyroPIDController.enable();
+					}
 					distancePIDController.disable();
 					gyroPIDInput.reset();
 					break;

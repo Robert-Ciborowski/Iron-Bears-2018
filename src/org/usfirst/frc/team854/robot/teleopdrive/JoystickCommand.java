@@ -9,6 +9,7 @@ package org.usfirst.frc.team854.robot.teleopdrive;
 
 import org.usfirst.frc.team854.robot.Robot;
 import org.usfirst.frc.team854.robot.RobotMode;
+import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
 import org.usfirst.frc.team854.robot.subsystems.RobotArmLevel;
 import org.usfirst.frc.team854.robot.subsystems.TurningMode;
 import org.usfirst.frc.team854.robot.utils.Direction1D;
@@ -78,12 +79,15 @@ public class JoystickCommand extends Command {
 			speed *= -1;
 		}
 
-		if (turn > 0) {
-			Robot.chassisSubsystem.setMotors(speed - turn, speed);
+		if (UserInterfaceConstants.GYRO_PID_DURING_TELEOP) {
+			Robot.chassisSubsystem.setGyroTargetMotion(turn, speed);
 		} else {
-			Robot.chassisSubsystem.setMotors(speed, speed + turn);
+			if (turn > 0) {
+				Robot.chassisSubsystem.setMotors(speed - turn, speed);
+			} else {
+				Robot.chassisSubsystem.setMotors(speed, speed + turn);
+			}
 		}
-		// Robot.chassisSubsystem.setGyroTargetMotion(turn, speed);
 
 		Direction1D newDirection = getDirection(Robot.oi.getPOVPosition());
 		if (newDirection != previousPOVDirection) {

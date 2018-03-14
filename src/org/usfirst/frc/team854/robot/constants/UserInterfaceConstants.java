@@ -33,4 +33,7 @@ public interface UserInterfaceConstants {
 	public static final int AXIS_ID_SPEED = 1;
 	public static final int AXIS_ID_TURN = 0;
 	public static final int AXIS_ID_MAX_SPEED = 3;
+	
+	// This defines whether the gyro PID is used during teleop.
+	public static final boolean GYRO_PID_DURING_TELEOP = false;
 }
