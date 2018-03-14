@@ -8,6 +8,7 @@
 package org.usfirst.frc.team854.robot.constants;
 
 import org.usfirst.frc.team854.robot.subsystems.TurningMode;
+import org.usfirst.frc.team854.robot.teleopdrive.TeleopDriveMode;
 
 public interface UserInterfaceConstants {
 	public static final boolean FLIP_GYRO = false;
@@ -35,5 +36,5 @@ public interface UserInterfaceConstants {
 	public static final int AXIS_ID_MAX_SPEED = 3;
 	
 	// This defines whether the gyro PID is used during teleop.
-	public static final boolean GYRO_PID_DURING_TELEOP = false;
+	public static final TeleopDriveMode TELEOP_DRIVE_MODE = TeleopDriveMode.SIMPLE;
 }

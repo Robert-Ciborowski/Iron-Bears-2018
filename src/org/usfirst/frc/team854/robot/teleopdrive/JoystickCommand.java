@@ -79,14 +79,33 @@ public class JoystickCommand extends Command {
 			speed *= -1;
 		}
 
-		if (UserInterfaceConstants.GYRO_PID_DURING_TELEOP) {
-			Robot.chassisSubsystem.setGyroTargetMotion(turn, speed);
-		} else {
-			if (turn > 0) {
-				Robot.chassisSubsystem.setMotors(speed - turn, speed);
-			} else {
-				Robot.chassisSubsystem.setMotors(speed, speed + turn);
-			}
+		switch (UserInterfaceConstants.TELEOP_DRIVE_MODE) {
+			case GYRO_PID:
+				Robot.chassisSubsystem.setGyroTargetMotion(turn, speed);
+				break;
+			case SIMPLE:
+				if (turn > 0) {
+					Robot.chassisSubsystem.setMotors(speed - turn, speed);
+				} else {
+					Robot.chassisSubsystem.setMotors(speed, speed + turn);
+				}
+				break;
+			case SCALED:
+				double halfTurn = turn / 2.0;
+				double left = speed - halfTurn, right = speed + halfTurn;
+				double absLeft = Math.abs(left), absRight = Math.abs(right);
+				double scalingFactor = 1.0;
+				if (absLeft > 1) {
+					scalingFactor = 1.0 / absLeft;
+				}
+				if (absRight > 1) {
+					double potentialScaling = 1.0 / absRight;
+					if (potentialScaling < scalingFactor) {
+						scalingFactor = potentialScaling;
+					}
+				}
+				Robot.chassisSubsystem.setMotors(left * scalingFactor, right * scalingFactor);
+				break; 
 		}
 
 		Direction1D newDirection = getDirection(Robot.oi.getPOVPosition());

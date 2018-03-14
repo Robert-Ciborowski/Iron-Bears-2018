@@ -19,6 +19,7 @@ import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.constants.RobotTuningConstants;
 import org.usfirst.frc.team854.robot.constants.UserInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
+import org.usfirst.frc.team854.robot.teleopdrive.TeleopDriveMode;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Spark;
@@ -101,10 +102,10 @@ public class ChassisSubsystem extends CustomSubsystem {
 			switch (mode) {
 				case TELEOPERATED:
 					// setGyroTargetMotion(0, 0);
-					if (UserInterfaceConstants.GYRO_PID_DURING_TELEOP) {
-						gyroPIDController.disable();
-					} else {
+					if (UserInterfaceConstants.TELEOP_DRIVE_MODE == TeleopDriveMode.GYRO_PID) {
 						gyroPIDController.enable();
+					} else {
+						gyroPIDController.disable();
 					}
 					distancePIDController.disable();
 					gyroPIDInput.reset();
