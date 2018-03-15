@@ -1,0 +1,81 @@
+<xml version="1.0">
+<dashboard>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="443" y="227"/>
+		<width>570</width>
+		<height>370</height>
+		<property name="Camera Choice" value=""/>
+	</static-widget>
+	<widget field="Location" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="86" y="102"/>
+	</widget>
+	<widget field="cube" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="8" y="299"/>
+		<width>405</width>
+		<height>119</height>
+		<property name="Color to show when true" value="255.255.51.255"/>
+		<property name="Color to show when false" value="0.0.0.255"/>
+	</widget>
+	<widget field="Arm Encoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="485" y="163"/>
+	</widget>
+	<widget field="Arm Setpoint" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="482" y="197"/>
+	</widget>
+	<widget field="Target Angle: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="6" y="268"/>
+		<width>201</width>
+	</widget>
+	<widget field="Arm Controller" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+		<location x="619" y="0"/>
+	</widget>
+	<widget field="Distance Controller" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+		<location x="452" y="0"/>
+	</widget>
+	<widget field="Gyro Controller" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+		<location x="304" y="-1"/>
+	</widget>
+	<widget field="Drive Encoder Right" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="7" y="238"/>
+	</widget>
+	<widget field="Drive Encoder Left" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="7" y="208"/>
+	</widget>
+	<widget field="Target" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="7" y="103"/>
+	</widget>
+	<widget field="Is there a box?" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="4" y="63"/>
+		<width>236</width>
+	</widget>
+	<widget field="Gyro-X (radians)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="3" y="34"/>
+		<width>235</width>
+	</widget>
+	<widget field="Max speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="4" y="6"/>
+		<width>237</width>
+	</widget>
+	<widget field="Output Angle: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="285" y="166"/>
+		<width>183</width>
+	</widget>
+	<widget field="angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="330" y="199"/>
+		<width>137</width>
+	</widget>
+	<widget field="Is Gyro On Target" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="239" y="274"/>
+	</widget>
+	<widget field="Is Distance On Target" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="230" y="254"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="42" y="94"/>
+		<height>14</height>
+		<property name="Text" value="Auto Path Selector"/>
+	</static-widget>
+</dashboard>
+<live-window>
+</live-window>
+</xml>

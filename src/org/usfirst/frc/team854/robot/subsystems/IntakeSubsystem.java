@@ -105,12 +105,16 @@ public class IntakeSubsystem extends CustomSubsystem {
 
     	switch (direction) {
 			case FORWARD:
-				leftIntakeInnerMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
-				rightIntakeInnerMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
+//				leftIntakeInnerMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
+//				rightIntakeInnerMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
+				leftIntakeInnerMotor.set(-Robot.oi.getIntakeSpeed());
+				rightIntakeInnerMotor.set(Robot.oi.getIntakeSpeed());
 				break;
 			case REVERSE:
-				leftIntakeInnerMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
-				rightIntakeInnerMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
+//				leftIntakeInnerMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
+//				rightIntakeInnerMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
+				leftIntakeInnerMotor.set(Robot.oi.getIntakeSpeed());
+				rightIntakeInnerMotor.set(-Robot.oi.getIntakeSpeed());
 				break;
 			case OFF:
 				leftIntakeInnerMotor.set(0);

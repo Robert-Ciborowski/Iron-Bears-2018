@@ -106,8 +106,8 @@ public class OperatorInterface {
 	}
 	
 	/** Returns the max speed that is inputed by the user.*/
-	public double getMaxSpeed() {
-		double maxSpeed = -mainController.getRawAxis(UserInterfaceConstants.AXIS_ID_MAX_SPEED);
+	public double getIntakeSpeed() {
+		double maxSpeed = -mainController.getRawAxis(UserInterfaceConstants.AXIS_ID_INTAKE_SPEED);
 		maxSpeed = 0.2 * (maxSpeed + 1) + 0.6;
 		return maxSpeed;
 	}
@@ -121,6 +121,6 @@ public class OperatorInterface {
 	}
 	
 	public void updateDashboard() {
-		SmartDashboard.putNumber("Max speed", getMaxSpeed());
+		SmartDashboard.putNumber("Max speed", getIntakeSpeed());
 	}
 }

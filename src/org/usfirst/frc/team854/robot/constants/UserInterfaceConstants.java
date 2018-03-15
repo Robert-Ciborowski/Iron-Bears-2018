@@ -33,7 +33,7 @@ public interface UserInterfaceConstants {
 	public static final int PORT_JOYSTICK = 0;
 	public static final int AXIS_ID_SPEED = 1;
 	public static final int AXIS_ID_TURN = 0;
-	public static final int AXIS_ID_MAX_SPEED = 3;
+	public static final int AXIS_ID_INTAKE_SPEED = 3;
 	
 	// This defines whether the gyro PID is used during teleop.
 	public static final TeleopDriveMode TELEOP_DRIVE_MODE = TeleopDriveMode.SIMPLE;
