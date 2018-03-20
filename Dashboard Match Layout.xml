@@ -1,0 +1,56 @@
+<xml version="1.0">
+<dashboard>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="443" y="227"/>
+		<width>570</width>
+		<height>370</height>
+		<property name="Camera Choice" value=""/>
+	</static-widget>
+	<widget field="Location" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="86" y="102"/>
+	</widget>
+	<widget field="cube" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="8" y="299"/>
+		<width>405</width>
+		<height>119</height>
+		<property name="Color to show when true" value="255.255.51.255"/>
+		<property name="Color to show when false" value="0.0.0.255"/>
+	</widget>
+	<widget field="Target" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="7" y="103"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="42" y="94"/>
+		<height>14</height>
+		<property name="Text" value="Auto Path Selector"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="443" y="227"/>
+		<width>570</width>
+		<height>370</height>
+		<property name="Camera Choice" value=""/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="42" y="94"/>
+		<height>14</height>
+		<property name="Text" value="Auto Path Selector"/>
+	</static-widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="Drive Encoder Right"/>
+	<hidden field="Arm Encoder"/>
+	<hidden field="Is Distance On Target"/>
+	<hidden field="Is Gyro On Target"/>
+	<hidden field="Is there a box?"/>
+	<hidden field="Gyro-X (radians)"/>
+	<hidden field="Distance Controller"/>
+	<hidden field="Drive Encoder Left"/>
+	<hidden field="Arm Controller"/>
+	<hidden field="angle"/>
+	<hidden field="Gyro Controller"/>
+	<hidden field="Output Angle: "/>
+	<hidden field="Max speed"/>
+	<hidden field="Target Angle: "/>
+	<hidden field="Arm Setpoint"/>
+</xml>

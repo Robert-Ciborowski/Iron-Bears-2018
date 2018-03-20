@@ -7,6 +7,6 @@
 
 package org.usfirst.frc.team854.robot.auto;
 
-public enum AutoTarget {
-	SWITCH, SCALE, NONE
+public enum FieldTarget {
+	LOCAL_SWITCH, FOREIGN_SWITCH, SCALE, NONE
 }

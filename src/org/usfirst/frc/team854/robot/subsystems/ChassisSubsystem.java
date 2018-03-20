@@ -83,6 +83,16 @@ public class ChassisSubsystem extends CustomSubsystem {
 		gyroPIDInput.init();
 	}
 	
+	long lastTime = 0, cTime = 0;
+	public void periodic() {
+		cTime = System.currentTimeMillis() - lastTime;
+		if (cTime > 1000) {
+			lastTime = System.currentTimeMillis();
+			cTime = 0;
+			System.out.println(distancePIDInput.getEC());
+		}
+	}
+	
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
@@ -178,14 +188,13 @@ public class ChassisSubsystem extends CustomSubsystem {
 		distancePIDInput.updateDashboard();
 		SmartDashboard.putData("Gyro Controller", gyroPIDController);
 		SmartDashboard.putData("Distance Controller", distancePIDController);
-		SmartDashboard.putBoolean("Is Gyro On Target",gyroPIDController.onTarget());
-		SmartDashboard.putBoolean("Is Distance On Target", distancePIDController.onTarget());
-		SmartDashboard.putBoolean("Angular PID is Enabled", gyroPIDController.isEnabled());
-		SmartDashboard.putBoolean("Distance PID is Enabled", distancePIDController.isEnabled());
+//		SmartDashboard.putBoolean("Is Gyro On Target",gyroPIDController.onTarget());
+//		SmartDashboard.putBoolean("Is Distance On Target", distancePIDController.onTarget());
+//		SmartDashboard.putBoolean("Angular PID is Enabled", gyroPIDController.isEnabled());
+//		SmartDashboard.putBoolean("Distance PID is Enabled", distancePIDController.isEnabled());
 	}
 
 	public boolean isAngleOnTarget() {
-		System.out.println("");
 		return gyroPIDController.onTarget();
 	}
 	

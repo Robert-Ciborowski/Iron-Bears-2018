@@ -11,23 +11,22 @@ import org.usfirst.frc.team854.robot.command.AngularMotionCommand;
 import org.usfirst.frc.team854.robot.command.ArmLevelCommand;
 import org.usfirst.frc.team854.robot.command.IntakeSpitCommand;
 import org.usfirst.frc.team854.robot.command.LinearMotionCommand;
+import static org.usfirst.frc.team854.robot.constants.RobotCommandConstants.*;
 import org.usfirst.frc.team854.robot.subsystems.RobotArmLevel;
 
 public class AutoLeftCommandGroup extends AutoCommandGroup {
 	public AutoLeftCommandGroup() {
 	}
-	
-	public void init(String fieldState, AutoTarget target) {
-		if (fieldState.length() < 3) {
-			throw new IllegalStateException("You aren't in auto.");
-		}
 
+	public void init() {
+		FieldTarget target = config.getFieldTarget();
+		Position1D position = config.getPositionForTarget(target);
 		switch (target) {
-			case SWITCH:
-				loadSwitch(fieldState.charAt(0) == 'L');
+			case LOCAL_SWITCH:
+				loadSwitch(position);
 				break;
 			case SCALE:
-				loadScale(fieldState.charAt(1) == 'L');
+				loadScale(position);
 				break;
 			case NONE:
 				loadNone();
@@ -39,35 +38,45 @@ public class AutoLeftCommandGroup extends AutoCommandGroup {
 	}
 
 	private void loadNone() {
-		System.out.println("hin");
-		addSequential(new LinearMotionCommand(10));
+		addSequential(new LinearMotionCommand(NONE_DISTANCE_FORWARD));
 	}
 
-	private void loadSwitch(boolean targetOnLeft) {
-		System.out.println("hisw");
-		//addParallel(new ArmLevelCommand(RobotArmLevel.SWITCH));
-		if (targetOnLeft) {
-			addSequential(new LinearMotionCommand(30));
+	// If these really are errors, make sure to update AutoRightCommand too.
+	private void loadSwitch(Position1D position) {
+		addParallel(new ArmLevelCommand(RobotArmLevel.SWITCH));
+		if (position == Position1D.LEFT) {
+			// Robot width or robot length?
+			addSequential(new LinearMotionCommand(DISTANCE_TO_SWITCH_EDGE + (SWITCH_WIDTH / 2) - (ROBOT_LENGTH / 2)));
 			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
+		} else if (config.shouldOverextend()) {
+			addSequential(new LinearMotionCommand(DISTANCE_TO_ALLEY));
+			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
+			addSequential(new LinearMotionCommand(DISTANCE_DOWN_ALLEY / 2));
+			addSequential(new AngularMotionCommand(-3 * (Math.PI / 4)));
+			addSequential(new LinearMotionCommand(16.854));
 		} else {
-			addSequential(new LinearMotionCommand(20));
-			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
-			addSequential(new LinearMotionCommand(50));
-			addSequential(new AngularMotionCommand(Math.PI / 2));
-			addSequential(new LinearMotionCommand(10));
+			loadNone();
+			return;
 		}
 		addSequential(new IntakeSpitCommand());
 	}
 
-	private void loadScale(boolean targetOnLeft) {
-		System.out.println("hisc");
+	private void loadScale(Position1D position) {
 		addParallel(new ArmLevelCommand(RobotArmLevel.SCALE));
-		if (targetOnLeft) {
-			addSequential(new LinearMotionCommand(50));
+		if (position == Position1D.LEFT) {
+			// Distance to scale seems high. Should it not be 139 + 56 + 130 - 38 - 32.5?
+			addSequential(new LinearMotionCommand(DISTANCE_TO_SCALE));
+			addSequential(new AngularMotionCommand(3 * Math.PI / 4));
+		} else if (config.shouldOverextend()) {
+			addSequential(new LinearMotionCommand(DISTANCE_TO_ALLEY));
+			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
+			addSequential(new LinearMotionCommand(DISTANCE_DOWN_ALLEY));
+			addSequential(new AngularMotionCommand(0));
+			addSequential(new LinearMotionCommand(DISTANCE_TO_SCALE - DISTANCE_TO_ALLEY));
+			addSequential(new AngularMotionCommand(-3 * (Math.PI / 4)));
 		} else {
-			addSequential(new LinearMotionCommand(40));
-			addSequential(new AngularMotionCommand(-(Math.PI / 4)));
-			addSequential(new LinearMotionCommand(5));
+			loadNone();
+			return;
 		}
 		addSequential(new IntakeSpitCommand());
 	}

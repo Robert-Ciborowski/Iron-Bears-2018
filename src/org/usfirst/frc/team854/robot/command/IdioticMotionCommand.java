@@ -11,14 +11,13 @@ import org.usfirst.frc.team854.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class LinearMotionCommand extends Command {
-	private double distance, angle;
+public class IdioticMotionCommand extends Command {
+	private double angle, time;
 	
-	public LinearMotionCommand(double distance) {
+	public IdioticMotionCommand(double time) {
 		requires(Robot.chassisSubsystem);
 
-		// This initialises and starts the motion.
-		this.distance = distance;
+		this.time = time;
 	}
 	
 	double cTime = 0, sTime = 0;
@@ -28,7 +27,7 @@ public class LinearMotionCommand extends Command {
 		System.out.println("Lineari.");
 		// Robot.chassisSubsystem.resetTargetAngle();
 		angle = Robot.chassisSubsystem.getTargetAngle();
-		Robot.chassisSubsystem.setAutonomousTarget(angle, distance);
+		Robot.chassisSubsystem.setAutonomousTarget(angle, 999999);
 		Robot.chassisSubsystem.enableAllPIDs();
 		sTime = System.currentTimeMillis();
 	}
@@ -36,18 +35,16 @@ public class LinearMotionCommand extends Command {
 	@Override
 	protected boolean isFinished() {
 //		return Robot.chassisSubsystem.isAutonomousOnTarget();
-		return cTime > 1250;
+		return cTime > time;
 	}
 	
 	@Override
 	protected void execute() {
-		System.out.println("Linear.");
 		cTime = System.currentTimeMillis() - sTime;
 	}
 	
 	@Override
 	protected void end() {
-		System.out.println("lend");
 		Robot.chassisSubsystem.disableAllComponents();
 	}
 }

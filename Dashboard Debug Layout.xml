@@ -1,5 +1,11 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Distance PID is Enabled" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="144"/>
+	</widget>
+	<widget field="Angular PID is Enabled" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="28" y="123"/>
+	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
 		<location x="443" y="227"/>
 		<width>570</width>

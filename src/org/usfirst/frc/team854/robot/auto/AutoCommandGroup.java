@@ -4,6 +4,13 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public abstract class AutoCommandGroup extends CommandGroup {
 	
-	public abstract void init(String fieldState, AutoTarget target);
+	protected AutoConfig config;
+	
+	public final void configure(AutoConfig config) {
+		this.config = config;
+		init();
+	}
+	
+	protected abstract void init();
 
 }

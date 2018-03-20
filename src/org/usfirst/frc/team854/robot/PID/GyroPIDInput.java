@@ -76,7 +76,7 @@ public class GyroPIDInput implements PIDSource {
 			// System.out.println("Current angle for relative (input): " + transformedTargetAngle + " " + targetAngle);
 			// System.out.println("Trans: " + transformedTargetAngle);
 			// System.out.println("Trans: " + transformedTargetAngle);
-			SmartDashboard.putNumber("Target Angle: ", currentAngleForRelativePID);
+//			SmartDashboard.putNumber("Target Angle: ", currentAngleForRelativePID);
 			return transformedTargetAngle;
 		} else {
 			throw new IllegalStateException("Stop screwing with the robot.");
@@ -117,8 +117,8 @@ public class GyroPIDInput implements PIDSource {
 		// SmartDashboard.putNumber("Gyro-X (radians)", -gyro.getAngle() * (Math.PI / 180.0));
 		
 		// This is for the new gyro.
-		SmartDashboard.putNumber("Gyro-X (radians)", gyro.getAngleX() * (Math.PI / 180.0));
-		SmartDashboard.putNumber("angle", currentAngleForRelativePID);
+//		SmartDashboard.putNumber("Gyro-X (radians)", gyro.getAngleX() * (Math.PI / 180.0));
+//		SmartDashboard.putNumber("angle", currentAngleForRelativePID);
 	}
 
 	public void init() {
@@ -136,7 +136,7 @@ public class GyroPIDInput implements PIDSource {
 
 	public void setTargetAngle(double targetAngle) {
 		this.targetAngle = targetAngle;
-		System.out.println("Target angle is set to: " + targetAngle);
+//		System.out.println("Target angle is set to: " + targetAngle);
 	}
 	
 	public double getTargetAngle() {

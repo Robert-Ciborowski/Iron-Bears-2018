@@ -16,10 +16,10 @@ import org.usfirst.frc.team854.robot.hardware.InterfaceType;
 import edu.wpi.first.wpilibj.Spark;
 
 public class ClimberSubsystem extends CustomSubsystem {
-	private Spark climbMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_CLIMBER);
+//	private Spark climbMotor = Robot.devices.getDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_CLIMBER);
 
     public ClimberSubsystem() {
-    	climbMotor.set(0);
+//    	climbMotor.set(0);
     }
 
     @Override
@@ -30,12 +30,13 @@ public class ClimberSubsystem extends CustomSubsystem {
     @Override
     public void setEnabled(boolean enabled) {
     	super.setEnabled(enabled);
+		System.out.println("WARNING: CLIMBER DISABLED");
     	
     	if (!enabled) {
-    		climbMotor.set(0);
+//    		climbMotor.set(0);
     		System.out.println("CLIMBER OFF!");
     	} else {
-    		climbMotor.set(1);
+//    		climbMotor.set(1);
     		System.out.println("CLIMBER ON!");
     	}
     }
@@ -44,30 +45,30 @@ public class ClimberSubsystem extends CustomSubsystem {
 	public void setCurrentMode(RobotMode mode) {
     	super.setCurrentMode(mode);
     	
-    	if (enabled) {
-			switch (mode) {
-				case TELEOPERATED:
-					climbMotor.set(0);
-					break;
-				case AUTONOMOUS:
-					climbMotor.set(0);
-					break;
-				case DISABLED:
-					climbMotor.set(0);
-					break;
-				case TEST:
-					climbMotor.set(0);
-					break;
-				default:
-					climbMotor.set(0);
-					break;
-			}
-    	}
+//    	if (enabled) {
+//			switch (mode) {
+//				case TELEOPERATED:
+//					climbMotor.set(0);
+//					break;
+//				case AUTONOMOUS:
+//					climbMotor.set(0);
+//					break;
+//				case DISABLED:
+//					climbMotor.set(0);
+//					break;
+//				case TEST:
+//					climbMotor.set(0);
+//					break;
+//				default:
+//					climbMotor.set(0);
+//					break;
+//			}
+//    	}
 	}
     
     public void setMotor(double speed) {
     	if (enabled) {
-    		climbMotor.set(speed);
+//    		climbMotor.set(speed);
     	}
     }
 

@@ -15,11 +15,13 @@
 package org.usfirst.frc.team854.robot;
 
 import org.usfirst.frc.team854.robot.auto.AutoCommandGroup;
+import org.usfirst.frc.team854.robot.auto.AutoConfig;
 import org.usfirst.frc.team854.robot.auto.AutoLeftCommandGroup;
 import org.usfirst.frc.team854.robot.auto.AutoMiddleCommandGroup;
 import org.usfirst.frc.team854.robot.auto.AutoRightCommandGroup;
-import org.usfirst.frc.team854.robot.auto.AutoTarget;
-import org.usfirst.frc.team854.robot.auto.TestCommandGroup;
+import org.usfirst.frc.team854.robot.auto.FieldTarget;
+import org.usfirst.frc.team854.robot.auto.Position1D;
+import org.usfirst.frc.team854.robot.auto.SimpleAutoCommandGroup;
 import org.usfirst.frc.team854.robot.constants.RobotInterfaceConstants;
 import org.usfirst.frc.team854.robot.hardware.DeviceProvider;
 import org.usfirst.frc.team854.robot.hardware.InterfaceType;
@@ -64,8 +66,8 @@ public class Robot extends CustomIterativeRobot {
 
 	private PIDSourceLogger logger;
 
-	private SendableChooser<AutoCommandGroup> locationChooser;
-	private SendableChooser<AutoTarget> targetChooser;
+	private SendableChooser<Position1D> locationChooser;
+	private SendableChooser<FieldTarget> targetChooser;
 	
 	public static RobotMode currentMode;
 
@@ -104,8 +106,8 @@ public class Robot extends CustomIterativeRobot {
 				new Spark(RobotInterfaceConstants.PORT_MOTOR_INTAKE_OUTER_LEFT));
 		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_INTAKE_OUTER_RIGHT,
 				new Spark(RobotInterfaceConstants.PORT_MOTOR_INTAKE_OUTER_RIGHT));
-		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_CLIMBER,
-				new Spark(RobotInterfaceConstants.PORT_MOTOR_CLIMBER));
+//		devices.putDevice(InterfaceType.PWM, RobotInterfaceConstants.PORT_MOTOR_CLIMBER,
+//				new Spark(RobotInterfaceConstants.PORT_MOTOR_CLIMBER));
 		
 		// These are the PCM devices.
 		devices.putDevice(InterfaceType.PCM, RobotInterfaceConstants.PORT_PNEUMATIC_LEFT,
@@ -133,7 +135,7 @@ public class Robot extends CustomIterativeRobot {
 		intakeSubsystem.setEnabled(true);
 		
 		climberSubsystem = new ClimberSubsystem();
-		climberSubsystem.setEnabled(false);
+		climberSubsystem.setEnabled(true);
 
 		oi = new OperatorInterface();
 		pdp = new PowerDistributionPanel();
@@ -143,7 +145,7 @@ public class Robot extends CustomIterativeRobot {
 	 * The robot's initialisation method.
 	 */
 	public void robotInit() {
-		// CameraServer.getInstance().startAutomaticCapture("Front camera", 0);
+		CameraServer.getInstance().startAutomaticCapture("Front camera", 0);
 		initDevices();
 		
 		initDashboard();
@@ -155,14 +157,17 @@ public class Robot extends CustomIterativeRobot {
 	
 	private void initDashboard() {
 		locationChooser = new SendableChooser<>();
-		locationChooser.addDefault("Left", new AutoLeftCommandGroup());
-		locationChooser.addObject("Middle", new AutoMiddleCommandGroup());
-		locationChooser.addObject("Right", new AutoRightCommandGroup());
+		locationChooser.addDefault("Left", Position1D.LEFT);
+		locationChooser.addObject("Middle", Position1D.NEUTRAL);
+		locationChooser.addObject("Right", Position1D.RIGHT);
 
 		targetChooser = new SendableChooser<>();
-		targetChooser.addDefault("Switch", AutoTarget.SWITCH);
-		targetChooser.addObject("Scale", AutoTarget.SCALE);
-		targetChooser.addObject("None", AutoTarget.NONE);
+		targetChooser.addDefault("Switch", FieldTarget.LOCAL_SWITCH);
+		targetChooser.addObject("Scale", FieldTarget.SCALE);
+		targetChooser.addObject("None", FieldTarget.NONE);
+
+		SmartDashboard.putBoolean("over_extend", true);
+		SmartDashboard.putBoolean("run_good_auto", false);
 
 		SmartDashboard.putData("Location", locationChooser);
 		SmartDashboard.putData("Target", targetChooser);
@@ -204,21 +209,37 @@ public class Robot extends CustomIterativeRobot {
 		
 		chassisSubsystem.resetTargetAngle();
 
-//		AngularMotionCommand command = new AngularMotionCommand(-6);
-//		LinearMotionCommand command = new LinearMotionCommand(15);
-		TestCommandGroup command = new TestCommandGroup();
-		Scheduler.getInstance().add(command);
-		
-		// autonomousCommand = new TestCommandGroup(-6);
-		// autonomousCommand.start();
-		// chassisSubsystem.resetTargetAngle();
-//		AutoTarget target = targetChooser.getSelected();
-//		autonomousCommand = locationChooser.getSelected();
-//		autonomousCommand.init(DriverStation.getInstance().getGameSpecificMessage(), target);
-    	// Scheduler.getInstance().add(autonomousCommand);
-    	
+		// we have two versions of our auto mode
+		Position1D position = locationChooser.getSelected();
+		AutoConfig config = new AutoConfig.Builder(DriverStation.getInstance().getGameSpecificMessage())
+				.fieldTarget(targetChooser.getSelected())
+				.startingLocation(position)
+				.overextend(SmartDashboard.getBoolean("over_extend", true))
+				.build();
+
+		if (!SmartDashboard.getBoolean("run_good_auto", false)) {
+			position = null;
+		}
+
+		autonomousCommand = getAutoCommand(position);
+		autonomousCommand.configure(config);
+    	Scheduler.getInstance().add(autonomousCommand);
+
         updateDashboard();
     }
+	
+	private AutoCommandGroup getAutoCommand(Position1D position) {
+		switch (position) {
+			case LEFT:
+				return new AutoLeftCommandGroup();
+			case NEUTRAL:
+				return new AutoLeftCommandGroup();
+			case RIGHT:
+				return new AutoLeftCommandGroup();
+			default:
+				return new SimpleAutoCommandGroup();
+		}
+	}
 
 	/**
 	 * This runs during the robot's autonomous mode, periodically.

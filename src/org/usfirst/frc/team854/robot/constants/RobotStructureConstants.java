@@ -16,4 +16,7 @@ public interface RobotStructureConstants {
 	public static final int WHEEL_RADIUS = 3;// 2;
 	public static final int ENCODER_COUNTS_PER_REVOLUTION = 1440;
 	public static final double ENCODER_COUNTS_PER_INCH = ENCODER_COUNTS_PER_REVOLUTION / (WHEEL_RADIUS * Math.PI * 2);
+	
+	public static final double MAX_INTAKE_SPEED = 1.0;
+	public static final double MIN_INTAKE_SPEED = 0.5;
 }

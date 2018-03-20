@@ -1,5 +1,5 @@
 /*
- * Name: AutoLeftCommandGroup
+ * Name: AutoMiddleCommandGroup
  * Author: Julian Dominguez-Schatz, Robert Ciborowski
  * Date: 20/02/2018
  * Description: The command that runs when auto starts if the robot starts at the middle.
@@ -12,23 +12,28 @@ import org.usfirst.frc.team854.robot.command.ArmLevelCommand;
 import org.usfirst.frc.team854.robot.command.IntakeSpitCommand;
 import org.usfirst.frc.team854.robot.command.LinearMotionCommand;
 import org.usfirst.frc.team854.robot.subsystems.RobotArmLevel;
+import static org.usfirst.frc.team854.robot.constants.RobotCommandConstants.*;
 
 public class AutoMiddleCommandGroup extends AutoCommandGroup {
 	public AutoMiddleCommandGroup() {
 	}
 	
 	@Override
-	public void init(String fieldState, AutoTarget target) {
-		if (fieldState.length() < 3) {
-			throw new IllegalStateException("You aren't in auto.");
+	public void init() {
+		if (!config.shouldOverextend()) {
+			loadNone();
+			return;
 		}
 
+		FieldTarget target = config.getFieldTarget();
+		Position1D position = config.getPositionForTarget(target);
 		switch (target) {
-			case SWITCH:
-				loadSwitch(fieldState.charAt(0) == 'L');
+			case LOCAL_SWITCH:
+				loadSwitch(position);
 				break;
 			case SCALE:
-				loadScale(fieldState.charAt(1) == 'L');
+				// loadScale(fieldState.charAt(1) == 'L');
+				loadNone();
 				break;
 			case NONE:
 				loadNone();
@@ -39,23 +44,24 @@ public class AutoMiddleCommandGroup extends AutoCommandGroup {
 	}
 
 	private void loadNone() {
-		addSequential(new LinearMotionCommand(20));
+		addSequential(new LinearMotionCommand(DISTANCE_TO_FRONT_CUBE_PILE / 2));
+		addSequential(new AngularMotionCommand(Math.PI / 2)); // + for left/- for right
+		// Switch width (56) or switch length (154.5)?
+		addSequential(new LinearMotionCommand(53 + (SWITCH_LENGTH / 2)));
+		addSequential(new AngularMotionCommand(0));
+		addSequential(new LinearMotionCommand(NONE_DISTANCE_FORWARD - (DISTANCE_TO_FRONT_CUBE_PILE / 2)));
 	}
 
-	private void loadSwitch(boolean targetOnLeft) {
+	private void loadSwitch(Position1D position) {
 		addParallel(new ArmLevelCommand(RobotArmLevel.SWITCH));
-		if (targetOnLeft) {
-			addSequential(new LinearMotionCommand(15));
-			addSequential(new AngularMotionCommand(Math.PI / 2));
-			addSequential(new LinearMotionCommand(5));
-			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
-			addSequential(new LinearMotionCommand(15));
+		if (position == Position1D.LEFT) {
+			addSequential(new LinearMotionCommand(DISTANCE_TO_FRONT_CUBE_PILE / 2));
+			addSequential(new AngularMotionCommand(Math.PI / 4));
+			addSequential(new LinearMotionCommand(61.5)); // pythagoras
 		} else {
-			addSequential(new LinearMotionCommand(15));
-			addSequential(new AngularMotionCommand(-(Math.PI / 2)));
-			addSequential(new LinearMotionCommand(5));
-			addSequential(new AngularMotionCommand(Math.PI / 2));
-			addSequential(new LinearMotionCommand(15));
+			addSequential(new LinearMotionCommand(DISTANCE_TO_FRONT_CUBE_PILE / 2));
+			addSequential(new AngularMotionCommand(-Math.PI / 4));
+			addSequential(new LinearMotionCommand(61.5)); // pythagoras
 		}
 		addSequential(new IntakeSpitCommand());
 	}

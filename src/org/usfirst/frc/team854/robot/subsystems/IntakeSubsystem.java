@@ -33,6 +33,8 @@ public class IntakeSubsystem extends CustomSubsystem {
 
 	private long fullElapsedTime;
 	private long fullStartTime;
+	
+	private boolean pneumaticsExtended;
 
     public IntakeSubsystem() {
     }
@@ -45,9 +47,10 @@ public class IntakeSubsystem extends CustomSubsystem {
 	    	// This resets time values.
 	    	fullElapsedTime = -1;
 	    	fullStartTime = 0;
-	
+
 			setInnerIntakeDirection(Direction1D.OFF);
-			setOuterIntakeDirection(Direction1D.REVERSE);
+			setOuterIntakeDirection(Direction1D.OFF);
+//			setOuterIntakeDirection(Direction1D.REVERSE);
 //			setPneumaticsExtended(false);
     	}
 	}
@@ -89,6 +92,7 @@ public class IntakeSubsystem extends CustomSubsystem {
     		return;
     	}
 
+    	pneumaticsExtended = extended;
     	if (extended) {
     		leftSolenoid.set(DoubleSolenoid.Value.kForward);
     		rightSolenoid.set(DoubleSolenoid.Value.kForward);
@@ -97,28 +101,119 @@ public class IntakeSubsystem extends CustomSubsystem {
     		rightSolenoid.set(DoubleSolenoid.Value.kReverse);
     	}
     }
+    
+    public boolean getPneumaticsExtended() {
+    	return pneumaticsExtended;
+    }
 
     public void setInnerIntakeDirection(Direction1D direction) {
     	if (!enabled) {
     		return;
     	}
+    	
+    	double intakeSpeed;
+    	if (currentMode == RobotMode.TELEOPERATED || currentMode == RobotMode.TEST) {
+    		intakeSpeed = Robot.oi.getIntakeSpeed();
+    	} else {
+    		intakeSpeed = RobotCommandConstants.INTAKE_MOTOR_SPEED;
+    	}
 
     	switch (direction) {
 			case FORWARD:
-//				leftIntakeInnerMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
-//				rightIntakeInnerMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
-				leftIntakeInnerMotor.set(-Robot.oi.getIntakeSpeed());
-				rightIntakeInnerMotor.set(Robot.oi.getIntakeSpeed());
+				leftIntakeInnerMotor.set(-intakeSpeed);
+				rightIntakeInnerMotor.set(intakeSpeed);
 				break;
 			case REVERSE:
-//				leftIntakeInnerMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
-//				rightIntakeInnerMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
-				leftIntakeInnerMotor.set(Robot.oi.getIntakeSpeed());
-				rightIntakeInnerMotor.set(-Robot.oi.getIntakeSpeed());
+				leftIntakeInnerMotor.set(intakeSpeed);
+				rightIntakeInnerMotor.set(-intakeSpeed);
 				break;
 			case OFF:
 				leftIntakeInnerMotor.set(0);
 				rightIntakeInnerMotor.set(0);
+				break;
+    	}
+    }
+    
+    public void setInnerMotors(double leftSpeed, double rightSpeed) {
+    	leftIntakeInnerMotor.set(leftSpeed);
+    	rightIntakeInnerMotor.set(rightSpeed);
+    }
+    
+    public void setOuterMotors(double leftSpeed, double rightSpeed) {
+    	leftIntakeOuterMotor.set(leftSpeed);
+    	rightIntakeOuterMotor.set(rightSpeed);
+    }
+
+    public void setInnerMotorDirections(Direction1D directionLeft, Direction1D directionRight) {
+    	if (!enabled) {
+    		return;
+    	}
+    	
+    	double intakeSpeed;
+    	if (currentMode == RobotMode.TELEOPERATED || currentMode == RobotMode.TEST) {
+    		intakeSpeed = Robot.oi.getIntakeSpeed();
+    	} else {
+    		intakeSpeed = RobotCommandConstants.INTAKE_MOTOR_SPEED;
+    	}
+
+    	switch (directionLeft) {
+			case FORWARD:
+				leftIntakeInnerMotor.set(-intakeSpeed);
+				break;
+			case REVERSE:
+				leftIntakeInnerMotor.set(intakeSpeed);
+				break;
+			case OFF:
+				leftIntakeInnerMotor.set(0);
+				break;
+    	}
+
+    	switch (directionRight) {
+			case FORWARD:
+				rightIntakeInnerMotor.set(intakeSpeed);
+				break;
+			case REVERSE:
+				rightIntakeInnerMotor.set(-intakeSpeed);
+				break;
+			case OFF:
+				rightIntakeInnerMotor.set(0);
+				break;
+    	}
+    }
+
+    public void setOuterMotorDirections(Direction1D directionLeft, Direction1D directionRight) {
+    	if (!enabled) {
+    		return;
+    	}
+    	
+    	double intakeSpeed;
+    	if (currentMode == RobotMode.TELEOPERATED || currentMode == RobotMode.TEST) {
+    		intakeSpeed = Robot.oi.getIntakeSpeed();
+    	} else {
+    		intakeSpeed = RobotCommandConstants.INTAKE_MOTOR_SPEED;
+    	}
+
+    	switch (directionLeft) {
+			case FORWARD:
+				leftIntakeOuterMotor.set(-intakeSpeed);
+				break;
+			case REVERSE:
+				leftIntakeOuterMotor.set(intakeSpeed);
+				break;
+			case OFF:
+				leftIntakeOuterMotor.set(0);
+				break;
+    	}
+
+    	switch (directionRight) {
+			case FORWARD:
+				rightIntakeOuterMotor.set(intakeSpeed);
+				break;
+			case REVERSE:
+				rightIntakeOuterMotor.set(-intakeSpeed);
+				break;
+			case OFF:
+				rightIntakeOuterMotor.set(0);
 				break;
     	}
     }
@@ -127,15 +222,22 @@ public class IntakeSubsystem extends CustomSubsystem {
     	if (!enabled) {
     		return;
     	}
+    	
+    	double intakeSpeed;
+    	if (currentMode == RobotMode.TELEOPERATED || currentMode == RobotMode.TEST) {
+    		intakeSpeed = Robot.oi.getIntakeSpeed();
+    	} else {
+    		intakeSpeed = RobotCommandConstants.INTAKE_MOTOR_SPEED;
+    	}
 
     	switch (direction) {
 			case FORWARD:
-				leftIntakeOuterMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
-				rightIntakeOuterMotor.set(-RobotCommandConstants.INTAKE_MOTOR_SPEED);
+				leftIntakeOuterMotor.set(-intakeSpeed);
+				rightIntakeOuterMotor.set(-intakeSpeed);
 				break;
 			case REVERSE:
-				leftIntakeOuterMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
-				rightIntakeOuterMotor.set(RobotCommandConstants.INTAKE_MOTOR_SPEED);
+				leftIntakeOuterMotor.set(intakeSpeed);
+				rightIntakeOuterMotor.set(intakeSpeed);
 				break;
 			case OFF:
 				leftIntakeOuterMotor.set(0);
@@ -150,19 +252,7 @@ public class IntakeSubsystem extends CustomSubsystem {
 
 	@Override
 	public void updateDashboard() {
-		SmartDashboard.putString("Is there a box?", fullLimitSwitch.get() ? "yes" : "no");
+//		SmartDashboard.putString("Is there a box?", fullLimitSwitch.get() ? "yes" : "no");
 		SmartDashboard.putBoolean("cube", fullLimitSwitch.get());
-//		BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
-//		img.getGraphics().setColor(Color.RED);
-//		img.getGraphics().fillRect(0, 0, 100, 100);
-//		try {
-//			ByteArrayOutputStream b = new ByteArrayOutputStream();
-//			ImageIO.write(img, "png", b);
-//			SmartDashboard.putRaw("abcdefg", b.toByteArray());
-//			GyroBase
-//			img.getGraphics().dispose();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}	
 	}
 }

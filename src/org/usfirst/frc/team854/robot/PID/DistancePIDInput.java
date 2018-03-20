@@ -36,6 +36,10 @@ public class DistancePIDInput implements PIDSource {
 		return PIDSourceType.kDisplacement;
 	}
 	
+	public double getEC() {
+		return Robot.devices.getDeviceValue(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_LEFT);
+	}
+	
 	public void setDistance(double distanceInInches) {
 		this.targetEncoderValue = distanceInInches * RobotStructureConstants.ENCODER_COUNTS_PER_INCH;
 		System.out.println("Distance set in inches: "+ distanceInInches);
@@ -62,7 +66,7 @@ public class DistancePIDInput implements PIDSource {
 		
 		// double returnValue = averageCurrentCount / targetEncoderValue;
 		double returnValue = averageCurrentCount - targetEncoderValue;
-		// System.out.println("Target: " + targetEncoderValue + ", Average: " + averageCurrentCount);
+//		System.out.println("Target: " + targetEncoderValue + ", Average: " + averageCurrentCount);
 		
 		// Note: the setpoint is zero!
 		return returnValue;

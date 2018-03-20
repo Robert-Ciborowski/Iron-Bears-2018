@@ -12,21 +12,14 @@ import org.usfirst.frc.team854.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class IntakeFeelersCommand extends Command {
-	
-	private boolean extended = false;
 
 	public IntakeFeelersCommand() {
 		requires(Robot.intakeSubsystem);
 	}
-	
-	public void execute() {
-		System.out.println("Executing.");
-	}
 
 	@Override
 	protected void initialize() {
-		Robot.intakeSubsystem.setPneumaticsExtended(extended);
-		extended = !extended;
+		Robot.intakeSubsystem.setPneumaticsExtended(!Robot.intakeSubsystem.getPneumaticsExtended());
 	}
 
 	@Override

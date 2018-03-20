@@ -17,7 +17,7 @@ public interface RobotInterfaceConstants {
 	public static final int PORT_MOTOR_INTAKE_INNER_RIGHT = 4;
 	public static final int PORT_MOTOR_INTAKE_OUTER_LEFT = 5;
 	public static final int PORT_MOTOR_INTAKE_OUTER_RIGHT = 6;
-	public static final int PORT_MOTOR_CLIMBER = 7;
+//	public static final int PORT_MOTOR_CLIMBER = 6;
 
 	// These are the DIO ports.
 	public static final int PORT_ENCODER_LEFT = 2;
