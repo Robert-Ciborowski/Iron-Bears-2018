@@ -33,7 +33,7 @@ public class ArmSubsystemWithoutPID extends CustomSubsystem {
 	private boolean moving = false;
 	private Direction1D directionOfMoving;
 	private final double tolerance = 15;
-	private final double switchArmHoldValue = 0.3, scaleArmHoldValue = 0.15, climbArmHoldValue = 0.1;
+	private final double switchArmHoldValue = 0.3, scaleArmHoldValue = 0.075, climbArmHoldValue = 0.1;
 
     public ArmSubsystemWithoutPID() {
     }

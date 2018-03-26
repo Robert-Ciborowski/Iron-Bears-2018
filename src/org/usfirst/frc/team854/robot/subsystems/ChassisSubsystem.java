@@ -69,7 +69,7 @@ public class ChassisSubsystem extends CustomSubsystem {
 		distancePIDController.setSetpoint(0);
 		
 		// Real robot:
-		distancePIDController.setAbsoluteTolerance(10);
+		distancePIDController.setAbsoluteTolerance(40);
 		
 		// Test robot:
 		// distancePIDController.setAbsoluteTolerance(10);
@@ -89,7 +89,7 @@ public class ChassisSubsystem extends CustomSubsystem {
 		if (cTime > 1000) {
 			lastTime = System.currentTimeMillis();
 			cTime = 0;
-			System.out.println(distancePIDInput.getEC());
+			// System.out.println(distancePIDInput.getEC());
 		}
 	}
 	
@@ -145,17 +145,21 @@ public class ChassisSubsystem extends CustomSubsystem {
 
 	public void setAutonomousTarget(double angle, double distance) {
 		// If it doesn't drive, this is the likely culprit.
-		if (currentMode == RobotMode.AUTONOMOUS) {
+		// if (currentMode == RobotMode.AUTONOMOUS) {
 			distancePIDInput.setDistance(distance);
 			distancePIDController.setSetpoint(1);
 			gyroPIDInput.setTargetAngle(angle);
 			distancePIDOutput.setTargetAngle(angle);
 			System.out.println(angle + " is the new target.");
-		}
+		// }
 	}
 	
 	public double getTargetAngle() {
 		return gyroPIDInput.getTargetAngle();
+	}
+	
+	public boolean isDistanceOnTarget() {
+		return distancePIDController.onTarget();
 	}
 
 	public boolean isAutonomousOnTarget() {

@@ -37,5 +37,6 @@ public class IntakeSwallowCommand extends Command {
 	protected void end() {
 		Robot.intakeSubsystem.setInnerIntakeDirection(Direction1D.OFF);
 		Robot.intakeSubsystem.setOuterIntakeDirection(Direction1D.OFF);
+		Robot.intakeSubsystem.setPneumaticsExtended(false);
 	}
 }

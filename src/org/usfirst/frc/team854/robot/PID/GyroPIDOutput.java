@@ -44,9 +44,10 @@ public class GyroPIDOutput implements PIDOutput {
 		leftSpeed *= RobotStructureConstants.WHEEL_RADIUS * (RobotStructureConstants.ENCODER_COUNTS_PER_INCH / RobotStructureConstants.MOTOR_MAX_RATE);
 		rightSpeed *= RobotStructureConstants.WHEEL_RADIUS * (RobotStructureConstants.ENCODER_COUNTS_PER_INCH / RobotStructureConstants.MOTOR_MAX_RATE);
 
-		leftSpeed = Math.max(-1, Math.min(1, leftSpeed));
-		rightSpeed = Math.max(-1, Math.min(1, rightSpeed));
+		leftSpeed = Math.max(-0.5, Math.min(0.5, leftSpeed));
+		rightSpeed = Math.max(-0.5, Math.min(0.5, rightSpeed));
 
+		// System.out.println("Angle Offset: " + angleOffset);
 //		System.out.println("Target Speed: " + targetSpeed);
 //		System.out.println("Target Angular Speed: " + targetAngularSpeed);
 //		System.out.println("Angle Offset: " + angleOffset);
@@ -55,7 +56,7 @@ public class GyroPIDOutput implements PIDOutput {
 //		System.out.println("--------------------");
 		// System.out.println("Left speed: " + leftSpeed);
 		Robot.chassisSubsystem.setMotors(leftSpeed, rightSpeed);
-//		System.out.println("Motors: " + leftSpeed + " " + rightSpeed);
+		// System.out.println("Motors: " + leftSpeed + " " + rightSpeed);
 		SmartDashboard.putNumber("Output Angle: ", outputAngle);
 	}
 

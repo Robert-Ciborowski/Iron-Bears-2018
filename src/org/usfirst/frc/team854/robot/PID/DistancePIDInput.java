@@ -41,8 +41,8 @@ public class DistancePIDInput implements PIDSource {
 	}
 	
 	public void setDistance(double distanceInInches) {
-		this.targetEncoderValue = distanceInInches * RobotStructureConstants.ENCODER_COUNTS_PER_INCH;
-		System.out.println("Distance set in inches: "+ distanceInInches);
+		this.targetEncoderValue = -distanceInInches * RobotStructureConstants.ENCODER_COUNTS_PER_INCH * 0.12 / 0.487;
+		System.out.println("Distance set in inches: " + distanceInInches);
 		intialEncoderValueWasTaken = false;
 	}
 
@@ -55,6 +55,7 @@ public class DistancePIDInput implements PIDSource {
 		if (!intialEncoderValueWasTaken) {
 			initialLeftEncoderValue = Robot.devices.getDeviceValue(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_LEFT);
 			initialRightEncoderValue = Robot.devices.getDeviceValue(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_RIGHT);
+			System.out.println("Init left: " + initialLeftEncoderValue + ", Init right: " + initialRightEncoderValue);
 			intialEncoderValueWasTaken = true;
 			return 0;
 		}
@@ -65,8 +66,8 @@ public class DistancePIDInput implements PIDSource {
 		double averageCurrentCount = (currentCountLeft + currentCountRight) / 2;
 		
 		// double returnValue = averageCurrentCount / targetEncoderValue;
-		double returnValue = averageCurrentCount - targetEncoderValue;
-//		System.out.println("Target: " + targetEncoderValue + ", Average: " + averageCurrentCount);
+		double returnValue = targetEncoderValue - averageCurrentCount;
+//		System.out.println("Target: " + targetEncoderValue + ", Average: " + averageCurrentCount + ", " + currentCountLeft);
 		
 		// Note: the setpoint is zero!
 		return returnValue;
@@ -77,5 +78,6 @@ public class DistancePIDInput implements PIDSource {
 				Robot.devices.getDeviceValue(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_LEFT));
 		SmartDashboard.putNumber("Drive Encoder Right",
 				Robot.devices.getDeviceValue(InterfaceType.DIGITAL, RobotInterfaceConstants.PORT_ENCODER_RIGHT));
+		SmartDashboard.putNumber("Drive Target Encoder Value (Average)", targetEncoderValue);
 	}
 }

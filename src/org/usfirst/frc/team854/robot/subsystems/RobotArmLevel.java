@@ -8,7 +8,7 @@
 package org.usfirst.frc.team854.robot.subsystems;
 
 public enum RobotArmLevel {
-	GROUND(0), SWITCH(400), SCALE(1200), CLIMB(1001);
+	GROUND(0), SWITCH(450), SCALE(1350), CLIMB(1001);
 	
 	private double setpoint;
 	

@@ -32,6 +32,8 @@ public class AngularMotionCommand extends Command {
 		Robot.chassisSubsystem.setTurningMode(TurningMode.ABSOLUTE);
 		Robot.chassisSubsystem.setAutonomousTarget(angle, 0);
 		Robot.chassisSubsystem.useGyroPIDOnly();
+		
+		System.out.println("Inited Angular.");
 	}
 	
 	@Override
@@ -42,6 +44,9 @@ public class AngularMotionCommand extends Command {
 	
 	@Override
 	protected boolean isFinished() {
+		if (Robot.chassisSubsystem.isAngleOnTarget()) {
+			System.out.println("Finished angular!!!");
+		}
 		return Robot.chassisSubsystem.isAngleOnTarget();
 	}
 }

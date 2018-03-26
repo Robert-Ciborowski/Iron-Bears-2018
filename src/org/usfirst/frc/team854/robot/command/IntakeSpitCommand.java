@@ -27,6 +27,7 @@ public class IntakeSpitCommand extends Command {
 
 		Robot.intakeSubsystem.setInnerIntakeDirection(Direction1D.REVERSE);
 		Robot.intakeSubsystem.setOuterIntakeDirection(Direction1D.REVERSE);
+		Robot.intakeSubsystem.setPneumaticsExtended(false);
 	}
 
 	@Override

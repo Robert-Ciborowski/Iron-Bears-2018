@@ -55,7 +55,7 @@ public class JoystickCommand extends Command {
 				// Robot.intakeSubsystem.setOuterIntakeDirection(testState ?
 				// Direction1D.FORWARD : Direction1D.OFF);
 				// Robot.armSubsystem.setArmLevel(testState ? RobotArmLevel.SWITCH : RobotArmLevel.GROUND);
-				Robot.armSubsystem.setMotor(testState ? 0.5 : 0);
+				// Robot.armSubsystem.setMotor(testState ? 0.5 : 0);
 				// Robot.intakeSubsystem.setPneumaticsExtended(testState);
 			}
 		} else {

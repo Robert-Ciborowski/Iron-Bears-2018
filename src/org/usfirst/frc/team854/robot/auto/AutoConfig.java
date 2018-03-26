@@ -14,12 +14,14 @@ public class AutoConfig {
 	private final Position1D startingLocation;
 	private final HashMap<FieldTarget, Position1D> fieldLayout;
 	private final boolean overextend;
+	private final boolean twoCube;
 
 	private AutoConfig(Builder builder) {
 		this.target = builder.fieldTarget;
 		this.startingLocation = builder.startingLocation;
 		this.fieldLayout = builder.fieldLayout;
 		this.overextend = builder.overextend;
+		this.twoCube = builder.twoCube;
 	}
 
 	public FieldTarget getFieldTarget() {
@@ -33,6 +35,10 @@ public class AutoConfig {
 	public boolean shouldOverextend() {
 		return overextend;
 	}
+
+	public boolean shouldRunTwoCubeAuto() {
+		return twoCube;
+	}
 	
 	public Position1D getStartingLocation() {
 		return startingLocation;
@@ -43,6 +49,7 @@ public class AutoConfig {
 		private Position1D startingLocation;
 		private HashMap<FieldTarget, Position1D> fieldLayout;
 		private boolean overextend;
+		private boolean twoCube;
 
 		public Builder(String fieldStateString) {
 			fieldTarget = FieldTarget.NONE;
@@ -59,6 +66,7 @@ public class AutoConfig {
 			fieldLayout.put(FieldTarget.FOREIGN_SWITCH, Position1D.fromChar(fieldStateString.charAt(2)));
 			
 			overextend = true;
+			twoCube = false;
 		}
 		
 		public Builder fieldTarget(FieldTarget fieldTarget) {
@@ -73,6 +81,11 @@ public class AutoConfig {
 		
 		public Builder overextend(boolean overextend) {
 			this.overextend = overextend;
+			return this;
+		}
+		
+		public Builder twoCube(boolean twoCube) {
+			this.twoCube = twoCube;
 			return this;
 		}
 		

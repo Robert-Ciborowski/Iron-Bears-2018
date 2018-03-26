@@ -11,10 +11,10 @@ import org.usfirst.frc.team854.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class IdioticMotionCommand extends Command {
+public class LinearTimedMotionCommand extends Command {
 	private double angle, time;
 	
-	public IdioticMotionCommand(double time) {
+	public LinearTimedMotionCommand(double time) {
 		requires(Robot.chassisSubsystem);
 
 		this.time = time;
@@ -46,5 +46,6 @@ public class IdioticMotionCommand extends Command {
 	@Override
 	protected void end() {
 		Robot.chassisSubsystem.disableAllComponents();
+		System.out.println("ENDED");
 	}
 }

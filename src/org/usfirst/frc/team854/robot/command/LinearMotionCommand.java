@@ -21,8 +21,6 @@ public class LinearMotionCommand extends Command {
 		this.distance = distance;
 	}
 	
-	double cTime = 0, sTime = 0;
-	
 	@Override
 	public void initialize() {
 		System.out.println("Lineari.");
@@ -30,19 +28,20 @@ public class LinearMotionCommand extends Command {
 		angle = Robot.chassisSubsystem.getTargetAngle();
 		Robot.chassisSubsystem.setAutonomousTarget(angle, distance);
 		Robot.chassisSubsystem.enableAllPIDs();
-		sTime = System.currentTimeMillis();
 	}
 	
 	@Override
 	protected boolean isFinished() {
-//		return Robot.chassisSubsystem.isAutonomousOnTarget();
-		return cTime > 1250;
+		// Robot.chassisSubsystem.isAutonomousOnTarget();
+		if (Robot.chassisSubsystem.isDistanceOnTarget()) {
+			System.out.println("Finished linear!!!");
+		}
+		return Robot.chassisSubsystem.isDistanceOnTarget();
 	}
 	
 	@Override
 	protected void execute() {
-		System.out.println("Linear.");
-		cTime = System.currentTimeMillis() - sTime;
+		// System.out.println("Executing linear!!!");
 	}
 	
 	@Override

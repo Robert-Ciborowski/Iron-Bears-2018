@@ -167,7 +167,8 @@ public class Robot extends CustomIterativeRobot {
 		targetChooser.addObject("None", FieldTarget.NONE);
 
 		SmartDashboard.putBoolean("over_extend", true);
-		SmartDashboard.putBoolean("run_good_auto", false);
+		SmartDashboard.putBoolean("run_good_auto", true);
+		SmartDashboard.putBoolean("two_cube", false);
 
 		SmartDashboard.putData("Location", locationChooser);
 		SmartDashboard.putData("Target", targetChooser);
@@ -209,35 +210,46 @@ public class Robot extends CustomIterativeRobot {
 		
 		chassisSubsystem.resetTargetAngle();
 
-		// we have two versions of our auto mode
-		Position1D position = locationChooser.getSelected();
-		AutoConfig config = new AutoConfig.Builder(DriverStation.getInstance().getGameSpecificMessage())
-				.fieldTarget(targetChooser.getSelected())
-				.startingLocation(position)
-				.overextend(SmartDashboard.getBoolean("over_extend", true))
-				.build();
-
-		if (!SmartDashboard.getBoolean("run_good_auto", false)) {
-			position = null;
-		}
-
-		autonomousCommand = getAutoCommand(position);
-		autonomousCommand.configure(config);
-    	Scheduler.getInstance().add(autonomousCommand);
+//		// we have two versions of our auto mode
+//		Position1D position = locationChooser.getSelected();
+//		AutoConfig config = new AutoConfig.Builder(DriverStation.getInstance().getGameSpecificMessage())
+//				.fieldTarget(targetChooser.getSelected())
+//				.startingLocation(position)
+//				.overextend(SmartDashboard.getBoolean("over_extend", true))
+//				.build();
+//
+//		if (!SmartDashboard.getBoolean("run_good_auto", false)) {
+//			position = null;
+//		}
+//		
+//		System.out.println("Position: " + position);
+//		System.out.println("Config: " + config.getStartingLocation() + ", " + config.getFieldTarget() + ", " + config.getPositionForTarget(FieldTarget.LOCAL_SWITCH));
+//
+//		autonomousCommand = getAutoCommand(position);
+//		autonomousCommand.configure(config);
+//    	Scheduler.getInstance().add(autonomousCommand);
+		
+		AutoCommandGroup simple = new SimpleAutoCommandGroup();
+		simple.configure(null);
+		Scheduler.getInstance().add(simple);
 
         updateDashboard();
     }
 	
 	private AutoCommandGroup getAutoCommand(Position1D position) {
+		if (position == null) {
+			return new SimpleAutoCommandGroup();
+		}
+		
 		switch (position) {
 			case LEFT:
 				return new AutoLeftCommandGroup();
 			case NEUTRAL:
-				return new AutoLeftCommandGroup();
+				return new AutoMiddleCommandGroup();
 			case RIGHT:
-				return new AutoLeftCommandGroup();
+				return new AutoRightCommandGroup();
 			default:
-				return new SimpleAutoCommandGroup();
+				throw new IllegalStateException("Stop messing with the JVM.");
 		}
 	}
 

@@ -11,8 +11,11 @@ import org.usfirst.frc.team854.robot.command.AngularMotionCommand;
 import org.usfirst.frc.team854.robot.command.ArmLevelCommand;
 import org.usfirst.frc.team854.robot.command.IntakeSpitCommand;
 import org.usfirst.frc.team854.robot.command.LinearMotionCommand;
+import org.usfirst.frc.team854.robot.command.LinearTimedMotionCommand;
 import org.usfirst.frc.team854.robot.subsystems.RobotArmLevel;
 import static org.usfirst.frc.team854.robot.constants.RobotCommandConstants.*;
+
+import org.usfirst.frc.team854.robot.Robot;
 
 public class AutoMiddleCommandGroup extends AutoCommandGroup {
 	public AutoMiddleCommandGroup() {
@@ -20,6 +23,9 @@ public class AutoMiddleCommandGroup extends AutoCommandGroup {
 	
 	@Override
 	public void init() {
+		System.out.println("Init 1!!!!!!!!!!!!!");
+		
+		Robot.intakeSubsystem.setPneumaticsExtended(false);
 		if (!config.shouldOverextend()) {
 			loadNone();
 			return;
@@ -27,6 +33,8 @@ public class AutoMiddleCommandGroup extends AutoCommandGroup {
 
 		FieldTarget target = config.getFieldTarget();
 		Position1D position = config.getPositionForTarget(target);
+		
+		System.out.println("Init 2!!!!!!!!!!!!!");
 		switch (target) {
 			case LOCAL_SWITCH:
 				loadSwitch(position);
@@ -55,13 +63,17 @@ public class AutoMiddleCommandGroup extends AutoCommandGroup {
 	private void loadSwitch(Position1D position) {
 		addParallel(new ArmLevelCommand(RobotArmLevel.SWITCH));
 		if (position == Position1D.LEFT) {
-			addSequential(new LinearMotionCommand(DISTANCE_TO_FRONT_CUBE_PILE / 2));
-			addSequential(new AngularMotionCommand(Math.PI / 4));
-			addSequential(new LinearMotionCommand(61.5)); // pythagoras
+			System.out.println("LEFT!!!!!!!!!!!!!");
+			addSequential(new LinearMotionCommand(DISTANCE_TO_FRONT_CUBE_PILE / 4));
+			addSequential(new AngularMotionCommand(Math.PI / 10));
+			// addSequential(new LinearMotionCommand(1205)); // pythagoras
+			addSequential(new LinearTimedMotionCommand(2000));
 		} else {
-			addSequential(new LinearMotionCommand(DISTANCE_TO_FRONT_CUBE_PILE / 2));
-			addSequential(new AngularMotionCommand(-Math.PI / 4));
-			addSequential(new LinearMotionCommand(61.5)); // pythagoras
+			System.out.println("RIGHT!!!!!!!!!!!!!");
+			addSequential(new LinearMotionCommand(DISTANCE_TO_FRONT_CUBE_PILE / 4));
+			addSequential(new AngularMotionCommand(-Math.PI / 10));
+			// addSequential(new LinearMotionCommand(1205)); // pythagoras
+			addSequential(new LinearTimedMotionCommand(2000));
 		}
 		addSequential(new IntakeSpitCommand());
 	}

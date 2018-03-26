@@ -117,8 +117,8 @@ public class GyroPIDInput implements PIDSource {
 		// SmartDashboard.putNumber("Gyro-X (radians)", -gyro.getAngle() * (Math.PI / 180.0));
 		
 		// This is for the new gyro.
-//		SmartDashboard.putNumber("Gyro-X (radians)", gyro.getAngleX() * (Math.PI / 180.0));
-//		SmartDashboard.putNumber("angle", currentAngleForRelativePID);
+		SmartDashboard.putNumber("Gyro-X (radians)", gyro.getAngleX() * (Math.PI / 180.0));
+		SmartDashboard.putNumber("angle", currentAngleForRelativePID);
 	}
 
 	public void init() {

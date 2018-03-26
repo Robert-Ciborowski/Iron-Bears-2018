@@ -9,6 +9,7 @@
 package org.usfirst.frc.team854.robot.operatorinterface;
 
 import org.usfirst.frc.team854.robot.RobotMode;
+import org.usfirst.frc.team854.robot.command.AngularMotionCommand;
 import org.usfirst.frc.team854.robot.command.ClimberStateCommand;
 import org.usfirst.frc.team854.robot.command.IntakeFeelersCommand;
 import org.usfirst.frc.team854.robot.command.IntakeSpitCommand;
@@ -87,13 +88,14 @@ public class OperatorInterface {
 		climberDownButton.whenReleased(new ClimberStateCommand(Direction1D.OFF));
 		
 		// bound to some random thing
-		testButton.whenPressed(new LinearMotionCommand(1));
+		// testButton.whenPressed(new LinearMotionCommand(150));
+		// testButton.whenPressed(new AngularMotionCommand(Math.PI / 2));
 		
 		// cube adjustment
-		intakeAdjustCWButton.whenPressed(new IntakeStateCommand(RobotCommandConstants.CUBE_ADJUST_SPEED, -(RobotCommandConstants.CUBE_ADJUST_SPEED - 0.4), true));
-		intakeAdjustCWButton.whenReleased(new IntakeStateCommand(0, false));
-		intakeAdjustCCWButton.whenPressed(new IntakeStateCommand(-RobotCommandConstants.CUBE_ADJUST_SPEED, (RobotCommandConstants.CUBE_ADJUST_SPEED - 0.4), true));
-		intakeAdjustCCWButton.whenReleased(new IntakeStateCommand(0, false));
+		intakeAdjustCWButton.whenPressed(new IntakeStateCommand(RobotCommandConstants.CUBE_ADJUST_SPEED, -(RobotCommandConstants.CUBE_ADJUST_SPEED - 0.4), false));
+		intakeAdjustCWButton.whenReleased(new IntakeStateCommand(0, true));
+		intakeAdjustCCWButton.whenPressed(new IntakeStateCommand(-RobotCommandConstants.CUBE_ADJUST_SPEED, (RobotCommandConstants.CUBE_ADJUST_SPEED - 0.4), false));
+		intakeAdjustCCWButton.whenReleased(new IntakeStateCommand(0, true));
 	}
 	
 	public void setCurrentMode(RobotMode mode) {
