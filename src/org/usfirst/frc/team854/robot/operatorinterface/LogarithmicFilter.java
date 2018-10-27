@@ -16,12 +16,12 @@ public class LogarithmicFilter implements Filter {
 	}
 
 	public LogarithmicFilter(double maxValue) {
+	    maxValueConstant = 1 / Math.log(2);
+	    
 		// We must divide by the max value, if it is zero, we ignore it.
-		if (maxValue == 0) {
-			maxValueConstant = Math.log(2);
-		} else {
+		if (maxValue != 0) {
 			// Precompute a constant that will scale the output up to the max value.
-			maxValueConstant = Math.log(2) / maxValue;
+			maxValueConstant *= maxValue;
 		}
 	}
 
@@ -33,7 +33,7 @@ public class LogarithmicFilter implements Filter {
 		
 		// Take the log of the value in the base specified in the constructor.
 		// This uses the change of base formula: log_a(v) = log_e(v) / log_e(a)
-		return (Math.log(transformedValue) / maxValueConstant) * signOfValue;
+		return (Math.log(transformedValue) * maxValueConstant) * signOfValue;
 	}
 
 }
